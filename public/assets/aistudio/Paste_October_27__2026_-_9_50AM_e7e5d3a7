@@ -1,0 +1,798 @@
+# MASTER PROMPT: BUILD THE OFFICIAL WEBSITE FOR THE BEHAVIOR CANVAS
+
+## 1. Project Overview
+
+Build a complete, professional, modern, responsive website for **The Behavior Canvas**, founded by Reema Singh.
+
+**Brand tagline:** Crafting Behavior, Creating Change
+
+**Website domain:** behaviorcanvas.com  
+**Email:** info@behaviorcanvas.com  
+**Instagram:** @thebehaviorcanvas  
+**YouTube:** @behaviorcanvas
+
+The website should establish The Behavior Canvas as a credible, educational, research-informed platform focused on behavior science, Applied Behavior Analysis (ABA), parent education, special education, inclusive learning, professional development, and digital educational resources.
+
+The website must serve an India-wide audience, including parents, caregivers, educators, special educators, behavior professionals, psychology students, and aspiring behavior analysts.
+
+The long-term goal is to develop The Behavior Canvas into a trusted Indian platform for behavior science education, ethical behavior support, professional learning, digital publications, workshops, and online services.
+
+Do not make this website look like a generic therapy clinic, a basic portfolio, or a template-based coaching website. It should feel like a polished, credible educational brand with the potential to grow into a larger professional platform.
+
+## 2. CRITICAL REQUIREMENT: USE MY UPLOADED LOGO
+
+I am uploading the official logo of The Behavior Canvas with this prompt.
+
+**Use my uploaded logo as the official brand identity throughout the website.**
+
+Follow these instructions strictly:
+
+- Use the uploaded logo exactly as provided.
+- Do not redesign, regenerate, redraw, reinterpret, recolor, stretch, distort, crop, or replace it with an AI-generated logo.
+- Preserve its original proportions, typography, symbols, colors, and visual details.
+- Place the logo prominently in the website header.
+- Use the logo in the footer and other appropriate brand locations.
+- Ensure the logo looks clear on desktop, tablet, and mobile screens.
+- Use a suitable background that makes the original logo legible without altering the logo itself.
+- If the uploaded file contains transparent areas, preserve its transparency.
+- Store the logo as a reusable asset and reference the same asset consistently throughout the project.
+- Do not use a text-based imitation of the logo when the actual image asset is available.
+- If the image cannot be accessed, create a clearly marked temporary placeholder and explain that the original logo needs to be uploaded again. Never invent a replacement.
+
+Analyze the actual logo to determine complementary website colors. Build the rest of the visual identity around the logo rather than forcing the logo to match a preselected palette.
+
+## 3. Brand Identity and Visual Design
+
+Create a visually beautiful, refined, modern, and professional website.
+
+### Desired visual direction
+
+- Soft pastel pink and lavender, where compatible with the uploaded logo.
+- Warm white and light neutral backgrounds.
+- Muted purple or another suitable brand-derived accent color.
+- Dark, readable text with strong contrast.
+- Subtle borders, generous whitespace, rounded corners, and elegant typography.
+- Professional illustrations, diagrams, and imagery relevant to learning, communication, behavior, family support, and inclusive education.
+- Clean layouts that feel welcoming to Indian parents and credible to professionals.
+
+The overall impression should be:
+
+- Trustworthy and professional.
+- Warm, empathetic, and family-friendly.
+- Evidence-informed and academically grounded.
+- Inclusive, respectful, and neurodiversity-affirming.
+- Premium without being visually overwhelming.
+- Modern and easy to navigate.
+
+Avoid excessive gradients, unnecessary animations, clutter, childish graphics, stereotypical autism imagery, overly bright colors, excessive decorative elements, and generic stock imagery that feels unrelated to the brand.
+
+Use subtle hover effects, gentle transitions, clear visual hierarchy, and consistent spacing. Respect reduced-motion preferences.
+
+## 4. Website Architecture
+
+Create the following pages with consistent navigation and a responsive layout.
+
+1. Home
+2. About The Behavior Canvas
+3. Services
+4. Individual service detail pages
+5. Resources and Digital Shop
+6. Individual product detail pages
+7. Workshops and Training
+8. Articles and Learning
+9. Frequently Asked Questions
+10. Contact and Enquiry
+11. Privacy Policy
+12. Terms and Conditions
+13. Refund and Cancellation Policy
+14. Professional and Service Disclaimer
+15. Copyright and Digital Product Usage Policy
+16. Custom 404 page
+
+Use a clean navigation menu:
+
+**Home | About | Services | Resources | Workshops | Articles | Contact**
+
+Include a prominent but tasteful **“Make an Enquiry”** button in the header.
+
+On mobile, use an accessible collapsible navigation menu.
+
+Do not create empty pages or broken links. If a section is not ready for publication, provide a polished, editable placeholder and make it easy to complete later.
+
+## 5. Homepage
+
+Design an excellent homepage that communicates the brand’s purpose within the first few seconds.
+
+### Section A: Header
+
+Include:
+
+- The uploaded official logo.
+- Main navigation.
+- A prominent “Make an Enquiry” button.
+- Responsive mobile navigation.
+
+Keep the header elegant, uncluttered, and easy to use.
+
+### Section B: Hero
+
+Use the following draft headline:
+
+**Understanding Behavior. Supporting Growth. Creating Change.**
+
+Supporting text:
+
+“The Behavior Canvas brings together behavior science, parent education, inclusive learning, and professional development to help individuals, families, educators, and professionals build meaningful skills and understanding.”
+
+Primary CTA: **Explore Our Services**
+
+Secondary CTA: **Explore Learning Resources**
+
+Add a small, tasteful visual related to learning, communication, connection, or behavior science. Do not use an unrelated decorative image.
+
+The hero should immediately communicate what The Behavior Canvas does and whom it supports.
+
+### Section C: Who We Support
+
+Create four visually distinct cards:
+
+1. **Parents and Caregivers**  
+   Practical education and guidance to better understand behavior, communication, learning, and everyday challenges.
+
+2. **Children and Learners**  
+   Individualized, respectful support focused on meaningful skills, participation, communication, and personal strengths, where appropriate.
+
+3. **Educators and Special Educators**  
+   Educational resources and strategies for inclusive classrooms, positive behavior support, and effective teaching.
+
+4. **Students and Behavior Professionals**  
+   Study resources, learning opportunities, workshops, and professional development in behavior science.
+
+Do not imply that every service is appropriate for every individual. Direct users to the relevant service information.
+
+### Section D: Explore Our Services
+
+Display attractive cards for:
+
+- Behavior Consultation
+- Parent Guidance and Training
+- Special Education and Inclusive Learning Support
+- Online Behavior Support, where appropriate
+- Professional Mentoring and Supervision, subject to eligibility and applicable requirements
+- Workshops and Educational Training
+
+Each card should have a concise description and a working “Learn More” link.
+
+Service availability, eligibility, fees, delivery format, and scope must be configurable. Do not invent qualifications, treatment outcomes, or service guarantees.
+
+### Section E: Featured Learning Resources
+
+Feature the available digital educational products:
+
+- QASP-S Study Notes
+- QASP-S Cheat Sheet
+- QASP-S Practice Questions Book
+- QASP-S Study Tracker
+- Complete QASP-S Study Bundle
+
+Use product cards with product images or attractive temporary covers, short descriptions, displayed prices, and “View Details” buttons.
+
+Clearly label any product that is not yet available for purchase.
+
+### Section F: Why The Behavior Canvas?
+
+Create a section with the following principles:
+
+- Evidence-informed education.
+- Practical, understandable resources.
+- Respect for individual differences.
+- Family and educator collaboration.
+- Ethical and responsible behavior support.
+- Accessible online learning across India.
+
+Present these as the brand’s commitments, not as unsupported claims of clinical effectiveness.
+
+### Section G: Founder Introduction
+
+Heading: **Meet the Founder**
+
+Draft text:
+
+“The Behavior Canvas was founded by Reema Singh, a behavior and special education professional with a background in psychology and a commitment to making behavior science education more accessible, practical, and meaningful.
+
+Through educational resources, professional learning, parent guidance, and inclusive approaches, The Behavior Canvas aims to support a deeper understanding of behavior and promote respectful, individualized learning.”
+
+Create an editable founder profile section with a space for a professional photograph.
+
+Only display credentials that have been verified and approved for publication. The founder’s biography, qualifications, registrations, experience, and professional designations must remain editable. Do not invent awards, affiliations, degrees, or professional endorsements.
+
+### Section H: Workshops and Learning
+
+Introduce upcoming workshops, online training, and educational sessions.
+
+Include:
+
+- Workshop title.
+- Intended audience.
+- Short description.
+- Date and delivery format, when confirmed.
+- Registration or enquiry CTA.
+
+If no workshops are scheduled, show a polished message inviting visitors to enquire about future sessions rather than inventing events.
+
+### Section I: Latest Articles
+
+Display recent educational articles about:
+
+- Understanding behavior.
+- Communication and engagement.
+- Positive behavior support.
+- Parent strategies.
+- Inclusive education.
+- Behavior science concepts.
+- Professional learning and exam preparation.
+
+Use editable article cards. Do not fabricate published articles, publication dates, research findings, or citations.
+
+### Section J: Final CTA
+
+Headline:
+
+**Small Steps. Meaningful Change.**
+
+Supporting text:
+
+“Explore our services, discover practical learning resources, or connect with The Behavior Canvas to find the right next step.”
+
+Buttons:
+
+- Explore Services
+- Contact Us
+
+### Section K: Footer
+
+Include:
+
+- Official uploaded logo.
+- Tagline: “Crafting Behavior, Creating Change”
+- Short brand description.
+- Navigation links.
+- Service links.
+- Digital shop links.
+- Contact email: info@behaviorcanvas.com
+- Instagram: @thebehaviorcanvas
+- YouTube: @behaviorcanvas
+- Privacy Policy.
+- Terms and Conditions.
+- Refund Policy.
+- Professional Disclaimer.
+- Copyright notice.
+
+Use real links only when the destination is known. Do not invent social profile URLs, phone numbers, office addresses, or third-party affiliations.
+
+## 6. About Page
+
+Create a dedicated About page with the following sections:
+
+- Our Story.
+- Our Mission.
+- Our Vision.
+- Our Values.
+- Our Approach.
+- Meet the Founder.
+
+Suggested mission:
+
+“To make behavior science education more accessible and practical while encouraging respectful, individualized, and evidence-informed approaches to behavior, learning, and inclusion.”
+
+Suggested vision:
+
+“To contribute to a more informed and inclusive community in India where families, educators, and professionals can access useful behavior science knowledge and learning opportunities.”
+
+Core values:
+
+- Respect and dignity.
+- Individualized support.
+- Evidence-informed practice.
+- Inclusion and accessibility.
+- Collaboration.
+- Ethical responsibility.
+- Lifelong learning.
+
+Clearly distinguish educational content from individualized professional services. Keep all founder details editable.
+
+## 7. Services Page
+
+Create a dedicated Services landing page and separate detail pages for each service.
+
+### Service 1: Behavior Consultation
+
+Explain that consultations may help families or educators understand behavior patterns, identify relevant environmental factors, consider possible functions of behavior, and explore appropriate support strategies.
+
+Include:
+
+- Who this service may be suitable for.
+- What the consultation may involve.
+- Online delivery information.
+- Enquiry form.
+- Editable fee field.
+- Scope and limitations.
+
+Do not promise diagnosis, guaranteed results, or outcomes that cannot be substantiated.
+
+### Service 2: Parent Guidance and Training
+
+Focus on practical parent education around:
+
+- Understanding behavior.
+- Communication and engagement.
+- Positive reinforcement.
+- Predictable routines.
+- Skill development.
+- Responding to challenging situations.
+- Collaboration with schools and professionals.
+
+Use non-blaming language. Make it clear that strategies should be individualized and appropriate to the child’s needs.
+
+### Service 3: Special Education and Inclusive Learning Support
+
+Cover educational guidance, learning participation, individualized teaching strategies, classroom support, and collaboration with families and educators.
+
+Clearly state the actual scope of the service. Do not imply formal school placement, legal certification, or services that are not offered.
+
+### Service 4: Online Behavior Support
+
+Explain the possible role of remote support, assessment-related discussion, goal planning, caregiver collaboration, and progress review where suitable.
+
+Make clear that suitability depends on individual needs, consent, available information, and applicable professional and legal requirements.
+
+### Service 5: Professional Mentoring and Supervision
+
+Provide an editable page for professional learning, mentoring, and supervision opportunities.
+
+Include an explicit note that availability, eligibility, scope, and supervision arrangements depend on the relevant credentialing body’s requirements and applicable ethical and professional standards.
+
+Do not imply automatic credential approval, credential eligibility, or endorsement by any certifying organization.
+
+### Service 6: Workshops and Training
+
+Describe online educational sessions for parents, educators, special educators, students, and professionals.
+
+Allow visitors to enquire about upcoming workshops or propose a training topic.
+
+### Enquiry forms
+
+Each service page should have a clear CTA and a short enquiry form with appropriate fields, such as:
+
+- Name.
+- Email address.
+- General category of enquiry.
+- Preferred contact method.
+- Message.
+- Consent to the privacy policy.
+
+Do not require visitors to disclose detailed medical, psychological, or sensitive child information in a general contact form.
+
+Display a clear confirmation message after successful submission. If form submission is not connected to a functioning backend, clearly identify the form as a demo or provide a working email-based alternative. Never claim that an enquiry has been sent when it has not.
+
+## 8. Resources and Digital Shop
+
+Create a professional digital storefront designed for educational PDF products and future downloadable resources.
+
+### Product 1: QASP-S Study Notes
+
+Suggested price: **₹799**
+
+Draft description:
+
+“Structured study notes designed to support QASP-S exam preparation, with organized concepts, definitions, and revision-friendly explanations.”
+
+Keep the exact contents editable. Do not claim that the notes are officially endorsed by QABA or guarantee exam success.
+
+### Product 2: QASP-S Cheat Sheet
+
+Suggested price: **₹299**
+
+Draft description:
+
+“A concise revision resource designed to help learners review key concepts and definitions during exam preparation.”
+
+### Product 3: QASP-S Practice Questions Book
+
+Suggested price: **₹999**
+
+Draft description:
+
+“A practice-focused learning resource containing questions intended to support concept review, self-assessment, and exam preparation.”
+
+Only advertise the exact question count, explanations, topic coverage, and included features that are verified for the final product.
+
+Do not imply that questions are official examination questions or reproduce protected exam content without authorization.
+
+### Product 4: QASP-S Study Tracker
+
+Suggested price: **₹149**
+
+Draft description:
+
+“A structured study-planning resource to help learners organize their preparation, track progress, and maintain a revision routine.”
+
+### Product 5: Complete QASP-S Study Bundle
+
+Suggested introductory price: **₹2,000**
+
+Draft description:
+
+“A combined study package bringing together selected study notes, revision resources, practice questions, and planning materials.”
+
+Display only products and components actually included in the final bundle.
+
+Prices must be editable from one central product configuration, not hardcoded across multiple pages.
+
+### Product card requirements
+
+Every product card should include:
+
+- Product cover or image.
+- Product title.
+- Brief description.
+- Price in INR.
+- Product format, such as PDF, when confirmed.
+- “View Details” link.
+- “Buy Now” or “Get This Resource” CTA when purchasing is enabled.
+
+### Individual product pages
+
+Every product should have its own page with:
+
+- Product description.
+- Intended audience.
+- Contents and included files.
+- File format and approximate size, where verified.
+- Price.
+- Usage and licensing terms.
+- Refund policy link.
+- FAQ.
+- Purchase CTA.
+
+Clearly identify educational products as independent study resources, not official certification materials.
+
+### Digital product purchasing
+
+Design the storefront so it can integrate with a legitimate payment provider such as Razorpay or Cashfree, subject to account approval and configuration.
+
+The purchasing flow should support:
+
+1. Product selection.
+2. Order summary.
+3. Payment through the configured provider.
+4. Payment confirmation verified by the backend.
+5. Secure delivery of the purchased digital file.
+6. A confirmation email with order details and access instructions.
+
+Do not store payment card details directly.
+
+Do not expose private file-storage URLs or use publicly accessible download links for paid products. Use authenticated or time-limited download links generated by a secure backend.
+
+Do not claim that payments, email delivery, or automatic downloads work until they are actually configured and tested.
+
+If no payment backend is available yet, build a visually complete storefront with a clearly configurable enquiry or coming-soon purchase mode. Make the future integration straightforward.
+
+### Digital product licensing
+
+Provide a product-specific usage policy that can be shown before purchase.
+
+Suggested language:
+
+“Digital resources are licensed for the purchaser’s personal educational use unless a different license is explicitly provided. Redistribution, resale, public uploading, or unauthorized sharing is not permitted.”
+
+Ensure this wording is consistent with applicable law and the final terms.
+
+## 9. Workshops Page
+
+Build a workshop listing page with:
+
+- Upcoming workshops.
+- Workshop details.
+- Intended audience.
+- Learning objectives.
+- Delivery format.
+- Date and time, when confirmed.
+- Fee, when confirmed.
+- Registration or enquiry CTA.
+
+Allow future workshops to be added without redesigning the website.
+
+Include an empty state for when there are no scheduled workshops.
+
+Do not invent registration numbers, attendance figures, certificates, accreditations, or participant testimonials.
+
+## 10. Articles and Learning Hub
+
+Create a lightweight learning hub with a professional article layout.
+
+Suggested categories:
+
+- ABA and Behavior Science.
+- Parenting and Caregiver Education.
+- Communication and Engagement.
+- Positive Behavior Support.
+- Special Education.
+- Inclusive Classrooms.
+- Professional Development.
+- QASP-S Exam Preparation.
+
+Each article should support:
+
+- Title.
+- Summary.
+- Main image, where appropriate.
+- Author.
+- Publication date.
+- Category.
+- Readable article body.
+- Relevant references, when used.
+- Related articles.
+- Share options.
+
+Use a reusable article template and a simple content-management approach.
+
+Do not create fake research citations or claim that a post is based on a study unless the source is verified.
+
+Include a disclaimer that general educational content does not replace individualized professional advice.
+
+## 11. FAQ Page
+
+Create an editable FAQ page with questions such as:
+
+- What is The Behavior Canvas?
+- Who can use the services?
+- Are services available online across India?
+- How can I enquire about a consultation?
+- Are digital study resources available for immediate purchase?
+- What file formats are provided?
+- Can I request a workshop for my organization?
+- How does professional mentoring or supervision work?
+- What is the refund policy for digital products?
+- Does The Behavior Canvas guarantee exam success?
+- Is educational content a substitute for professional assessment or care?
+
+Use clear, honest answers. Make availability and policies configurable and consistent with the actual services.
+
+## 12. Contact Page
+
+Include:
+
+- Contact email: info@behaviorcanvas.com.
+- Instagram profile reference: @thebehaviorcanvas.
+- YouTube profile reference: @behaviorcanvas.
+- General enquiry form.
+- Service enquiry category.
+- Workshop enquiry category.
+- Digital product support category.
+- Professional collaboration category.
+
+Keep any social media URLs editable. Do not invent a phone number or physical office address.
+
+Use a form backend or email service only when properly configured. Include validation, accessible error messages, spam protection, and a clear privacy notice.
+
+If no backend is connected, offer a working email link as an alternative.
+
+## 13. Privacy, Terms, and Professional Policies
+
+Create dedicated, editable policy pages for:
+
+- Privacy Policy.
+- Terms and Conditions.
+- Refund and Cancellation Policy.
+- Professional and Service Disclaimer.
+- Digital Product Licensing and Copyright.
+
+The privacy policy should explain what information is collected, why it is collected, how it is used, how long it is retained, and how users can contact the brand regarding their information.
+
+Collect only the information necessary for the requested service or transaction.
+
+Avoid requesting detailed child case histories, diagnoses, assessment reports, or other sensitive information through an unsecured general enquiry form.
+
+The professional disclaimer should clarify that:
+
+- General website content is educational.
+- Online services have a defined scope and may not be suitable for every case.
+- Service availability depends on suitability and applicable requirements.
+- Emergencies require appropriate local emergency or healthcare services.
+- No specific outcome or exam result is guaranteed.
+
+Policies must be reviewed and adapted to the actual business model and applicable Indian law before launch. Do not invent legal registrations, regulatory approvals, or certifications.
+
+## 14. Technology and Implementation
+
+Build a maintainable, responsive website with a modern frontend.
+
+Preferred approach:
+
+- React with TypeScript.
+- A clean, reusable component architecture.
+- Tailwind CSS or an equally maintainable styling system, if supported.
+- A structured routing system.
+- Centralized brand and product configuration.
+- A reusable content structure for services, workshops, products, and articles.
+- Accessible forms and navigation.
+- Production-ready error, loading, and empty states.
+
+Use the framework and deployment capabilities supported by the current Google AI Studio environment. Do not assume that Google AI Studio itself provides hosting, payment processing, email delivery, a database, or a secure digital-download backend.
+
+If a backend is required, separate the frontend from backend functionality and document the required integrations.
+
+Do not put secret API keys, payment credentials, email credentials, or private tokens in client-side code. Use environment variables and secure server-side configuration.
+
+Keep integrations modular so the website can later be connected to a custom domain, a content-management system, a payment gateway, secure file storage, analytics, and a transactional email provider.
+
+Do not introduce unnecessary infrastructure or paid services when a simpler reliable solution is sufficient.
+
+## 15. Design System and Reusable Components
+
+Create reusable components for:
+
+- Header.
+- Footer.
+- Buttons.
+- Service cards.
+- Product cards.
+- Workshop cards.
+- Article cards.
+- Enquiry forms.
+- FAQ accordion.
+- Testimonials section, disabled until genuine approved testimonials are available.
+- Breadcrumbs.
+- Page headings.
+- CTA sections.
+- Notices and disclaimers.
+- Empty states.
+- Error and success messages.
+
+Use a centralized design system for colors, typography, spacing, borders, shadows, and button styles.
+
+Maintain consistent visual identity across every page.
+
+All brand assets, including the uploaded logo, should be reusable and easy to update.
+
+## 16. Responsive Design and Accessibility
+
+The website must work well on:
+
+- Desktop computers.
+- Laptops.
+- Tablets.
+- Mobile phones.
+
+Requirements:
+
+- Mobile-first responsive layouts.
+- No horizontal overflow.
+- Readable font sizes.
+- Accessible color contrast.
+- Keyboard-friendly navigation.
+- Visible focus states.
+- Descriptive image alt text.
+- Correct heading hierarchy.
+- Proper form labels.
+- Accessible validation messages.
+- Screen-reader-friendly controls.
+- Reduced-motion support.
+- Accessible menus and interactive components.
+
+Use inclusive, respectful language and avoid portraying disability or neurodivergence as something that must always be eliminated or normalized.
+
+## 17. SEO and Performance
+
+Prepare the website for search visibility across India.
+
+Implement:
+
+- Unique page titles.
+- Meta descriptions.
+- Semantic HTML.
+- Appropriate heading hierarchy.
+- Descriptive URLs.
+- Canonical URLs where appropriate.
+- Open Graph metadata.
+- Social sharing previews.
+- XML sitemap.
+- Robots.txt.
+- Image optimization.
+- Lazy loading where appropriate.
+- Fast page rendering.
+- Clear internal linking.
+- Relevant structured data only when supported by actual business information.
+
+Use natural search phrases where relevant, such as:
+
+- Behavior consultation in India.
+- Parent guidance and behavior support.
+- ABA learning resources.
+- Special education resources in India.
+- Inclusive education training.
+- QASP-S study notes.
+- Behavior science educational resources.
+
+Do not keyword-stuff pages or make misleading claims about clinical services, qualifications, or rankings.
+
+Do not publish placeholder metadata or example URLs in the production build.
+
+## 18. Analytics and Future Growth
+
+Structure the website so it can grow to include:
+
+- More digital products.
+- E-books and publications.
+- Online courses.
+- Paid workshops.
+- Webinar registration.
+- A newsletter.
+- YouTube educational content.
+- Professional mentoring and supervision information.
+- Research and publication pages.
+- A searchable resource library.
+- A learning management system, if needed later.
+
+Keep these features modular. Do not build a complex member portal or paid course platform in the first version unless specifically required.
+
+Provide optional analytics integration only after the necessary configuration and privacy disclosures are in place.
+
+## 19. Content and Ethical Standards
+
+These requirements are mandatory:
+
+- Never fabricate qualifications, testimonials, client results, statistics, awards, publications, or affiliations.
+- Never claim official endorsement by QABA, RCI, or another organization without explicit authorization.
+- Never guarantee exam success or behavioral outcomes.
+- Do not use identifiable client or child information.
+- Do not publish fabricated case studies as real experiences.
+- Do not present general education as a substitute for individualized professional assessment.
+- Use respectful, non-stigmatizing language.
+- Explain service limitations transparently.
+- Keep all editable content easy to maintain.
+- Do not create fake payment confirmations or pretend an enquiry has been submitted.
+- Do not make unfinished functionality appear operational.
+
+## 20. Final Deliverables
+
+Build the actual website, not just a visual mockup or a plan.
+
+Deliver:
+
+1. Complete responsive website structure.
+2. All listed pages and navigation.
+3. The uploaded official logo integrated correctly.
+4. Consistent branding based on the logo.
+5. Complete initial page layouts and professional draft content.
+6. Service enquiry forms.
+7. Digital product catalogue and detail pages.
+8. Workshop and article templates.
+9. Editable centralized product and service information.
+10. Privacy, terms, refund, and disclaimer pages.
+11. Accessible components and responsive layouts.
+12. SEO metadata and performance-conscious implementation.
+13. Clear setup instructions for any required external services.
+14. A list of features that are functional, incomplete, or awaiting external configuration.
+15. Instructions for previewing, testing, and deploying the website.
+
+Before finishing, test every navigation item, internal link, CTA, responsive layout, form state, and available interaction.
+
+Do not report a feature as functional unless it has been implemented and tested. Clearly identify any backend, payment, email, hosting, or custom-domain steps that remain.
+
+## 21. Final Creative Direction
+
+The final website should feel like a distinctive, credible Indian behavior science and educational brand that can earn the trust of parents, educators, students, and professionals.
+
+It should combine the warmth of a family-support platform with the clarity of an academic resource hub and the professionalism of a growing digital education business.
+
+**The uploaded logo is the source of truth for the visual identity. Preserve it exactly.**
+
+**Brand:** The Behavior Canvas  
+**Tagline:** Crafting Behavior, Creating Change  
+**Founder:** Reema Singh  
+**Website:** behaviorcanvas.com  
+**Email:** info@behaviorcanvas.com
+
+Build a polished first version that is ready to preview, easy to maintain, and structured for future expansion.

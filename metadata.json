@@ -1,0 +1,6 @@
+{
+  "name": "The Behavior Canvas",
+  "description": "The official website for The Behavior Canvas founded by Reema Singh. Crafting Behavior, Creating Change. Educational resources, parent guidance, inclusive learning, and behavior science support across India.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
