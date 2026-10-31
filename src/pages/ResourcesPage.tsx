@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle2, FileText, Download, ShieldCheck, Sparkles, ArrowLeft, HelpCircle, Lock, Globe, CreditCard } from 'lucide-react';
+import { ArrowRight, CheckCircle2, FileText, Download, ShieldCheck, Sparkles, ArrowLeft, HelpCircle, Lock, Globe, CreditCard, Eye } from 'lucide-react';
 import { productsData, ProductItem } from '../data/products';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { RoutePath } from '../types';
@@ -8,6 +8,7 @@ interface ResourcesPageProps {
   selectedSlug?: string;
   onNavigate: (route: RoutePath, param?: string) => void;
   onSelectProduct: (product: ProductItem) => void;
+  onPreviewProduct?: (product: ProductItem) => void;
   currency: 'USD' | 'INR';
   onCurrencyToggle: () => void;
 }
@@ -16,6 +17,7 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
   selectedSlug,
   onNavigate,
   onSelectProduct,
+  onPreviewProduct,
   currency,
   onCurrencyToggle
 }) => {
@@ -129,13 +131,24 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
                   </span>
                 </div>
               </div>
-              <button
-                onClick={() => onSelectProduct(activeProduct)}
-                className="w-full sm:w-auto px-6 py-3 text-xs sm:text-sm font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-all shadow-md active:scale-98 flex items-center justify-center gap-2 shrink-0"
-              >
-                <Download className="w-4 h-4" />
-                <span>Get This Resource</span>
-              </button>
+              <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
+                {onPreviewProduct && (
+                  <button
+                    onClick={() => onPreviewProduct(activeProduct)}
+                    className="w-full sm:w-auto px-5 py-3 text-xs sm:text-sm font-semibold text-[#583256] bg-white hover:bg-[#F6EEF5] border border-[#DACFDB] rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 shrink-0"
+                  >
+                    <Eye className="w-4 h-4" />
+                    <span>Preview Sample Pages</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => onSelectProduct(activeProduct)}
+                  className="w-full sm:w-auto px-6 py-3 text-xs sm:text-sm font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-all shadow-md active:scale-98 flex items-center justify-center gap-2 shrink-0"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Get This Resource</span>
+                </button>
+              </div>
             </div>
 
             <div className="space-y-3 text-xs sm:text-sm text-[#5C4A60] leading-relaxed">
@@ -334,18 +347,29 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
                 </div>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-[#F2EBF1] flex items-center gap-3">
-                <button
-                  onClick={() => onNavigate('product-detail', product.slug)}
-                  className="flex-1 py-2.5 text-center text-xs font-semibold text-[#2A182C] bg-white border border-[#DACFDB] hover:bg-[#FAF6F8] rounded-xl transition-colors"
-                >
-                  View Details
-                </button>
+              <div className="pt-6 mt-6 border-t border-[#F2EBF1] flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  {onPreviewProduct && (
+                    <button
+                      onClick={() => onPreviewProduct(product)}
+                      className="flex-1 py-2 text-center text-xs font-semibold text-[#583256] bg-[#FAF2F8] hover:bg-[#F2EBF1] border border-[#DACFDB] rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>Preview</span>
+                    </button>
+                  )}
+                  <button
+                    onClick={() => onNavigate('product-detail', product.slug)}
+                    className="flex-1 py-2 text-center text-xs font-semibold text-[#2A182C] bg-white border border-[#DACFDB] hover:bg-[#FAF6F8] rounded-xl transition-colors"
+                  >
+                    View Details
+                  </button>
+                </div>
                 <button
                   onClick={() => onSelectProduct(product)}
-                  className="flex-1 py-2.5 text-center text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-colors shadow-xs"
+                  className="w-full py-2.5 text-center text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-colors shadow-xs"
                 >
-                  Get Resource
+                  Get Resource ({currentSymbol}{price.toLocaleString()})
                 </button>
               </div>
             </div>

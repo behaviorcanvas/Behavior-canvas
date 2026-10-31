@@ -3,6 +3,8 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { EnquiryModal } from './components/EnquiryModal';
 import { CheckoutModal } from './components/CheckoutModal';
+import { SampleNotesModal } from './components/SampleNotesModal';
+import { AnnouncementBar } from './components/AnnouncementBar';
 import { GeminiChatbot } from './components/GeminiChatbot';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
@@ -31,6 +33,10 @@ export default function App() {
   // Checkout Modal state
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+  // Sample Notes Preview Modal state
+  const [previewProduct, setPreviewProduct] = useState<ProductItem | null>(null);
+  const [isSampleOpen, setIsSampleOpen] = useState(false);
 
   // Parse hash to route state on mount and popstate
   useEffect(() => {
@@ -94,16 +100,22 @@ export default function App() {
     setIsCheckoutOpen(true);
   };
 
+  const handlePreviewProduct = (product: ProductItem) => {
+    setPreviewProduct(product);
+    setIsSampleOpen(true);
+  };
+
   const handleToggleCurrency = () => {
     setCurrency((prev) => (prev === 'USD' ? 'INR' : 'USD'));
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F9] text-[#221824] selection:bg-[#EBDDE9] selection:text-[#3B223D]">
-      {/* Top Banner with International & Multi-currency notice */}
-      <div className="bg-[#583256] text-[#F3EBF2] text-[11px] py-1.5 px-4 text-center font-medium flex items-center justify-center gap-2">
-        <span>The Behavior Canvas · International Behavior Science Study Resources, Remote Supervision & Parent Guidance Across All Time Zones</span>
-      </div>
+      {/* Top Announcement Bar with Coupon & International Gateways */}
+      <AnnouncementBar
+        currency={currency}
+        onCurrencyToggle={handleToggleCurrency}
+      />
 
       {/* Main Navigation (Uploaded logo strictly integrated in Zone 1) */}
       <Navbar
@@ -121,6 +133,7 @@ export default function App() {
             onNavigate={navigateTo}
             onOpenEnquiry={handleOpenEnquiry}
             onSelectProduct={handleSelectProduct}
+            onPreviewProduct={handlePreviewProduct}
             currency={currency}
           />
         )}
@@ -145,6 +158,7 @@ export default function App() {
             selectedSlug={routeState.param}
             onNavigate={navigateTo}
             onSelectProduct={handleSelectProduct}
+            onPreviewProduct={handlePreviewProduct}
             currency={currency}
             onCurrencyToggle={handleToggleCurrency}
           />
@@ -235,6 +249,15 @@ export default function App() {
         product={selectedProduct}
         currency={currency}
         onCurrencyChange={setCurrency}
+      />
+
+      {/* Global Sample Notes & Question Book Preview Modal */}
+      <SampleNotesModal
+        isOpen={isSampleOpen}
+        onClose={() => setIsSampleOpen(false)}
+        product={previewProduct}
+        onProceedToCheckout={handleSelectProduct}
+        currency={currency}
       />
 
       {/* Global Footer */}

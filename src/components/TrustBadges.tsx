@@ -126,7 +126,7 @@ export const TrustBadges: React.FC<TrustBadgesProps> = ({ onNavigate, onOpenEnqu
                   <div className="w-10 h-10 rounded-xl bg-[#FAF4F8] border border-[#EDE2EB] flex items-center justify-center group-hover:scale-105 transition-transform">
                     {getBadgeIcon(badge.iconName)}
                   </div>
-                  <span className="text-[10px] font-semibold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-[#FAF2F8] text-[#583256] border border-[#EDE2EB]">
+                  <span className="text-[11px] font-semibold tracking-wider uppercase text-[#7A5B79]">
                     {badge.badge}
                   </span>
                 </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, BookOpen, Users, Compass, GraduationCap, CheckCircle2, Calendar, FileText, Sparkles, HeartHandshake, ShieldCheck, Globe, Linkedin } from 'lucide-react';
+import { ArrowRight, BookOpen, Users, Compass, GraduationCap, CheckCircle2, Calendar, FileText, Sparkles, HeartHandshake, ShieldCheck, Globe, Linkedin, Eye } from 'lucide-react';
 import { brandConfig } from '../data/brand';
 import { servicesData } from '../data/services';
 import { productsData, ProductItem } from '../data/products';
@@ -7,12 +7,15 @@ import { workshopsData } from '../data/workshops';
 import { articlesData } from '../data/articles';
 import { TestimonialsSection } from '../components/TestimonialsSection';
 import { TrustBadges } from '../components/TrustBadges';
+import { InteractiveQuestionWidget } from '../components/InteractiveQuestionWidget';
+import { TeleSupervisionCalculator } from '../components/TeleSupervisionCalculator';
 import { RoutePath } from '../types';
 
 interface HomePageProps {
   onNavigate: (route: RoutePath, param?: string) => void;
   onOpenEnquiry: (category?: string, subject?: string) => void;
   onSelectProduct: (product: ProductItem) => void;
+  onPreviewProduct?: (product: ProductItem) => void;
   currency: 'USD' | 'INR';
 }
 
@@ -20,6 +23,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onNavigate,
   onOpenEnquiry,
   onSelectProduct,
+  onPreviewProduct,
   currency,
 }) => {
   const currentSymbol = currency === 'USD' ? '$' : '₹';
@@ -32,7 +36,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
             {/* Left Column: Proposition */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#583256] tracking-wide uppercase bg-[#FAF2F8] px-3 py-1 rounded-full border border-[#EDE2EB]">
+              <div className="flex items-center gap-2 text-xs font-semibold text-[#583256] tracking-wider uppercase">
                 <Globe className="w-3.5 h-3.5 text-[#583256]" />
                 <span>Global & Pan-India · QASP-S Study Resources & Tele-Supervision</span>
               </div>
@@ -287,6 +291,11 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
+      {/* Interactive Tele-Supervision Timezone Converter & Pacing Tool */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <TeleSupervisionCalculator onOpenEnquiry={onOpenEnquiry} />
+      </section>
+
       {/* Section E: Featured Learning Resources (Digital Educational Products) with Watercolor Cover & Multi-Currency */}
       <section className="bg-gradient-to-b from-[#F7EFF5]/60 to-[#FAF6F8] py-16 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 border-y border-[#EDE2EB]">
         <div className="max-w-7xl mx-auto space-y-12">
@@ -362,18 +371,29 @@ export const HomePage: React.FC<HomePageProps> = ({
                     </div>
                   </div>
 
-                  <div className="pt-6 mt-6 border-t border-[#F2EBF1] flex items-center gap-3">
-                    <button
-                      onClick={() => onNavigate('product-detail', product.slug)}
-                      className="flex-1 py-2 text-center text-xs font-semibold text-[#2A182C] bg-white border border-[#DACFDB] hover:bg-[#FAF6F8] rounded-lg transition-colors"
-                    >
-                      View Details
-                    </button>
+                  <div className="pt-6 mt-6 border-t border-[#F2EBF1] flex flex-col gap-2">
+                    <div className="flex items-center gap-2">
+                      {onPreviewProduct && (
+                        <button
+                          onClick={() => onPreviewProduct(product)}
+                          className="flex-1 py-2 text-center text-xs font-semibold text-[#583256] bg-[#FAF2F8] hover:bg-[#F2EBF1] border border-[#DACFDB] rounded-lg transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                          <span>Preview Sample</span>
+                        </button>
+                      )}
+                      <button
+                        onClick={() => onNavigate('product-detail', product.slug)}
+                        className="flex-1 py-2 text-center text-xs font-semibold text-[#2A182C] bg-white border border-[#DACFDB] hover:bg-[#FAF6F8] rounded-lg transition-colors"
+                      >
+                        View Details
+                      </button>
+                    </div>
                     <button
                       onClick={() => onSelectProduct(product)}
-                      className="flex-1 py-2 text-center text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-lg transition-colors shadow-xs"
+                      className="w-full py-2.5 text-center text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-lg transition-colors shadow-xs"
                     >
-                      Get Resource
+                      Get Resource ({currentSymbol}{price.toLocaleString()})
                     </button>
                   </div>
                 </div>
@@ -394,6 +414,11 @@ export const HomePage: React.FC<HomePageProps> = ({
             </button>
           </div>
         </div>
+      </section>
+
+      {/* Interactive QASP-S Exam Scenario Practice Widget */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <InteractiveQuestionWidget onNavigate={onNavigate} />
       </section>
 
       {/* Section F: Why The Behavior Canvas? */}

@@ -25,13 +25,34 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [paymentProvider, setPaymentProvider] = useState<'stripe' | 'paypal' | 'razorpay'>('stripe');
   const [step, setStep] = useState<'details' | 'processing' | 'confirmed'>('details');
   const [agreedToLicense, setAgreedToLicense] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [discountPercent, setDiscountPercent] = useState<number>(0);
+  const [couponMessage, setCouponMessage] = useState<{ text: string; isError: boolean } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   if (!isOpen || !product) return null;
 
-  const currentPrice = currency === 'USD' ? product.priceUSD : product.priceINR;
+  const rawPrice = currency === 'USD' ? product.priceUSD : product.priceINR;
   const currentSymbol = currency === 'USD' ? '$' : '₹';
   const originalPrice = currency === 'USD' ? product.originalPriceUSD : product.originalPriceINR;
+  const discountAmount = discountPercent > 0 ? (rawPrice * discountPercent) / 100 : 0;
+  const currentPrice = discountPercent > 0 ? (currency === 'USD' ? Number((rawPrice - discountAmount).toFixed(2)) : Math.round(rawPrice - discountAmount)) : rawPrice;
+
+  const handleApplyCoupon = (e: React.FormEvent) => {
+    e.preventDefault();
+    const code = couponCode.trim().toUpperCase();
+    if (code === 'GLOBALSTUDY') {
+      setDiscountPercent(15);
+      setCouponMessage({ text: 'Coupon GLOBALSTUDY applied! 15% off.', isError: false });
+    } else if (code === 'WELCOME10') {
+      setDiscountPercent(10);
+      setCouponMessage({ text: 'Coupon WELCOME10 applied! 10% off.', isError: false });
+    } else if (!code) {
+      setCouponMessage(null);
+    } else {
+      setCouponMessage({ text: 'Invalid promo code. Try "GLOBALSTUDY"', isError: true });
+    }
+  };
 
   const handleCurrencySwitch = (c: 'USD' | 'INR') => {
     setCurrency(c);
@@ -105,6 +126,9 @@ Support Email: ${brandConfig.email}
     setStep('details');
     setName('');
     setEmail('');
+    setCouponCode('');
+    setDiscountPercent(0);
+    setCouponMessage(null);
     setAgreedToLicense(false);
     setErrors({});
     onClose();
@@ -386,12 +410,47 @@ Support Email: ${brandConfig.email}
                 </p>
               </div>
 
+              {/* Promo Code Input */}
+              <div className="p-3 bg-[#FAF8FA] rounded-xl border border-[#EDE2EB] space-y-2">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                    placeholder="Promo code (e.g. GLOBALSTUDY)"
+                    className="flex-1 px-3 py-1.5 text-xs rounded-lg border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256] uppercase"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    className="px-3 py-1.5 text-xs font-semibold text-[#583256] bg-white hover:bg-[#F2EBF1] border border-[#DACFDB] rounded-lg transition-colors whitespace-nowrap"
+                  >
+                    Apply
+                  </button>
+                </div>
+                {couponMessage && (
+                  <p
+                    className={`text-[11px] ${
+                      couponMessage.isError ? 'text-rose-600' : 'text-emerald-700 font-medium'
+                    }`}
+                  >
+                    {couponMessage.text}
+                  </p>
+                )}
+              </div>
+
               {/* Order total */}
               <div className="py-2.5 px-3 bg-[#FAF8FA] rounded-lg border border-[#EDE2EB] text-xs space-y-1">
                 <div className="flex justify-between text-[#5C4A60]">
                   <span>Item Subtotal</span>
-                  <span className="tabular-nums">{currentSymbol}{currentPrice.toLocaleString()} {currency}</span>
+                  <span className="tabular-nums">{currentSymbol}{rawPrice.toLocaleString()} {currency}</span>
                 </div>
+                {discountPercent > 0 && (
+                  <div className="flex justify-between text-emerald-700 font-medium">
+                    <span>Discount ({discountPercent}%)</span>
+                    <span className="tabular-nums">-{currentSymbol}{discountAmount.toLocaleString()} {currency}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-[#5C4A60]">
                   <span>Worldwide Digital Delivery</span>
                   <span className="text-emerald-700 font-medium">Free (Instant Email Link)</span>

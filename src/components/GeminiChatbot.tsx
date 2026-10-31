@@ -113,12 +113,29 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
 
       setMessages((prev) => [...prev, assistantMsg]);
     } catch (err: any) {
-      console.error('Chat error:', err);
+      console.warn('Backend unavailable, using client-side behavior science advisor:', err);
+      
+      const q = textToSend.toLowerCase();
+      let responseText = '';
+      
+      if (q.includes('certif') || q.includes('credential') || q.includes('qasp') || q.includes('reema') || q.includes('founder') || q.includes('who are you') || q.includes('linkedin')) {
+        responseText = `The Behavior Canvas was founded by Reema Singh, a **QASP-S® (Qualified Autism Services Practitioner-Supervisor)** board-certified through the Qualified Applied Behavior Analysis Credentialing Board (QABA®).\n\nKey credentials & accreditations:\n• QASP-S® Board Certified Practitioner & Supervisor\n• Psychology & Special Education Academic Background\n• International Tele-Supervisor for candidates worldwide\n\nVerify Reema's professional profile & credentials on LinkedIn:\nhttps://www.linkedin.com/in/reema-qasp-s-4402a431b/`;
+      } else if (q.includes('supervis') || q.includes('tele') || q.includes('remote') || q.includes('hour') || q.includes('time') || q.includes('book')) {
+        responseText = `We provide **Worldwide Tele-Supervision** for ABAT® and QASP-S® candidates across the US, UK, Middle East, Australia, India, and beyond.\n\n• Flexible multi-timezone matching (US EST/PST, UK GMT, UAE GST, India IST, Australia AEST)\n• 1-on-1 competency sign-offs and monthly verification documentation\n• Case formulation, ethical dilemma coaching, and mock portfolio defense\n\nClick 'Book Supervision' in the header to submit an initial consultation enquiry!`;
+      } else if (q.includes('study') || q.includes('note') || q.includes('exam') || q.includes('cheat') || q.includes('question') || q.includes('resource') || q.includes('bank') || q.includes('price') || q.includes('cost')) {
+        responseText = `The Behavior Canvas offers high-yield digital study materials for behavior practitioners:\n\n1. **QASP-S Complete Study System**: Comprehensive task list notes, ethical guidelines, and case vignettes.\n2. **Applied Scenario Question Bank**: 100+ scenario-based questions with thorough rationale breakdowns.\n3. **Quick-Reference Exam Cheat Sheets & Study Tracker**: High-yield visual summaries of formulas, reinforcement schedules, and prompt hierarchies.\n\nAvailable with instant download in both USD ($) and INR (₹) in our Study Store!`;
+      } else if (q.includes('pay') || q.includes('stripe') || q.includes('paypal') || q.includes('card') || q.includes('currency') || q.includes('international')) {
+        responseText = `We support 100% secure, internationally accepted payment methods through **Stripe** (Cards, Apple Pay, Google Pay) and **PayPal Global**, with automatic currency toggle between USD ($) and INR (₹). All downloads are delivered immediately to your email with 256-bit SSL encryption.`;
+      } else if (q.includes('function') || q.includes('aba') || q.includes('reinforce') || q.includes('prompt') || q.includes('behavior')) {
+        responseText = `In Applied Behavior Analysis (ABA), behavior always serves a function. The 4 primary functions of behavior are:\n\n1. **Sensory / Automatic**: Internally pleasing or self-soothing sensory input.\n2. **Escape / Avoidance**: Removing or delaying an unpleasant demand or situation.\n3. **Attention**: Gaining interaction or reaction from caregivers, peers, or instructors.\n4. **Tangible / Access**: Gaining access to a preferred item, activity, or environment.\n\nOur study notes and question banks dive deep into functional behavior assessments (FBA), functional communication training (FCT), and ethical considerations!`;
+      } else {
+        responseText = `Hello! I am your AI Behavior Science & Supervision Advisor at The Behavior Canvas. How can I help you today?\n\n• QASP-S / ABAT exam preparation & study bundles\n• International remote tele-supervision bookings\n• Core Applied Behavior Analysis concepts and ethical standards\n• Verifying founder certifications and partnerships\n\nYou can also contact Reema directly at info@behaviorcanvas.com or via LinkedIn: https://www.linkedin.com/in/reema-qasp-s-4402a431b/`;
+      }
+
       const fallbackMsg: Message = {
-        id: `error-${Date.now()}`,
+        id: `model-${Date.now()}`,
         role: 'model',
-        content:
-          'I apologize, but our server-side connection encountered an issue. For prompt answers regarding our QASP-S study bundles or remote supervision availability, feel free to submit an enquiry or email Reema directly at info@behaviorcanvas.com.',
+        content: responseText,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, fallbackMsg]);
