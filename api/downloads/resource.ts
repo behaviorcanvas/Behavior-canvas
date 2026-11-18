@@ -1,4 +1,4 @@
-import { ApiRequest, ApiResponse, verifyDownloadToken } from '../_lib/token.ts';
+import { ApiRequest, ApiResponse, verifyDownloadToken } from '../_lib/token';
 
 function isAllowedResourceUrl(rawUrl: string): boolean {
   try {

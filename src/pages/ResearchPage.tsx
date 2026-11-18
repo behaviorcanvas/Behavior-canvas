@@ -47,7 +47,7 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ onNavigate, onOpenEn
           <div className="lg:col-span-5">
             <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-[#514458]/10">
               <img
-                src="/src/assets/images/research_journal_editorial_1794989153921.jpg"
+                src="/assets/images/research_journal_editorial_1794989153921.jpg"
                 alt="Behavioural Science Research Journal Editorial"
                 className="w-full h-full object-cover"
               />

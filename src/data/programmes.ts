@@ -19,7 +19,7 @@ export const programmesData: ProgrammeItem[] = [
     slug: 'foundations-of-applied-behaviour-analysis',
     title: 'Foundations of Applied Behaviour Analysis',
     category: 'Foundations of Applied Behaviour Analysis',
-    coverImage: '/src/assets/images/academy_editorial_cover_1794989128289.jpg',
+    coverImage: '/assets/images/academy_editorial_cover_1794989128289.jpg',
     description:
       'A structured foundational course introducing core principles of Applied Behaviour Analysis, philosophical underpinnings, respondent and operant conditioning, and ethical human-centred application for students and early-career educators.',
     learningObjectives: [
@@ -66,7 +66,7 @@ export const programmesData: ProgrammeItem[] = [
     slug: 'functional-behaviour-assessment-compassionate-practice',
     title: 'Functional Behaviour Assessment: Understanding Before Intervening',
     category: 'Functional Behaviour Assessment',
-    coverImage: '/src/assets/images/hero_behaviour_canvas_calm_1794989127767.jpg',
+    coverImage: '/assets/images/hero_behaviour_canvas_calm_1794989127767.jpg',
     description:
       'An applied academy module focused on indirect interviews, descriptive ABC observation, environmental contextual analysis, and developing compassionate functional hypotheses prior to intervention planning.',
     learningObjectives: [
@@ -109,7 +109,7 @@ export const programmesData: ProgrammeItem[] = [
     slug: 'positive-behaviour-support-and-functional-communication',
     title: 'Positive Behaviour Support & Functional Communication Training',
     category: 'Positive Behaviour Support',
-    coverImage: '/src/assets/images/classroom_watercolor_inclusion_1793099874430.jpg',
+    coverImage: '/assets/images/classroom_watercolor_inclusion_1793099874430.jpg',
     description:
       'Learn how to replace restrictive behaviour-reduction practices with proactive Positive Behaviour Support (PBS) and authentic Functional Communication Training (FCT) across AAC, gesture, visual, and spoken modalities.',
     learningObjectives: [
@@ -151,7 +151,7 @@ export const programmesData: ProgrammeItem[] = [
     slug: 'ethical-and-compassionate-behavioural-practice',
     title: 'Ethical & Compassionate Behavioural Practice: Assent, Dignity & Quality of Life',
     category: 'Ethical and Compassionate Behavioural Practice',
-    coverImage: '/src/assets/images/supervision_watercolor_mentoring_1793099905362.jpg',
+    coverImage: '/assets/images/supervision_watercolor_mentoring_1793099905362.jpg',
     description:
       'A reflective masterclass and seminar series examining trauma-informed ethics, assent vs. consent, neurodiversity affirmation, scope of competence, and meaningful quality-of-life outcomes.',
     learningObjectives: [
@@ -189,7 +189,7 @@ export const programmesData: ProgrammeItem[] = [
     slug: 'parent-education-understanding-behaviour-home',
     title: 'Parent Education Programme: Understanding Behaviour at Home',
     category: 'Parent Education',
-    coverImage: '/src/assets/images/hero_watercolor_child_guide_1793099905373.jpg',
+    coverImage: '/assets/images/hero_watercolor_child_guide_1793099905373.jpg',
     description:
       'A warm, jargon-free educational programme helping parents understand why challenging moments happen, build calmer transitions, strengthen communication, and partner effectively with educators.',
     learningObjectives: [
@@ -227,7 +227,7 @@ export const programmesData: ProgrammeItem[] = [
     slug: 'introduction-to-behavioural-science-open-primer',
     title: 'Introduction to Behavioural Science: An Open Orientation',
     category: 'Introduction to Behavioural Science',
-    coverImage: '/src/assets/images/research_journal_editorial_1794989153921.jpg',
+    coverImage: '/assets/images/research_journal_editorial_1794989153921.jpg',
     description:
       'An accessible introductory overview designed for curious learners, psychology students, and community members exploring how environment, learning history, and compassion intersect.',
     learningObjectives: [

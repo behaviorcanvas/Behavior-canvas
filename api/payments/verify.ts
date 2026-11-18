@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { ApiRequest, ApiResponse, signDownloadToken } from '../_lib/token.ts';
+import { ApiRequest, ApiResponse, signDownloadToken } from '../_lib/token';
 
 export default async function handler(req: ApiRequest, res: ApiResponse) {
   if (req.method !== 'POST') {

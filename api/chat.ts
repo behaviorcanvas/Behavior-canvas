@@ -1,5 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
-import type { ApiRequest, ApiResponse } from './_lib/token.ts';
+import type { ApiRequest, ApiResponse } from './_lib/token';
 
 interface ChatMessage {
   role: 'user' | 'model';

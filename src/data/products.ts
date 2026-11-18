@@ -46,7 +46,7 @@ export const productsData: ProductItem[] = [
     originalPriceUSD: 16,
     format: 'Digital PDF Document',
     category: 'Notes',
-    image: '/src/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
+    image: '/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
     badge: 'Core ABA Notes',
     shortDescription:
       'Comprehensive, systematically structured ABA & behavioural science study notes pairing conceptual accuracy with compassionate home, clinic, and school applications.',
@@ -106,7 +106,7 @@ export const productsData: ProductItem[] = [
     originalPriceUSD: 7,
     format: 'Digital PDF Document',
     category: 'Cheat Sheet',
-    image: '/src/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
+    image: '/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
     badge: 'Quick Reference',
     shortDescription:
       'A crisp, visual rapid-revision guide summarising measurement procedures, reinforcement schedules, prompting hierarchies, and ethical safeguards.',
@@ -158,7 +158,7 @@ export const productsData: ProductItem[] = [
     originalPriceUSD: 22,
     format: 'Digital PDF Document',
     category: 'Practice',
-    image: '/src/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
+    image: '/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
     badge: 'Applied Practice',
     shortDescription:
       'Scenario-driven applied behaviour analysis questions complete with thorough conceptual rationales explaining every correct choice and distractor.',
@@ -209,7 +209,7 @@ export const productsData: ProductItem[] = [
     originalPriceUSD: 5,
     format: 'Fillable PDF & Revision Tracker',
     category: 'Planner',
-    image: '/src/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
+    image: '/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
     badge: 'Study Planner',
     shortDescription:
       'Stay calm and consistent with domain checklists, 8/12-week study timetables, confidence ratings, and mock score logs.',
@@ -251,7 +251,7 @@ export const productsData: ProductItem[] = [
     originalPriceUSD: 10,
     format: 'Digital E-Book (PDF)',
     category: 'E-book',
-    image: '/src/assets/images/research_journal_editorial_1794989153921.jpg',
+    image: '/assets/images/research_journal_editorial_1794989153921.jpg',
     badge: 'Digital E-Book',
     shortDescription:
       'An accessible reader bridging functional understanding, emotional regulation, assent, and collaborative home-school routines without jargon.',
@@ -289,7 +289,7 @@ export const productsData: ProductItem[] = [
     format: 'Complete 4-Resource Digital Pack (PDFs)',
     category: 'Bundle',
     isBundle: true,
-    image: '/src/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
+    image: '/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
     badge: 'Best Value Bundle',
     shortDescription:
       'Bring together ABA Notes (₹799), ABA Cheat Sheet (₹299), ABA Question Bank (₹999), and Study Tracker (₹149) in one unified digital bundle.',

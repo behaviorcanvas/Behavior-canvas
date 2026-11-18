@@ -62,7 +62,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   ).map((item, idx) => ({
     title: item.title,
     description: item.description,
-    image: item.imageUrl || '/src/assets/images/hero_behaviour_canvas_calm_1794989127767.jpg',
+    image: item.imageUrl || '/assets/images/hero_behaviour_canvas_calm_1794989127767.jpg',
     cta: item.ctaLabel || 'Explore',
     route: (item.link as RoutePath) || 'services',
     icon: pillarIcons[idx % pillarIcons.length],
@@ -142,7 +142,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <img
                   src={
                     homeCms?.heroImage ||
-                    '/src/assets/images/hero_behaviour_canvas_calm_1794989127767.jpg'
+                    '/assets/images/hero_behaviour_canvas_calm_1794989127767.jpg'
                   }
                   alt="Calm pastel watercolour editorial illustration for The Behavior Canvas"
                   className="w-full h-full object-cover"

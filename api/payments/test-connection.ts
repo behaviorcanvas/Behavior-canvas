@@ -1,4 +1,4 @@
-import type { ApiRequest, ApiResponse } from '../_lib/token.ts';
+import type { ApiRequest, ApiResponse } from '../_lib/token';
 
 export default function handler(req: ApiRequest, res: ApiResponse) {
   if (req.method !== 'POST' && req.method !== 'GET') {

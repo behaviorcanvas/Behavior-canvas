@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { ApiRequest, ApiResponse, getHeaderValue, readRawBody } from '../_lib/token.ts';
+import { ApiRequest, ApiResponse, getHeaderValue, readRawBody } from '../_lib/token';
 
 export const config = {
   api: {

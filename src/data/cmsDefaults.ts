@@ -93,7 +93,7 @@ export const DEFAULT_CMS_PAGES: Record<string, CmsPageDoc> = {
     heroHeading: 'Understanding Behaviour. Creating Meaningful Change.',
     heroBody:
       'Welcome to The Behavior Canvas, a space dedicated to behavioural science, evidence-based learning, compassionate support and professional development. We bring together education, behavioural science and practical knowledge to support individuals, families, students and professionals.',
-    heroImage: '/src/assets/images/hero_behaviour_canvas_calm_1794989127767.jpg',
+    heroImage: '/assets/images/hero_behaviour_canvas_calm_1794989127767.jpg',
     ctaPrimaryLabel: 'Explore Our Academy',
     ctaSecondaryLabel: 'Discover Our Services',
     status: 'published',
@@ -120,7 +120,7 @@ export const DEFAULT_CMS_PAGES: Record<string, CmsPageDoc> = {
             title: 'Behavioural Services',
             description:
               'Individualised behaviour consultation, parent education and training, online behavioural support, and ethical educational guidance.',
-            imageUrl: '/src/assets/images/hero_watercolor_child_guide_1793099905373.jpg',
+            imageUrl: '/assets/images/hero_watercolor_child_guide_1793099905373.jpg',
             ctaLabel: 'Explore Services',
             link: 'services',
           },
@@ -128,7 +128,7 @@ export const DEFAULT_CMS_PAGES: Record<string, CmsPageDoc> = {
             title: 'Academy of Behavioural Science',
             description:
               'Ten structured curriculum domains spanning Applied Behaviour Analysis, FBA, PBS, Functional Communication, and ethical practice.',
-            imageUrl: '/src/assets/images/academy_editorial_cover_1794989128289.jpg',
+            imageUrl: '/assets/images/academy_editorial_cover_1794989128289.jpg',
             ctaLabel: 'View Academy',
             link: 'academy',
           },
@@ -136,7 +136,7 @@ export const DEFAULT_CMS_PAGES: Record<string, CmsPageDoc> = {
             title: 'Workshops & Masterclasses',
             description:
               'Interactive live workshops and applied seminars designed for educators, parents, students, and practitioner cohorts.',
-            imageUrl: '/src/assets/images/classroom_watercolor_inclusion_1793099874430.jpg',
+            imageUrl: '/assets/images/classroom_watercolor_inclusion_1793099874430.jpg',
             ctaLabel: 'Upcoming Workshops',
             link: 'workshops',
           },
@@ -144,7 +144,7 @@ export const DEFAULT_CMS_PAGES: Record<string, CmsPageDoc> = {
             title: 'Learning Resources',
             description:
               'Curated ABA notes, rapid cheat sheets, applied scenario question banks, study trackers, and accessible e-books.',
-            imageUrl: '/src/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
+            imageUrl: '/assets/images/study_bundle_watercolor_cover_1793099874549.jpg',
             ctaLabel: 'Browse Resources',
             link: 'resources',
           },
@@ -156,7 +156,7 @@ export const DEFAULT_CMS_PAGES: Record<string, CmsPageDoc> = {
         heading: 'The Behavior Canvas – Academy of Behavioural Science.',
         subheading: 'Academic & Applied Programmes',
         body: 'Ten core learning domains designed with academic rigour, compassionate ethics, and real-world applicability for students, educators, parents, and practitioners.',
-        imageUrl: '/src/assets/images/academy_editorial_cover_1794989128289.jpg',
+        imageUrl: '/assets/images/academy_editorial_cover_1794989128289.jpg',
         imageAlt: 'The Behavior Canvas Academy editorial table setting',
         ctaLabel: 'Explore All Programmes',
         ctaLink: 'programmes',
@@ -223,7 +223,7 @@ export const DEFAULT_CMS_PAGES: Record<string, CmsPageDoc> = {
     heroHeading: 'Advancing Compassionate, Evidence-Based Behavioural Science.',
     heroBody:
       'The Behavior Canvas – Academy of Behavioural Science brings together academic scholarship, clinical research awareness, inclusive education, and human-centred ethical guidance.',
-    heroImage: '/src/assets/images/academy_editorial_cover_1794989128289.jpg',
+    heroImage: '/assets/images/academy_editorial_cover_1794989128289.jpg',
     status: 'published',
     seoTitle: 'About Us | The Behavior Canvas',
     seoDescription:

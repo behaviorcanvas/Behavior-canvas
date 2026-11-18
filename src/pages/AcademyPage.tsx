@@ -256,7 +256,7 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({
           <div className="lg:col-span-5">
             <div className="rounded-2xl overflow-hidden aspect-[16/10] border border-[#514458]/10">
               <img
-                src="/src/assets/images/academy_editorial_cover_1794989128289.jpg"
+                src="/assets/images/academy_editorial_cover_1794989128289.jpg"
                 alt="The Behavior Canvas Academy"
                 className="w-full h-full object-cover"
               />

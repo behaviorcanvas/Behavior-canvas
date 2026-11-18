@@ -30,7 +30,7 @@ export const workshopsData: WorkshopItem[] = [
     id: 'positive-behavior-inclusive-classroom',
     slug: 'positive-behavior-inclusive-classroom',
     title: 'Positive Behavior Support in the Inclusive Classroom',
-    bannerImage: '/src/assets/images/classroom_watercolor_inclusion_1793099874430.jpg',
+    bannerImage: '/assets/images/classroom_watercolor_inclusion_1793099874430.jpg',
     audience: 'Mainstream Teachers, Special Educators, Shadow Teachers & School Counsellors',
     shortDescription:
       'A practical, scenario-based workshop on identifying behavioural antecedents, designing visual supports, and nurturing neurodiversity-affirming classroom environments.',
@@ -67,7 +67,7 @@ export const workshopsData: WorkshopItem[] = [
     id: 'functional-communication-caregivers',
     slug: 'functional-communication-caregivers',
     title: 'Functional Communication & Co-Regulation: Practical Tools for Parents',
-    bannerImage: '/src/assets/images/hero_watercolor_child_guide_1793099905373.jpg',
+    bannerImage: '/assets/images/hero_watercolor_child_guide_1793099905373.jpg',
     audience: 'Parents, Family Caregivers & Early Interventionists',
     shortDescription:
       'Empathetic, parent-first strategies to recognise early overwhelm signals, scaffold functional communication at home, and support calm co-regulation.',
@@ -102,7 +102,7 @@ export const workshopsData: WorkshopItem[] = [
     id: 'applied-behavior-analysis-foundations',
     slug: 'applied-behavior-analysis-foundations',
     title: 'Foundations of Ethical Behaviour Analysis for Students & Aspiring Practitioners',
-    bannerImage: '/src/assets/images/supervision_watercolor_growth_1793099872825.jpg',
+    bannerImage: '/assets/images/supervision_watercolor_growth_1793099872825.jpg',
     audience: 'Psychology Students, Special Educators & Behaviour Technicians',
     shortDescription:
       'A conceptual masterclass unpacking operant contingencies, motivating operations, and assent-centred ethical decision-making.',
