@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Mail, Instagram, Youtube, Send, CheckCircle2, ShieldCheck, Clock, MessageSquare, AlertCircle } from 'lucide-react';
-import { brandConfig } from '../data/brand';
-import { Breadcrumbs } from '../components/Breadcrumbs';
+import { Mail, Instagram, Youtube, Send, CheckCircle2, ShieldCheck, AlertCircle } from 'lucide-react';
+import { usePlatform } from '../contexts/PlatformContext';
 import { RoutePath } from '../types';
 
 interface ContactPageProps {
@@ -9,6 +8,7 @@ interface ContactPageProps {
 }
 
 export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
+  const { siteSettings, submitEnquiry } = usePlatform();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [category, setCategory] = useState('General Enquiry');
@@ -18,307 +18,255 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [refCode, setRefCode] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validate = () => {
     const errs: Record<string, string> = {};
-    if (!name.trim()) errs.name = 'Please provide your full name.';
-    if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) errs.email = 'Please provide a valid email address.';
-    if (!message.trim() || message.trim().length < 15) errs.message = 'Please provide a message with at least 15 characters.';
+    if (!name.trim()) errs.name = 'Please enter your full name.';
+    if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) errs.email = 'Please enter a valid email.';
+    if (!message.trim() || message.trim().length < 10)
+      errs.message = 'Please enter a brief message (at least 10 characters).';
     if (!consent) errs.consent = 'Please confirm agreement to our Privacy Policy.';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const id = await submitEnquiry({
+        name,
+        email,
+        phone,
+        category,
+        contactMethod,
+        message,
+        consentAgreed: consent,
+      });
+      setRefCode(id);
       setIsSubmitted(true);
-    }, 700);
+    } catch (err: any) {
+      setErrors({ submit: err?.message || 'Unable to submit enquiry right now.' });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
-      <Breadcrumbs items={[{ label: 'Contact & Enquiry' }]} />
-
-      <div className="max-w-3xl space-y-3">
-        <span className="text-xs font-semibold tracking-wider uppercase text-[#7A5B79]">
-          Get in Touch
-        </span>
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-[#2A182C]">
-          Contact The Behavior Canvas
-        </h1>
-        <p className="text-base sm:text-lg text-[#5A475D] leading-relaxed">
-          Whether you are a parent exploring behavioral guidance, an educator seeking inclusive strategies, a school requesting workshops, or a professional with questions, we would love to connect.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        {/* Left Column: Contact Channels & Trust Info */}
-        <div className="lg:col-span-5 space-y-8">
-          <div className="bg-white rounded-3xl border border-[#EDE2EB] p-8 shadow-xs space-y-6">
-            <h2 className="text-xl font-bold text-[#2A182C]">
-              Direct Communication Channels
-            </h2>
-
-            <div className="space-y-4">
-              {/* Email */}
-              <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-[#FAF8FA] border border-[#F0E6EF]">
-                <div className="w-10 h-10 rounded-xl bg-white border border-[#EDE2EB] flex items-center justify-center text-[#583256] shrink-0">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-semibold text-[#7A677D] uppercase">Official Email</span>
-                  <a
-                    href={`mailto:${brandConfig.email}`}
-                    className="block text-sm font-bold text-[#2A182C] hover:text-[#583256] hover:underline transition-colors"
-                  >
-                    {brandConfig.email}
-                  </a>
-                  <p className="text-[11px] text-[#7A677D] mt-0.5">Checked daily by our team</p>
-                </div>
-              </div>
-
-              {/* Instagram */}
-              <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-[#FAF8FA] border border-[#F0E6EF]">
-                <div className="w-10 h-10 rounded-xl bg-white border border-[#EDE2EB] flex items-center justify-center text-[#583256] shrink-0">
-                  <Instagram className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-semibold text-[#7A677D] uppercase">Instagram Community</span>
-                  <a
-                    href={brandConfig.instagram.url}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="block text-sm font-bold text-[#2A182C] hover:text-[#583256] hover:underline transition-colors"
-                  >
-                    {brandConfig.instagram.handle}
-                  </a>
-                  <p className="text-[11px] text-[#7A677D] mt-0.5">Bite-sized behavior tips & updates</p>
-                </div>
-              </div>
-
-              {/* YouTube */}
-              <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-[#FAF8FA] border border-[#F0E6EF]">
-                <div className="w-10 h-10 rounded-xl bg-white border border-[#EDE2EB] flex items-center justify-center text-[#583256] shrink-0">
-                  <Youtube className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-semibold text-[#7A677D] uppercase">YouTube Channel</span>
-                  <a
-                    href={brandConfig.youtube.url}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="block text-sm font-bold text-[#2A182C] hover:text-[#583256] hover:underline transition-colors"
-                  >
-                    {brandConfig.youtube.handle}
-                  </a>
-                  <p className="text-[11px] text-[#7A677D] mt-0.5">Educational videos & tutorials</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Operating info */}
-            <div className="pt-4 border-t border-[#EDE2EB] space-y-2 text-xs text-[#5C4A60]">
-              <div className="flex items-center gap-2 font-semibold text-[#2A182C]">
-                <Clock className="w-4 h-4 text-[#583256]" />
-                <span>Response Window: 24–48 Business Hours</span>
-              </div>
-              <p>
-                Services and consultations are conducted virtually across all Indian states and territories.
-              </p>
-            </div>
-          </div>
-
-          {/* Privacy & Crisis Notice */}
-          <div className="p-6 rounded-2xl bg-[#FAF8FA] border border-[#EDE2EB] text-xs text-[#5C4A60] space-y-2.5">
-            <h4 className="font-bold text-[#2A182C] flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Data Confidentiality & Privacy Notice</span>
-            </h4>
-            <p className="leading-relaxed">
-              We respect your privacy. Please do not submit medical histories, diagnostic paperwork, or sensitive personal child records through this public enquiry form. Specific contextual information is gathered securely during private consultation intake.
-            </p>
-          </div>
+    <div className="bg-[#F8F5EF] py-12 lg:py-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="max-w-3xl space-y-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6E6474]">
+            Contact & Enquiries
+          </p>
+          <h1 className="font-serif text-3xl sm:text-5xl font-semibold text-[#514458]">
+            Get in Touch With The Behavior Canvas
+          </h1>
+          <p className="text-base text-[#6E6474] leading-relaxed">
+            Questions about Academy programmes, workshops, behavioural consultations, or learning resources? Reach out directly and we will respond thoughtfully.
+          </p>
         </div>
 
-        {/* Right Column: Multi-Category Interactive Form */}
-        <div className="lg:col-span-7 bg-white rounded-3xl border border-[#EDE2EB] p-8 sm:p-10 shadow-xs space-y-6">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold text-[#2A182C]">
-              Send an Online Enquiry
-            </h2>
-            <p className="text-xs text-[#6B5A6E]">
-              Fill in your details below. We review each enquiry personally and reply promptly.
-            </p>
-          </div>
-
-          {isSubmitted ? (
-            <div className="py-12 text-center space-y-4">
-              <div className="w-14 h-14 mx-auto rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-xs">
-                <CheckCircle2 className="w-8 h-8" />
-              </div>
-              <h3 className="text-2xl font-bold text-[#2A182C]">
-                Thank You, {name}!
-              </h3>
-              <p className="text-xs sm:text-sm text-[#5C4A60] max-w-md mx-auto leading-relaxed">
-                Your message regarding <span className="font-semibold text-[#2A182C]">{category}</span> has been received. Reema Singh and The Behavior Canvas team will respond via {contactMethod} at <span className="font-semibold text-[#2A182C]">{email}</span> within 24 to 48 business hours.
-              </p>
-              <div className="pt-4">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsSubmitted(false);
-                    setName('');
-                    setEmail('');
-                    setMessage('');
-                    setConsent(false);
-                  }}
-                  className="px-6 py-2.5 text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-colors shadow-xs"
-                >
-                  Send Another Enquiry
-                </button>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-5 space-y-6">
+            <div className="p-7 rounded-2xl bg-white border border-[#514458]/10 space-y-5 shadow-xs">
+              <h2 className="font-serif text-xl font-semibold text-[#514458]">Direct Channels</h2>
+              <div className="space-y-4 text-sm text-[#6E6474]">
+                <div className="flex items-start gap-3">
+                  <Mail className="w-4 h-4 text-[#514458] mt-1 shrink-0" />
+                  <div>
+                    <p className="font-semibold text-[#514458]">Official Email</p>
+                    <a href={`mailto:${siteSettings.email}`} className="underline">
+                      {siteSettings.email}
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Instagram className="w-4 h-4 text-[#514458] mt-1 shrink-0" />
+                  <div>
+                    <p className="font-semibold text-[#514458]">Instagram</p>
+                    <a href={siteSettings.instagramUrl} target="_blank" rel="noreferrer noopener" className="underline">
+                      {siteSettings.instagramHandle}
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Youtube className="w-4 h-4 text-[#514458] mt-1 shrink-0" />
+                  <div>
+                    <p className="font-semibold text-[#514458]">YouTube</p>
+                    <a href={siteSettings.youtubeUrl} target="_blank" rel="noreferrer noopener" className="underline">
+                      {siteSettings.youtubeHandle}
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label className="block text-xs font-semibold text-[#3B223D] mb-1">
-                  Your Full Name <span className="text-rose-600">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Ananya Sen / Vikram Rao"
-                  className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256]"
-                />
-                {errors.name && <p className="text-xs text-rose-600 mt-1">{errors.name}</p>}
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-6 rounded-2xl bg-[#F4E4ED]/50 border border-[#514458]/10 space-y-2 text-xs text-[#514458]">
+              <p className="font-semibold flex items-center gap-1.5">
+                <AlertCircle className="w-4 h-4" />
+                Privacy & Clinical Scope Note
+              </p>
+              <p className="leading-relaxed text-[#6E6474]">
+                Please avoid uploading confidential medical reports or acute crisis details here. The Behavior Canvas provides educational, consultation, and academic services and is not an emergency clinic.
+              </p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-7 bg-white p-7 sm:p-9 rounded-3xl border border-[#514458]/10 shadow-xs">
+            {isSubmitted ? (
+              <div className="py-10 text-center space-y-4">
+                <CheckCircle2 className="w-10 h-10 text-emerald-700 mx-auto" />
+                <h2 className="font-serif text-2xl font-semibold text-[#514458]">
+                  Enquiry Submitted
+                </h2>
+                <p className="text-sm text-[#6E6474] max-w-md mx-auto">
+                  Thank you, {name}. Your reference is <span className="font-mono text-xs">{refCode}</span>. We will reply via {contactMethod} within 24–48 business hours.
+                </p>
+                <button
+                  onClick={() => {
+                    setIsSubmitted(false);
+                    setMessage('');
+                  }}
+                  className="px-5 py-2.5 bg-[#514458] text-white text-xs font-semibold rounded-xl cursor-pointer"
+                >
+                  Send Another Message
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <h2 className="font-serif text-2xl font-semibold text-[#514458]">
+                  Send an Enquiry
+                </h2>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-[#514458] mb-1">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-[#514458]/15"
+                    />
+                    {errors.name && <p className="text-xs text-rose-600 mt-1">{errors.name}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#514458] mb-1">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-[#514458]/15"
+                    />
+                    {errors.email && <p className="text-xs text-rose-600 mt-1">{errors.email}</p>}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-[#514458] mb-1">
+                      Phone / WhatsApp
+                    </label>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-[#514458]/15"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#514458] mb-1">
+                      Category
+                    </label>
+                    <select
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-[#514458]/15"
+                    >
+                      <option value="General Enquiry">General Enquiry</option>
+                      <option value="Academy Programmes">Academy Programmes</option>
+                      <option value="Behaviour Consultation">Behaviour Consultation</option>
+                      <option value="Parent Training">Parent Training</option>
+                      <option value="Workshops & Masterclasses">Workshops & Masterclasses</option>
+                      <option value="Learning Resources">Learning Resources</option>
+                      <option value="Research Collaboration">Research Collaboration</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#514458] mb-1">
+                      Preferred Contact
+                    </label>
+                    <select
+                      value={contactMethod}
+                      onChange={(e) => setContactMethod(e.target.value as any)}
+                      className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-[#514458]/15"
+                    >
+                      <option value="Email">Email</option>
+                      <option value="WhatsApp">WhatsApp</option>
+                      <option value="Phone Call">Phone Call</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block text-xs font-semibold text-[#3B223D] mb-1">
-                    Email Address <span className="text-rose-600">*</span>
+                  <label className="block text-xs font-medium text-[#514458] mb-1">
+                    Message *
                   </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="name@example.com"
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256]"
+                  <textarea
+                    rows={4}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-[#514458]/15"
                   />
-                  {errors.email && <p className="text-xs text-rose-600 mt-1">{errors.email}</p>}
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#3B223D] mb-1">
-                    Phone / WhatsApp Number (Optional)
-                  </label>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+91 98765 43210"
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-[#3B223D] mb-1">
-                    Enquiry Category
-                  </label>
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256]"
-                  >
-                    <option value="General Enquiry">General Enquiry</option>
-                    <option value="Service Enquiry">Service & Consultation Enquiry</option>
-                    <option value="Workshop Enquiry">Workshop & School Training Enquiry</option>
-                    <option value="Digital Product Support">Digital Product & Study Notes Support</option>
-                    <option value="Professional Collaboration">Professional Collaboration & Speaking</option>
-                  </select>
+                  {errors.message && <p className="text-xs text-rose-600 mt-1">{errors.message}</p>}
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-[#3B223D] mb-1">
-                    Preferred Contact Method
-                  </label>
-                  <select
-                    value={contactMethod}
-                    onChange={(e) => setContactMethod(e.target.value as any)}
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256]"
-                  >
-                    <option value="Email">Email</option>
-                    <option value="WhatsApp">WhatsApp</option>
-                    <option value="Phone Call">Phone Call</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-[#3B223D] mb-1">
-                  How Can We Help You? <span className="text-rose-600">*</span>
-                </label>
-                <textarea
-                  rows={4}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Share details of your situation, the age of your learner, specific behavioral questions, or the topic you would like to explore."
-                  className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256] resize-y"
-                />
-                {errors.message && <p className="text-xs text-rose-600 mt-1">{errors.message}</p>}
-              </div>
-
-              <div>
-                <label className="flex items-start gap-2.5 cursor-pointer">
+                <label className="flex items-start gap-2.5 text-xs text-[#6E6474] cursor-pointer">
                   <input
                     type="checkbox"
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded border-[#DACFDB] text-[#583256] focus:ring-[#583256]"
+                    className="mt-0.5"
                   />
-                  <span className="text-xs text-[#5C4A60] leading-relaxed">
-                    I confirm that this enquiry is for educational guidance and agree to the{' '}
+                  <span>
+                    I consent to my enquiry details being stored for response and agree to the{' '}
                     <button
                       type="button"
                       onClick={() => onNavigate('privacy-policy')}
-                      className="text-[#583256] font-semibold underline"
+                      className="underline text-[#514458]"
                     >
                       Privacy Policy
-                    </button>.
+                    </button>
+                    .
                   </span>
                 </label>
-                {errors.consent && <p className="text-xs text-rose-600 mt-1">{errors.consent}</p>}
-              </div>
+                {errors.consent && <p className="text-xs text-rose-600">{errors.consent}</p>}
+                {errors.submit && <p className="text-xs text-rose-600">{errors.submit}</p>}
 
-              <div className="pt-2 flex items-center justify-between">
-                <span className="text-[11px] text-[#7A677D]">
-                  No spam guaranteed. We respect your inbox.
-                </span>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-6 py-3 text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-all shadow-xs flex items-center gap-2 disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <span>Submitting...</span>
-                  ) : (
-                    <>
-                      <Send className="w-3.5 h-3.5" />
-                      <span>Submit Message</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
-          )}
+                <div className="pt-2 flex items-center justify-between">
+                  <span className="text-xs text-[#6E6474] inline-flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                    Direct to Admin Inbox
+                  </span>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="px-6 py-3 bg-[#514458] hover:bg-[#3f3445] text-white text-xs font-semibold rounded-xl inline-flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>{isSubmitting ? 'Submitting...' : 'Send Message'}</span>
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
         </div>
       </div>
     </div>

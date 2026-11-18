@@ -8,222 +8,214 @@ export interface PolicyDocument {
   slug: string;
   title: string;
   lastUpdated: string;
+  draftNotice: string;
   introduction: string;
   sections: PolicySection[];
 }
 
 export const policiesData: Record<string, PolicyDocument> = {
-  "privacy-policy": {
-    id: "privacy-policy",
-    slug: "privacy-policy",
-    title: "Privacy Policy",
-    lastUpdated: "October 2026",
+  'privacy-policy': {
+    id: 'privacy-policy',
+    slug: 'privacy-policy',
+    title: 'Privacy Policy',
+    lastUpdated: 'November 2026',
+    draftNotice:
+      'Published policy template for The Behavior Canvas (behaviorcanvas.com). Recommended for periodic review by qualified legal counsel in your jurisdiction.',
     introduction:
-      "The Behavior Canvas ('we', 'us', or 'our'), founded by Reema Singh, is dedicated to protecting your personal privacy. This Privacy Policy outlines our transparent practices regarding the collection, handling, storage, and protection of information when you interact with our website (behaviorcanvas.com) and utilize our educational resources or online services.",
+      "The Behavior Canvas – Academy of Behavioural Science ('we', 'us', or 'our'), founded and directed by Reema Singh, respects your privacy and handles personal data with ethical care. This Privacy Policy describes how information is collected, used, and safeguarded when you visit behaviorcanvas.com, enrol in Academy programmes, register for workshops, purchase digital study resources, or submit an enquiry.",
     sections: [
       {
-        heading: "1. Information We Collect",
+        heading: '1. Information We Collect (Data Minimisation)',
         paragraphs: [
-          "We adhere to the principle of strict data minimization. We only collect the minimal information necessary to fulfill your specific enquiry, facilitate digital product delivery, or conduct educational services.",
-          "Voluntary Contact & Enquiry Information: When you submit an enquiry through our website forms or contact us via email, we collect your name, email address, preferred contact method, general category of enquiry, and any message you choose to provide.",
-          "Transactional Information: When purchasing digital study resources, we collect your name and email address to fulfill digital download delivery and maintain purchase records. We do not store or process your debit/credit card numbers or banking passwords on our servers; transactions are processed securely through authorized payment gateway partners (such as Razorpay or Cashfree).",
-          "Technical & Usage Information: Standard non-identifying technical metadata (browser type, device type, general regional location) may be collected automatically to maintain website security, prevent spam, and optimize site performance."
-        ]
+          'Contact & Enquiry Details: Name, email address, phone number (optional), preferred contact method, category of interest, and the enquiry details you voluntarily submit.',
+          'Learner Account & Enrolment Details: When signing in to the Student & Learner Portal via Google Sign-In, we store your name, verified email address, optional academic background, city, and course/workshop enrolment records.',
+          'Payment & Order Metadata: When purchasing digital resources, programmes, or workshop seats, transactions are processed through external payment providers (such as Razorpay or Stripe) or verified UPI transfers. We store order identifiers, item titles, verification status, and delivery receipts—never raw credit/debit card numbers or banking credentials.',
+        ],
       },
       {
-        heading: "2. How We Use Your Information",
+        heading: '2. Protection of Child & Sensitive Information',
         paragraphs: [
-          "To respond to your service, consultation, workshop, or digital resource enquiries.",
-          "To deliver purchased digital study materials and provide transaction confirmations.",
-          "To provide scheduled virtual consultations, parent guidance sessions, or mentoring.",
-          "To communicate essential administrative updates regarding website terms or scheduling changes.",
-          "We never sell, rent, monetize, or trade your personal information to third parties for marketing purposes."
-        ]
+          'Public website forms must not be used to upload detailed medical diagnoses, psychiatric records, or identifiable clinical files about children.',
+          'Any developmental context shared within private booked consultations is handled confidentially and used solely for educational and behavioural guidance.',
+        ],
       },
       {
-        heading: "3. Protection of Sensitive Child Information",
+        heading: '3. How Information Is Used & Stored',
         paragraphs: [
-          "We intentionally do not request detailed medical histories, formal diagnostic psychological reports, or sensitive identifying information about children through general public enquiry forms.",
-          "Any contextual developmental observations shared during scheduled private consultations are treated with strict confidentiality and stored securely under applicable privacy norms."
-        ]
+          'To respond accurately to enquiries, deliver verified digital downloads, manage student enrolments, issue verifiable participation or completion certificates, and maintain statutory accounting records.',
+          'We never sell, rent, or trade personal information with third-party data brokers or advertisers.',
+        ],
       },
       {
-        heading: "4. Data Retention & Security",
+        heading: '4. Your Rights & Contact',
         paragraphs: [
-          "We retain your enquiry and transactional details only for as long as necessary to fulfill the relevant service, resolve disputes, and comply with applicable statutory tax and accounting obligations in India.",
-          "We implement industry-standard technical measures to safeguard information against unauthorized access, alteration, disclosure, or destruction."
-        ]
+          'To request review, correction, or deletion of your enquiry or learner account records, email info@behaviorcanvas.com.',
+        ],
       },
-      {
-        heading: "5. Grievance Redressal & Contact Information",
-        paragraphs: [
-          "If you have questions, concerns, or wish to exercise your rights to review, update, or request the deletion of your personal contact records, please contact our Grievance Officer at info@behaviorcanvas.com.",
-          "Official domain: behaviorcanvas.com | Email: info@behaviorcanvas.com"
-        ]
-      }
-    ]
+    ],
   },
-  "terms-and-conditions": {
-    id: "terms-and-conditions",
-    slug: "terms-and-conditions",
-    title: "Terms and Conditions",
-    lastUpdated: "October 2026",
+  'terms-and-conditions': {
+    id: 'terms-and-conditions',
+    slug: 'terms-and-conditions',
+    title: 'Terms and Conditions',
+    lastUpdated: 'November 2026',
+    draftNotice:
+      'Platform Terms and Conditions for behaviorcanvas.com. Recommended for periodic review by qualified legal counsel.',
     introduction:
-      "Welcome to The Behavior Canvas. These Terms and Conditions govern your access to and use of behaviorcanvas.com, including all content, digital resources, educational materials, and services offered by The Behavior Canvas and Reema Singh. By accessing or using this website, you signify your agreement to these Terms.",
+      'These Terms and Conditions govern your use of behaviorcanvas.com, the Academy of Behavioural Science, workshops, digital resources, and consultation services offered by The Behavior Canvas.',
     sections: [
       {
-        heading: "1. Scope of Website & Educational Content",
+        heading: '1. Educational Purpose & Scope',
         paragraphs: [
-          "The Behavior Canvas provides educational content, digital study guides, workshops, and professional consultation focused on behavior science, Applied Behavior Analysis (ABA), parent guidance, and inclusive education.",
-          "All articles, guides, infographics, and general website publications are published for educational and informational purposes only. They do not constitute formal medical, psychiatric, or diagnostic advice."
-        ]
+          'All website pages, Academy syllabi, workshops, articles, and study resources are provided for educational, professional development, and informational purposes.',
+          'Enrolling in an Academy programme or purchasing study notes creates an educational relationship—not a doctor-patient or emergency clinical care relationship.',
+        ],
       },
       {
-        heading: "2. Intellectual Property Rights",
+        heading: '2. Intellectual Property',
         paragraphs: [
-          "All content on this website—including text, graphics, logos, brand marks, diagrams, article texts, and digital publications—is the proprietary intellectual property of The Behavior Canvas and Reema Singh, protected under Indian and international copyright laws.",
-          "You may not copy, reproduce, distribute, republish, resell, publicly display, or create derivative works from our materials without explicit prior written authorization."
-        ]
+          'All text, editorial visuals, watercolours, curriculum outlines, ABA notes, cheat sheets, question banks, and recordings remain the intellectual property of The Behavior Canvas and Reema Singh.',
+        ],
       },
       {
-        heading: "3. User Conduct & Acceptable Use",
+        heading: '3. Scheduling, Enrolments & Rescheduling',
         paragraphs: [
-          "You agree to use this website solely for lawful, non-commercial educational purposes.",
-          "You agree not to transmit any unlawful, threatening, abusive, defamatory, or invasive material, nor to attempt to probe, scan, or compromise website security or infrastructure."
-        ]
+          'Confirmed consultation sessions require at least 24 hours advance notice for rescheduling. Academy cohort dates and workshop seats are governed by published schedules and confirmation emails.',
+        ],
       },
       {
-        heading: "4. Service Consultations & Rescheduling",
+        heading: '4. Governing Law',
         paragraphs: [
-          "Consultations and mentoring sessions must be scheduled in advance through mutual confirmation. If you need to reschedule a confirmed appointment, please provide at least 24 hours prior notice.",
-          "Consultation availability and acceptance of new clients are subject to professional suitability and capacity."
-        ]
+          'These terms are governed by applicable laws in India, with disputes subject to competent courts in India.',
+        ],
       },
-      {
-        heading: "5. Limitation of Liability",
-        paragraphs: [
-          "To the maximum extent permitted by applicable law, The Behavior Canvas and Reema Singh shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from the use of or inability to use this website, materials, or services.",
-          "These terms are governed by and construed in accordance with the laws of India, and any disputes shall be subject to the exclusive jurisdiction of the competent courts in India."
-        ]
-      }
-    ]
+    ],
   },
-  "refund-and-cancellation-policy": {
-    id: "refund-and-cancellation-policy",
-    slug: "refund-and-cancellation-policy",
-    title: "Refund and Cancellation Policy",
-    lastUpdated: "October 2026",
+  'refund-and-cancellation-policy': {
+    id: 'refund-and-cancellation-policy',
+    slug: 'refund-and-cancellation-policy',
+    title: 'Cancellation and Refund Policy',
+    lastUpdated: 'November 2026',
+    draftNotice:
+      'Commercial Cancellation & Refund Policy for digital products, workshops, academy programmes, and consultations.',
     introduction:
-      "The Behavior Canvas is committed to clarity and fairness in all client and learner interactions. Please review our policy regarding digital product purchases, service consultations, and educational workshops.",
+      'The Behavior Canvas strives for fairness and clarity across all digital study materials, workshops, Academy programmes, and individual consultations.',
     sections: [
       {
-        heading: "1. Digital Products (PDF Study Notes, Cheat Sheets, Workbooks, Trackers)",
+        heading: '1. Digital Learning Resources (PDF Notes, Cheat Sheets, Question Banks, E-books)',
         paragraphs: [
-          "Due to the immediate access nature of downloadable digital files, purchases of digital educational resources (such as QASP-S study notes, practice questions, cheat sheets, and bundles) are non-refundable once the file download link has been accessed or generated.",
-          "Technical Replacement Guarantee: If you experience any file corruption, defective download links, or difficulty opening a purchased PDF, please email info@behaviorcanvas.com with your order details. We will gladly re-issue a fresh working link or email the file directly to you within 24–48 hours."
-        ]
+          'Due to instant digital access upon verified payment, digital PDF downloads are non-refundable once accessed or unlocked.',
+          'Technical Support Guarantee: If you experience a corrupted file, broken link, or accidental duplicate payment, contact info@behaviorcanvas.com with your Order ID for prompt replacement or reconciliation.',
+        ],
       },
       {
-        heading: "2. Individual Consultations & Parent Guidance Sessions",
+        heading: '2. Workshops & Live Events',
         paragraphs: [
-          "Cancellations made more than 24 hours prior to the scheduled consultation time are eligible for a full reschedule without penalty or a refund minus administrative processing fees.",
-          "Cancellations made less than 24 hours prior to the session, or missed sessions ('no-shows'), are not eligible for a refund, as that dedicated professional time was reserved exclusively for you.",
-          "In the unlikely event that The Behavior Canvas needs to reschedule a session due to unforeseen professional emergency or illness, you will be offered your choice of immediate rescheduling at the earliest mutually convenient slot or a 100% full refund."
-        ]
+          'Cancellations requested 48 hours or more before a scheduled live workshop are eligible for a full refund or cohort credit.',
+          'Requests within 48 hours of workshop start are ordinarily non-refundable, though accessible takeaways or recordings (where provided for that cohort) remain available.',
+        ],
       },
       {
-        heading: "3. Live Workshops and Training Webinars",
+        heading: '3. Academy Programmes & Consultations',
         paragraphs: [
-          "Participants who cancel their workshop registration at least 48 hours prior to the scheduled event will receive a full refund or session credit toward a future workshop cohort.",
-          "Cancellations requested within 48 hours of the event start time are non-refundable, but session recordings and learning materials will remain accessible to registered participants where applicable."
-        ]
+          'Consultation cancellations made more than 24 hours ahead may be rescheduled once without penalty. Programme withdrawal timelines prior to cohort commencement will be specified in each cohort welcome letter.',
+        ],
       },
-      {
-        heading: "4. How to Request a Cancellation or Support",
-        paragraphs: [
-          "To request a rescheduling, cancellation, or file replacement, please send an email to info@behaviorcanvas.com including your full name, transaction date, and order reference."
-        ]
-      }
-    ]
+    ],
   },
-  "professional-disclaimer": {
-    id: "professional-disclaimer",
-    slug: "professional-disclaimer",
-    title: "Professional and Service Disclaimer",
-    lastUpdated: "October 2026",
+  'professional-disclaimer': {
+    id: 'professional-disclaimer',
+    slug: 'professional-disclaimer',
+    title: 'Professional Disclaimer',
+    lastUpdated: 'November 2026',
+    draftNotice: 'Ethical Practice & Scope Disclaimer for behavioural services and public content.',
     introduction:
-      "Please read this Professional and Service Disclaimer carefully prior to using our website, purchasing educational study guides, or booking professional consultations.",
+      'Please review this Professional Disclaimer carefully prior to relying on any educational articles, resources, or requesting behavioural services.',
     sections: [
       {
-        heading: "1. Educational Purpose & Non-Medical Scope",
+        heading: '1. Not Medical, Psychiatric, or Emergency Care',
         paragraphs: [
-          "The content published on behaviorcanvas.com—including articles, guides, worksheets, workshops, and general consultation discussions—is intended solely for educational, informational, and skill-building purposes.",
-          "The Behavior Canvas does not provide medical, pediatric, psychiatric, or diagnostic services. Consultations and resources do not constitute, nor are they a substitute for, clinical medical assessment, formal psychological diagnosis, or psychiatric treatment."
-        ]
+          'Content on The Behavior Canvas does not constitute medical diagnosis, psychiatric treatment, speech/occupational therapy, or acute crisis intervention.',
+          'In case of acute medical emergency, severe self-harm risk, or immediate safety crisis, please contact local emergency medical services or your nearest hospital immediately.',
+        ],
       },
       {
-        heading: "2. Crisis & Emergency Services Notice",
+        heading: '2. No Guaranteed Outcomes',
         paragraphs: [
-          "The Behavior Canvas is NOT an emergency or crisis intervention provider. If you, your child, or a person in your care is experiencing an acute medical emergency, severe self-harm crisis, violent behavioral crisis, or imminent physical risk, please contact your nearest local hospital emergency department or regional emergency helpline immediately."
-        ]
+          'Behavioural support and skill development depend on complex individual, ecological, and family variables. The Behavior Canvas does not promise guaranteed behavioural outcomes or credential exam passage.',
+        ],
       },
       {
-        heading: "3. Individualized Suitability & Limitations",
+        heading: '3. Scope of Practice & Credential Transparency',
         paragraphs: [
-          "Behavioral principles and strategies must always be individualized. What proves effective for one learner in one environment may not be appropriate or safe for another.",
-          "General educational materials are not tailored to any specific individual case. Applying strategies from articles or study notes is done at the user's personal discretion, and parents and educators are encouraged to seek individualized guidance."
-        ]
+          'Reema Singh practises and teaches within ethical boundaries consistent with QASP-S (QABA, USA) training, clinical psychology research, and special education expertise.',
+        ],
       },
-      {
-        heading: "4. No Guarantee of Outcomes or Exam Passage",
-        paragraphs: [
-          "While our resources and guidance are grounded in established behavior science and pedagogical best practices, human behavior is complex and multifactorial. The Behavior Canvas makes no warranties, express or implied, regarding guaranteed behavioral outcomes or timelines.",
-          "Independent study resources (such as QASP-S study guides) are designed to aid revision and concept review. We do not guarantee that using these study materials will result in passing any credentialing board examination."
-        ]
-      },
-      {
-        heading: "5. Non-Affiliation with Third-Party Credentialing Bodies",
-        paragraphs: [
-          "The Behavior Canvas is an independent educational platform. Reference to credentials (such as QASP-S, ABAT, or QABA) is made strictly for descriptive educational categorization and does not imply official endorsement, partnership, or sponsorship by any credentialing organization."
-        ]
-      }
-    ]
+    ],
   },
-  "copyright-policy": {
-    id: "copyright-policy",
-    slug: "copyright-policy",
-    title: "Copyright and Digital Product Usage Policy",
-    lastUpdated: "October 2026",
+  'educational-disclaimer': {
+    id: 'educational-disclaimer',
+    slug: 'educational-disclaimer',
+    title: 'Educational Programme Disclaimer',
+    lastUpdated: 'November 2026',
+    draftNotice: 'Clarity regarding Academy certificates and independent credentialing boards.',
     introduction:
-      "All digital products, study materials, cheat sheets, and publications created by The Behavior Canvas and Reema Singh are protected by copyright laws. This policy outlines your permitted usage and strict licensing restrictions.",
+      'The Behavior Canvas – Academy of Behavioural Science maintains strict transparency regarding certificate types and academic standing.',
     sections: [
       {
-        heading: "1. Personal Educational Single-User License",
+        heading: '1. Distinction Between Certificate Types',
         paragraphs: [
-          "When you purchase or download a digital resource from The Behavior Canvas, you are granted a revocable, non-exclusive, non-transferable, single-user license strictly for your personal, individual educational use.",
-          "You are permitted to download the file to your personal computer, tablet, or smartphone, and print one (1) physical copy for your personal study reference."
-        ]
+          'Certificate of Participation: Issued for attending live workshops, seminars, or orientations.',
+          'Certificate of Completion: Issued upon fulfilling attendance, readings, or applied coursework within an independent Academy programme.',
+        ],
       },
       {
-        heading: "2. Strict Prohibition Against Unauthorized Redistribution",
+        heading: '2. Non-Licensure & Non-Accreditation Statement',
         paragraphs: [
-          "You may NOT resell, sub-license, rent, lease, or distribute our digital files to third parties.",
-          "You may NOT upload our files to public or shared cloud drives (such as Google Drive, Dropbox, Telegram channels, WhatsApp groups, Course Hero, Scribd, or torrent sites).",
-          "You may NOT email or forward copies of downloaded files to colleagues, friends, or study groups. Each individual user must purchase their own legitimate copy."
-        ]
+          'Independent educational programmes and certificates issued by The Behavior Canvas do NOT constitute university degrees, government clinical licences, or QABA-approved coursework/continuing education credits unless explicitly and formally authorised in writing.',
+          'Reference to credentials such as QASP-S or ABA terminology in study guides is strictly descriptive for learner preparation.',
+        ],
+      },
+    ],
+  },
+  'digital-product-terms': {
+    id: 'digital-product-terms',
+    slug: 'digital-product-terms',
+    title: 'Digital Product Terms & Copyright',
+    lastUpdated: 'November 2026',
+    draftNotice: 'Single-user licensing & intellectual property terms for digital store items.',
+    introduction:
+      'All digital study notes, cheat sheets, scenario question banks, trackers, and e-books from The Behavior Canvas are licensed—not sold outright—for individual study use.',
+    sections: [
+      {
+        heading: '1. Single-User Educational Licence',
+        paragraphs: [
+          'Verified buyers receive a personal, non-transferable, non-exclusive licence to download materials onto personal devices and print one copy for personal revision.',
+        ],
       },
       {
-        heading: "3. Institutional & Multi-User Licensing",
+        heading: '2. Strictly Prohibited Actions',
         paragraphs: [
-          "If you represent a school, university, therapy center, or training institute wishing to use our study materials or toolkits with a cohort of students or staff, please contact us at info@behaviorcanvas.com to arrange an authorized institutional multi-user license."
-        ]
+          'Forwarding PDFs via WhatsApp/Telegram groups, uploading to shared drives, Scribd, Course Hero, commercial redistribution, or institutional bulk sharing without a written Institutional Licence is strictly prohibited.',
+        ],
       },
+    ],
+  },
+  'copyright-policy': {
+    id: 'copyright-policy',
+    slug: 'copyright-policy',
+    title: 'Copyright and Intellectual Property Policy',
+    lastUpdated: 'November 2026',
+    draftNotice: 'Brand & material copyright notice for behaviorcanvas.com.',
+    introduction:
+      'All branding, Academy curricula, digital PDF study guides, editorial articles, and bespoke illustrations on behaviorcanvas.com are protected under applicable copyright laws.',
+    sections: [
       {
-        heading: "4. Copyright Infringement & Legal Enforcement",
+        heading: '1. Institutional & Bulk Licensing',
         paragraphs: [
-          "Digital resources may contain embedded, invisible digital watermarking and tracking identifiers. Unauthorized distribution or commercial piracy of our intellectual property is subject to legal action under the Indian Copyright Act, 1957 and applicable international intellectual property treaties."
-        ]
-      }
-    ]
-  }
+          'Universities, clinics, NGOs, and schools interested in licensing study materials or hosting institutional workshops should contact info@behaviorcanvas.com for an authorised multi-seat agreement.',
+        ],
+      },
+    ],
+  },
 };

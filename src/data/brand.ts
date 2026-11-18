@@ -1,5 +1,6 @@
 export interface BrandConfig {
   name: string;
+  positioning: string;
   tagline: string;
   heroHeadline: string;
   heroSubheadline: string;
@@ -21,6 +22,7 @@ export interface BrandConfig {
   founder: {
     name: string;
     role: string;
+    credentialsLine: string;
     credentials: string[];
     bioShort: string;
     bioFull: string[];
@@ -29,6 +31,10 @@ export interface BrandConfig {
   };
   mission: string;
   vision: string;
+  philosophyPrinciples: {
+    title: string;
+    description: string;
+  }[];
   values: {
     title: string;
     description: string;
@@ -37,119 +43,149 @@ export interface BrandConfig {
     title: string;
     description: string;
   }[];
+  payments: {
+    upiId: string;
+    payeeName: string;
+    razorpayKeyId?: string;
+  };
 }
 
 export const brandConfig: BrandConfig = {
-  name: "The Behavior Canvas",
-  tagline: "Crafting Behavior, Creating Change",
-  heroHeadline: "Understanding Behavior. Supporting Growth. Creating Change.",
+  name: 'The Behavior Canvas',
+  positioning: 'The Behavior Canvas – Academy of Behavioural Science',
+  tagline: 'Crafting Behavior, Creating Change.',
+  heroHeadline: 'Understanding Behaviour. Creating Meaningful Change.',
   heroSubheadline:
-    "The Behavior Canvas brings together behavior science, parent education, inclusive learning, and professional development to help individuals, families, educators, and professionals build meaningful skills and understanding.",
-  domain: "behaviorcanvas.com",
-  email: "info@behaviorcanvas.com",
+    'Welcome to The Behavior Canvas, a space dedicated to behavioural science, evidence-based learning, compassionate support and professional development. We bring together education, behavioural science and practical knowledge to support individuals, families, students and professionals.',
+  domain: 'behaviorcanvas.com',
+  email: 'info@behaviorcanvas.com',
   instagram: {
-    handle: "@thebehaviorcanvas",
-    url: "https://instagram.com/thebehaviorcanvas",
+    handle: '@thebehaviorcanvas',
+    url: 'https://instagram.com/thebehaviorcanvas',
   },
   youtube: {
-    handle: "@behaviorcanvas",
-    url: "https://youtube.com/@behaviorcanvas",
+    handle: '@behaviorcanvas',
+    url: 'https://youtube.com/@behaviorcanvas',
   },
   linkedin: {
-    handle: "Reema Singh (QASP-S)",
-    url: "https://www.linkedin.com/in/reema-qasp-s-4402a431b/",
+    handle: 'Reema Singh (QASP-S)',
+    url: 'https://www.linkedin.com/in/reema-qasp-s-4402a431b/',
   },
-  logoPath: "/assets/behavior-canvas-logo.jpg",
+  logoPath: '/assets/behavior-canvas-logo.jpg',
   founder: {
-    name: "Reema Singh",
-    role: "Founder, QASP-S® Credentialed Specialist & International Tele-Supervisor",
+    name: 'Reema Singh',
+    role: 'Founder & Director',
+    credentialsLine:
+      'QASP-S (QABA, USA) | Behaviour Analyst | Clinical Psychology Researcher | Special Educator',
     credentials: [
-      "Qualified Autism Services Practitioner-Supervisor (QASP-S®, QABA® Board Credentialed)",
-      "Psychology & Special Education Academic Background",
-      "International Fieldwork & Tele-Supervisor (US, UK, Middle East, Australia, India)",
-      "Parent Educator & Inclusive Learning Consultant",
+      'QASP-S (QABA, USA)',
+      'Behaviour Analyst',
+      'Clinical Psychology Researcher',
+      'Special Educator',
     ],
     bioShort:
-      "The Behavior Canvas was founded by Reema Singh, a behavior and special education professional with a background in psychology and a commitment to making behavior science education more accessible, practical, and meaningful.",
+      'Reema Singh is the Founder and Director of The Behavior Canvas – Academy of Behavioural Science. With training across Applied Behaviour Analysis, clinical psychology research, and special education, her work focuses on making behavioural science rigorous, ethical, compassionate, and genuinely accessible.',
     bioFull: [
-      "The Behavior Canvas was founded by Reema Singh, a behavior and special education professional with a background in psychology and a commitment to making behavior science education more accessible, practical, and meaningful across India.",
-      "With hands-on experience guiding parents, mentoring educators, and supporting learners with diverse needs, Reema brings a respectful, neurodiversity-affirming perspective to Applied Behavior Analysis (ABA) and educational practice.",
-      "Her work focuses on demystifying behavior science: transforming academic principles into compassionate, practical strategies that parents can apply at home, and that educators can embed within mainstream and inclusive classrooms.",
-      "Through structured digital study resources, targeted parent guidance, and professional workshops, The Behavior Canvas provides a grounded, ethical learning environment designed to empower both families and future behavior specialists."
+      'Reema Singh is the Founder and Director of The Behavior Canvas – Academy of Behavioural Science. She holds the Qualified Autism Services Practitioner-Supervisor (QASP-S) credential through QABA (USA) alongside academic and applied foundations in behaviour analysis, clinical psychology research, and special education.',
+      'Her work bridges research-grounded behavioural science with real-world application for parents and families, psychology and special education students, behaviour analysts, educators, and wider academic communities.',
+      'Guided by scientific integrity, respect for individual differences, and an unwavering commitment to assent and human dignity, Reema founded The Behavior Canvas to elevate ethical behavioural education beyond simplified therapy models into a cohesive space for structured programmes, workshops, research engagement, and practical learning tools.',
     ],
     approachHighlights: [
-      "Emphasis on learner dignity, functional communication, and assent",
-      "Context-focused analysis rather than blaming individuals or families",
-      "Evidence-informed frameworks adapted to Indian home and classroom realities",
-      "Collaborative approach bridging parents, educators, and multidisciplinary teams"
+      'Prioritising functional understanding before introducing any behavioural intervention',
+      'Centring dignity, autonomy, and ongoing learner assent across every educational context',
+      'Translating behavioural research into clear, non-blaming guidance for families and educators',
+      'Supporting lifelong ethical reflection among students, practitioners, and educators',
     ],
-    image: "/assets/aistudio/IMG_3227_699f0dff.jpeg",
+    image: '/assets/founder-reema-singh.jpeg',
   },
   mission:
-    "To make behavior science education more accessible and practical while encouraging respectful, individualized, and evidence-informed approaches to behavior, learning, and inclusion.",
+    'To make behavioural science accessible, meaningful and applicable through education, ethical practice, evidence-based support, research and professional development.',
   vision:
-    "To contribute to a more informed and inclusive community in India where families, educators, and professionals can access useful behavior science knowledge and learning opportunities.",
+    'An informed, compassionate ecosystem where parents, learners, educators, researchers, and practitioners engage with behavioural science with scientific integrity and respect for human dignity.',
+  philosophyPrinciples: [
+    {
+      title: 'Understand before intervening',
+      description:
+        'Every behaviour communicates context, history, sensory experience, or unmet need. Careful functional understanding must always precede any support strategy.',
+    },
+    {
+      title: 'Science with compassion',
+      description:
+        'Precision and data-informed methodology belong hand-in-hand with warmth, emotional safety, and genuine care for the human being.',
+    },
+    {
+      title: 'Dignity and autonomy',
+      description:
+        'Support should expand personal agency, voice, and independence—never coerce conformity at the expense of individual identity.',
+    },
+    {
+      title: 'Respect for assent',
+      description:
+        'Meaningful learning honours ongoing learner willingness, comfort, and communication, actively adapting whenever withdrawal or distress appears.',
+    },
+    {
+      title: 'Evidence-based decision-making',
+      description:
+        'Educational frameworks, recommendations, and mentoring remain grounded in empirical research and honest appraisal of boundaries.',
+    },
+    {
+      title: 'Individualised support',
+      description:
+        'No two learners, classrooms, or families are identical. Strategies are thoughtfully adapted to culture, strengths, and real environments.',
+    },
+    {
+      title: 'Meaningful outcomes and quality of life',
+      description:
+        'True success is measured not by isolated compliance metrics, but by everyday wellbeing, functional communication, belonging, and joy.',
+    },
+  ],
   values: [
     {
-      title: "Respect and Dignity",
-      description:
-        "Every learner is an individual with intrinsic worth. Behavior support must always prioritize autonomy, communication, and emotional wellbeing.",
+      title: 'Scientific Integrity',
+      description: 'Remaining faithful to empirical behavioural methodology and honest conceptual boundaries.',
     },
     {
-      title: "Individualized Support",
-      description:
-        "There are no cookie-cutter solutions. Strategies must be tailored to the unique strengths, needs, family context, and goals of each person.",
+      title: 'Professional Credibility',
+      description: 'Transparent credentials, structured curricula, and responsible representation of qualifications.',
     },
     {
-      title: "Evidence-Informed Practice",
-      description:
-        "Our educational materials and guidance are rooted in peer-reviewed behavior science and effective pedagogical principles.",
+      title: 'Compassion & Inclusion',
+      description: 'Welcoming diverse neurotypes and learning profiles without stigma or blame.',
     },
     {
-      title: "Inclusion & Accessibility",
-      description:
-        "Committed to dismantling barriers in educational and social settings so that all learners can participate meaningfully.",
+      title: 'Ethical Responsibility',
+      description: 'Clear scope of practice, zero guaranteed-outcome claims, and strict learner privacy.',
     },
     {
-      title: "Collaboration & Empathy",
-      description:
-        "True progress occurs when parents, educators, and specialists work hand-in-hand with trust, transparency, and non-blaming language.",
+      title: 'Respect for Individual Differences',
+      description: 'Strengths-focused and culturally responsive adaptation across home and school contexts.',
     },
     {
-      title: "Ethical Responsibility",
-      description:
-        "Rigorous adherence to ethical guidelines, transparent boundaries of competence, and honest communication of scope.",
-    },
-    {
-      title: "Lifelong Learning",
-      description:
-        "Encouraging continuous curiosity, reflective practice, and professional growth for students, educators, and practitioners.",
+      title: 'Lifelong Learning',
+      description: 'Fostering curiosity, peer dialogue, and reflective scholarship across careers.',
     },
   ],
   commitments: [
     {
-      title: "Evidence-Informed Education",
-      description: "Grounded in behavioral principles validated by scientific research, translated into actionable understanding."
+      title: 'Academic Depth Meets Everyday Clarity',
+      description: 'Structured courses, notes, and workshops that respect intellectual rigour while remaining practical.',
     },
     {
-      title: "Practical, Understandable Resources",
-      description: "Clarity over clinical jargon. Tools designed for immediate real-world use at home and in classrooms."
+      title: 'Whole-Ecosystem Community',
+      description: 'Serving families, educators, students, behaviour analysts, and researchers under one unified academy.',
     },
     {
-      title: "Respect for Individual Differences",
-      description: "Affirming neurodivergence and viewing differences through a strengths-based, dignity-preserving lens."
+      title: 'Transparent Educational Boundaries',
+      description: 'Clearly distinguishing educational certificates from statutory clinical licences or external board endorsements.',
     },
     {
-      title: "Family & Educator Collaboration",
-      description: "Partnering actively with caregivers and teachers as essential co-designers of supportive environments."
+      title: 'Privacy & Ethical Stewardship',
+      description: 'Safeguarding personal enquiry details and learner records with strict confidentiality.',
     },
-    {
-      title: "Ethical & Responsible Support",
-      description: "Transparent scopes, zero unrealistic promises, and steadfast adherence to professional ethics."
-    },
-    {
-      title: "Accessible Across India",
-      description: "Delivered online to bridge geographical gaps, providing quality resources to families nationwide."
-    }
-  ]
+  ],
+  payments: {
+    upiId: 'behaviorcanvas@okhdfcbank',
+    payeeName: 'The Behavior Canvas',
+    razorpayKeyId: '',
+  },
 };

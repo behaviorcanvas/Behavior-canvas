@@ -1,290 +1,233 @@
 import React, { useState } from 'react';
-import { Calendar, Clock, Video, CheckCircle2, ArrowRight, Send, HelpCircle, Users, Award } from 'lucide-react';
-import { workshopsData, WorkshopItem } from '../data/workshops';
-import { Breadcrumbs } from '../components/Breadcrumbs';
-import { brandConfig } from '../data/brand';
+import {
+  Calendar,
+  Clock,
+  ArrowLeft,
+  CheckCircle2,
+  Users,
+  Award,
+  ArrowRight,
+} from 'lucide-react';
+import { usePlatform } from '../contexts/PlatformContext';
 import { RoutePath } from '../types';
+import { CheckoutItem } from '../components/CheckoutModal';
 
 interface WorkshopsPageProps {
+  selectedSlug?: string;
+  currency?: 'USD' | 'INR';
   onNavigate: (route: RoutePath, param?: string) => void;
   onOpenEnquiry: (category?: string, subject?: string) => void;
+  onCheckoutItem?: (item: CheckoutItem) => void;
 }
 
 export const WorkshopsPage: React.FC<WorkshopsPageProps> = ({
+  selectedSlug,
+  currency = 'INR',
   onNavigate,
-  onOpenEnquiry
+  onOpenEnquiry,
+  onCheckoutItem,
 }) => {
-  const [activeTab, setActiveTab] = useState<'All' | 'Registration Open' | 'Upcoming'>('All');
+  const { workshops } = usePlatform();
+  const [tab, setTab] = useState<'All' | 'Registration Open' | 'Upcoming'>('All');
 
-  // Custom institutional workshop form state
-  const [orgName, setOrgName] = useState('');
-  const [contactPerson, setContactPerson] = useState('');
-  const [orgEmail, setOrgEmail] = useState('');
-  const [orgTopic, setOrgTopic] = useState('');
-  const [orgMessage, setOrgMessage] = useState('');
-  const [submittedOrg, setSubmittedOrg] = useState(false);
+  const activeWorkshop = selectedSlug
+    ? workshops.find((w) => w.slug === selectedSlug || w.id === selectedSlug) || null
+    : null;
 
-  const filteredWorkshops = workshopsData.filter((w) => {
-    if (activeTab === 'All') return true;
-    return w.status === activeTab;
-  });
+  if (activeWorkshop) {
+    const statusLabel = activeWorkshop.eventStatus || activeWorkshop.status;
+    return (
+      <div className="bg-[#F8F5EF] py-12 lg:py-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <button
+            onClick={() => onNavigate('workshops')}
+            className="inline-flex items-center gap-2 text-xs font-semibold text-[#514458] hover:underline cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Workshops & Events</span>
+          </button>
 
-  const handleOrgSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!contactPerson.trim() || !orgEmail.trim() || !orgTopic.trim()) return;
-    setSubmittedOrg(true);
-  };
+          <div className="bg-white rounded-3xl border border-[#514458]/10 overflow-hidden shadow-xs">
+            {activeWorkshop.bannerImage && (
+              <div className="h-64 overflow-hidden bg-[#F4E4ED]/30">
+                <img
+                  src={activeWorkshop.bannerImage}
+                  alt={activeWorkshop.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+            <div className="p-8 sm:p-10 space-y-8">
+              <div className="space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#6E6474]">
+                  {statusLabel} · {activeWorkshop.deliveryFormat}
+                </p>
+                <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-[#514458]">
+                  {activeWorkshop.title}
+                </h1>
+                <p className="text-base text-[#6E6474] leading-relaxed">
+                  {activeWorkshop.shortDescription}
+                </p>
+              </div>
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
-      <Breadcrumbs items={[{ label: 'Workshops & Training' }]} />
-
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#EDE2EB] pb-8">
-        <div className="space-y-3 max-w-2xl">
-          <span className="text-xs font-semibold tracking-wider uppercase text-[#7A5B79]">
-            Live Collaborative Learning
-          </span>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-[#2A182C]">
-            Workshops & Educational Training
-          </h1>
-          <p className="text-sm sm:text-base text-[#5A475D] leading-relaxed">
-            Interactive, research-grounded online workshops designed for parents, educators, special educators, and psychology professionals across India.
-          </p>
-        </div>
-
-        {/* Filter */}
-        <div className="flex items-center gap-1.5 p-1 bg-[#FAF6F8] rounded-xl border border-[#EDE2EB] shrink-0 self-start md:self-auto">
-          {(['All', 'Registration Open', 'Upcoming'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                activeTab === tab
-                  ? 'bg-white text-[#2A182C] shadow-xs'
-                  : 'text-[#6B5A6E] hover:text-[#2A182C]'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Workshops List */}
-      <div className="space-y-8">
-        {filteredWorkshops.length === 0 ? (
-          <div className="p-12 text-center bg-white rounded-3xl border border-[#EDE2EB] space-y-3">
-            <Calendar className="w-10 h-10 text-[#8C7A8F] mx-auto" />
-            <h3 className="text-base font-bold text-[#2A182C]">No workshops match this filter currently</h3>
-            <p className="text-xs text-[#5C4A60] max-w-sm mx-auto">
-              Please check back soon or submit an enquiry below to be notified when upcoming cohorts open for registration.
-            </p>
-          </div>
-        ) : (
-          filteredWorkshops.map((workshop) => (
-            <div
-              key={workshop.id}
-              className="bg-white rounded-3xl border border-[#EDE2EB] p-8 sm:p-10 shadow-xs hover:border-[#DACFDB] transition-all grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
-            >
-              {/* Left / Middle: Title, Audience, Objectives, Descriptions */}
-              <div className="lg:col-span-8 space-y-5">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100">
-                    {workshop.status}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-5 rounded-2xl bg-[#F8F5EF] border border-[#514458]/10 text-xs">
+                <div>
+                  <span className="text-[#6E6474] block mb-1 flex items-center gap-1">
+                    <Calendar className="w-3.5 h-3.5" /> Date & Schedule
                   </span>
-                  <span className="text-xs text-[#6B5A6E] flex items-center gap-1.5">
-                    <Video className="w-3.5 h-3.5 text-[#583256]" />
-                    <span>{workshop.deliveryFormat}</span>
+                  <strong className="text-[#514458]">{activeWorkshop.dateTime}</strong>
+                </div>
+                <div>
+                  <span className="text-[#6E6474] block mb-1 flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5" /> Duration
                   </span>
+                  <strong className="text-[#514458]">{activeWorkshop.duration}</strong>
                 </div>
-
-                <h2 className="text-2xl sm:text-3xl font-bold text-[#2A182C]">
-                  {workshop.title}
-                </h2>
-
-                <div className="p-3 bg-[#FAF8FA] rounded-xl text-xs text-[#5C4A60]">
-                  <span className="font-semibold text-[#2A182C]">Intended Audience: </span>
-                  {workshop.audience}
+                <div>
+                  <span className="text-[#6E6474] block mb-1 flex items-center gap-1">
+                    <Users className="w-3.5 h-3.5" /> Audience
+                  </span>
+                  <strong className="text-[#514458]">{activeWorkshop.audience}</strong>
                 </div>
-
-                <div className="space-y-3 text-xs sm:text-sm text-[#5C4A60] leading-relaxed">
-                  {workshop.fullDescription.map((p, idx) => (
-                    <p key={idx}>{p}</p>
-                  ))}
+                <div>
+                  <span className="text-[#6E6474] block mb-1 flex items-center gap-1">
+                    <Award className="w-3.5 h-3.5" /> Fee & Certificate
+                  </span>
+                  <strong className="text-[#514458]">{activeWorkshop.fee}</strong>
                 </div>
+              </div>
 
-                {/* Objectives */}
-                <div className="space-y-2 pt-2">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-[#2A182C]">
-                    Key Learning Objectives
-                  </h3>
+              {activeWorkshop.learningObjectives.length > 0 && (
+                <div className="space-y-3">
+                  <h2 className="font-serif text-xl font-semibold text-[#514458]">
+                    Learning Objectives
+                  </h2>
                   <ul className="space-y-2">
-                    {workshop.learningObjectives.map((obj, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-xs text-[#2A182C]">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    {activeWorkshop.learningObjectives.map((obj) => (
+                      <li key={obj} className="flex items-start gap-2.5 text-sm text-[#6E6474]">
+                        <CheckCircle2 className="w-4 h-4 text-[#514458] shrink-0 mt-0.5" />
                         <span>{obj}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-              </div>
+              )}
 
-              {/* Right: Date, Fee, Registration Card */}
-              <div className="lg:col-span-4 bg-[#FAF8FA] rounded-2xl border border-[#EDE2EB] p-6 space-y-5">
-                <div className="space-y-3 text-xs text-[#5C4A60]">
-                  <div className="space-y-1">
-                    <span className="text-[11px] font-semibold text-[#7A677D] uppercase">Date & Timing</span>
-                    <p className="font-bold text-[#2A182C] text-sm flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-[#583256]" />
-                      <span>{workshop.dateTime}</span>
-                    </p>
-                  </div>
-
-                  <div className="space-y-1">
-                    <span className="text-[11px] font-semibold text-[#7A677D] uppercase">Duration</span>
-                    <p className="font-medium text-[#2A182C] flex items-center gap-1.5">
-                      <Clock className="w-4 h-4 text-[#583256]" />
-                      <span>{workshop.duration}</span>
-                    </p>
-                  </div>
-
-                  <div className="space-y-1 pt-2 border-t border-[#EDE2EB]">
-                    <span className="text-[11px] font-semibold text-[#7A677D] uppercase">Fee Structure</span>
-                    <p className="text-lg font-bold text-[#583256] tabular-nums">
-                      {workshop.fee}
-                    </p>
-                  </div>
-
-                  <div className="pt-2 text-[11px] text-[#6B5A6E] space-y-1 border-t border-[#EDE2EB]">
-                    <p className="font-semibold text-[#2A182C]">Includes:</p>
-                    <ul className="space-y-1 list-disc list-inside">
-                      {workshop.takeaways.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
+              <div className="flex flex-wrap gap-3 pt-2">
+                {onCheckoutItem &&
+                  statusLabel === 'Registration Open' &&
+                  (activeWorkshop.feeINR ?? 0) > 0 && (
+                    <button
+                      onClick={() =>
+                        onCheckoutItem({
+                          itemType: 'workshop',
+                          id: activeWorkshop.id,
+                          title: activeWorkshop.title,
+                          subtitle: activeWorkshop.dateTime,
+                          priceINR: activeWorkshop.feeINR || 999,
+                          priceUSD: activeWorkshop.feeUSD || 14,
+                        })
+                      }
+                      className="px-6 py-3 bg-[#514458] hover:bg-[#3f3445] text-white text-xs font-semibold rounded-xl cursor-pointer"
+                    >
+                      Register Online ({currency === 'INR' ? `₹${activeWorkshop.feeINR}` : `$${activeWorkshop.feeUSD}`})
+                    </button>
+                  )}
                 <button
-                  onClick={() => onOpenEnquiry('Workshops & Training', `Workshop Registration: ${workshop.title}`)}
-                  className="w-full py-3 text-center text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-all shadow-xs"
+                  onClick={() => onOpenEnquiry('Workshops & Masterclasses', activeWorkshop.title)}
+                  className="px-6 py-3 bg-[#F4E4ED] text-[#514458] text-xs font-semibold rounded-xl cursor-pointer"
                 >
-                  Register / Enquire for this Session
+                  Enquire / Waitlist
                 </button>
               </div>
             </div>
-          ))
-        )}
+          </div>
+        </div>
       </div>
+    );
+  }
 
-      {/* Propose a Workshop / Institutional Training Form */}
-      <section className="bg-white rounded-3xl border border-[#EDE2EB] p-8 sm:p-12 shadow-xs space-y-8">
-        <div className="max-w-2xl space-y-2">
-          <span className="text-xs font-semibold tracking-wider uppercase text-[#7A5B79]">
-            Schools, Universities & Non-Profits
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#2A182C] tracking-tight">
-            Request a Custom Workshop for Your Team
-          </h2>
-          <p className="text-xs sm:text-sm text-[#5C4A60] leading-relaxed">
-            We partner with educational institutions and organizations across India to conduct customized workshops on Positive Behavior Support, inclusive classroom structuring, and functional communication.
+  const filtered = workshops.filter((w) => {
+    if (tab === 'All') return true;
+    const label = w.eventStatus || w.status;
+    return label === tab;
+  });
+
+  return (
+    <div className="bg-[#F8F5EF] py-12 lg:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="max-w-3xl space-y-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6E6474]">
+            Live Cohorts & Seminars
+          </p>
+          <h1 className="font-serif text-3xl sm:text-5xl font-semibold text-[#514458]">
+            Workshops & Events
+          </h1>
+          <p className="text-base text-[#6E6474] leading-relaxed">
+            Interactive live workshops and applied masterclasses for parents, educators, psychology learners, and practitioners.
           </p>
         </div>
 
-        {submittedOrg ? (
-          <div className="p-6 bg-[#FAF8FA] rounded-2xl border border-[#EDE2EB] text-center space-y-3">
-            <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
-            <h3 className="text-base font-bold text-[#2A182C]">
-              Institutional Request Received
-            </h3>
-            <p className="text-xs text-[#5C4A60] max-w-md mx-auto leading-relaxed">
-              Thank you, {contactPerson}! We have received your training request for {orgName || 'your organization'}. Reema Singh will connect with you at {orgEmail} to discuss learning objectives and available dates.
-            </p>
+        <div className="flex flex-wrap gap-2">
+          {(['All', 'Registration Open', 'Upcoming'] as const).map((t) => (
             <button
-              onClick={() => setSubmittedOrg(false)}
-              className="text-xs font-semibold text-[#583256] underline"
+              key={t}
+              onClick={() => setTab(t)}
+              className={`px-4 py-2 rounded-xl text-xs font-medium cursor-pointer ${
+                tab === t
+                  ? 'bg-[#514458] text-white'
+                  : 'bg-white text-[#514458] border border-[#514458]/15'
+              }`}
             >
-              Submit another request
+              {t}
             </button>
-          </div>
-        ) : (
-          <form onSubmit={handleOrgSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
-            <div>
-              <label className="block text-xs font-semibold text-[#3B223D] mb-1">
-                Organization / School Name
-              </label>
-              <input
-                type="text"
-                value={orgName}
-                onChange={(e) => setOrgName(e.target.value)}
-                placeholder="e.g. Modern Academy / Special Needs Learning Center"
-                className="w-full px-3.5 py-2.5 text-xs rounded-lg border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256]"
-              />
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((w) => (
+            <div
+              key={w.id}
+              className="bg-white rounded-2xl border border-[#514458]/10 overflow-hidden shadow-xs flex flex-col justify-between"
+            >
+              <div>
+                {w.bannerImage && (
+                  <div className="h-44 overflow-hidden bg-[#F4E4ED]/30">
+                    <img
+                      src={w.bannerImage}
+                      alt={w.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="p-6 space-y-3">
+                  <div className="flex items-center justify-between text-xs text-[#6E6474]">
+                    <span className="font-semibold text-[#514458]">
+                      {w.eventStatus || w.status}
+                    </span>
+                    <span>{w.duration.split('(')[0].trim()}</span>
+                  </div>
+                  <h2 className="font-serif text-xl font-semibold text-[#514458]">{w.title}</h2>
+                  <p className="text-xs font-medium text-[#6E6474]">{w.dateTime}</p>
+                  <p className="text-sm text-[#6E6474] line-clamp-3 leading-relaxed">
+                    {w.shortDescription}
+                  </p>
+                </div>
+              </div>
+              <div className="px-6 py-4 bg-[#F8F5EF]/60 border-t border-[#514458]/10 flex items-center justify-between text-xs">
+                <span className="font-semibold text-[#514458]">{w.fee}</span>
+                <button
+                  onClick={() => onNavigate('workshop-detail', w.slug)}
+                  className="inline-flex items-center gap-1 font-semibold text-[#514458] cursor-pointer"
+                >
+                  <span>Workshop Details</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-semibold text-[#3B223D] mb-1">
-                Contact Person Name *
-              </label>
-              <input
-                type="text"
-                required
-                value={contactPerson}
-                onChange={(e) => setContactPerson(e.target.value)}
-                placeholder="e.g. Radhika Sen (Coordinator)"
-                className="w-full px-3.5 py-2.5 text-xs rounded-lg border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256]"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-[#3B223D] mb-1">
-                Official Email Address *
-              </label>
-              <input
-                type="email"
-                required
-                value={orgEmail}
-                onChange={(e) => setOrgEmail(e.target.value)}
-                placeholder="radhika@school.org"
-                className="w-full px-3.5 py-2.5 text-xs rounded-lg border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256]"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-[#3B223D] mb-1">
-                Proposed Training Topic *
-              </label>
-              <input
-                type="text"
-                required
-                value={orgTopic}
-                onChange={(e) => setOrgTopic(e.target.value)}
-                placeholder="e.g. Positive Classroom Support for Primary Teachers"
-                className="w-full px-3.5 py-2.5 text-xs rounded-lg border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256]"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-[#3B223D] mb-1">
-                Expected Participants & Approximate Timeline
-              </label>
-              <textarea
-                rows={3}
-                value={orgMessage}
-                onChange={(e) => setOrgMessage(e.target.value)}
-                placeholder="Share estimated participant count, target date range (e.g. November/December 2026), and specific team challenges you want to address."
-                className="w-full px-3.5 py-2.5 text-xs rounded-lg border border-[#DACFDB] bg-white text-[#2A182C] focus:outline-hidden focus:border-[#583256]"
-              />
-            </div>
-            <div className="md:col-span-2 pt-2">
-              <button
-                type="submit"
-                className="px-6 py-3 text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-all shadow-xs flex items-center gap-2"
-              >
-                <Send className="w-3.5 h-3.5" />
-                <span>Submit Institutional Request</span>
-              </button>
-            </div>
-          </form>
-        )}
-      </section>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

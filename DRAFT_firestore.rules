@@ -1,0 +1,379 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 0: Global Default-Deny Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ==================== PRIMITIVES & IDENTITY ====================
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isVerifiedUser() && request.auth.uid == userId;
+    }
+
+    function isBootstrappedOwner() {
+      return isVerifiedUser() && request.auth.token.email == 'info@behaviorcanvas.com';
+    }
+
+    function isAdmin() {
+      return isVerifiedUser() && (
+        isBootstrappedOwner() ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isOptionalString(data, field, maxLen) {
+      return !(field in data) || (data[field] is string && data[field].size() <= maxLen);
+    }
+
+    function isOptionalNumber(data, field) {
+      return !(field in data) || (data[field] is number && data[field] >= 0);
+    }
+
+    function isOptionalBool(data, field) {
+      return !(field in data) || (data[field] is bool);
+    }
+
+    function isOptionalBoundedList(data, field, maxItems) {
+      return !(field in data) || (data[field] is list && data[field].size() <= maxItems);
+    }
+
+    // ==================== VALIDATION BLUEPRINTS ====================
+    function isValidAdminUser(data) {
+      return data.keys().hasAll(['uid', 'email', 'role'])
+        && data.keys().hasOnly(['uid', 'email', 'name', 'role', 'createdAt'])
+        && isValidId(data.uid)
+        && data.email is string && data.email.size() <= 160
+        && isOptionalString(data, 'name', 120)
+        && data.role in ['super_admin', 'editor']
+        && isOptionalString(data, 'createdAt', 60);
+    }
+
+    function isValidEnquiryCreate(data) {
+      return data.keys().hasAll(['name', 'email', 'category', 'message', 'status'])
+        && data.keys().hasOnly(['name', 'email', 'phone', 'category', 'contactMethod', 'message', 'consentAgreed', 'status', 'createdAt'])
+        && data.name is string && data.name.size() >= 1 && data.name.size() <= 120
+        && data.email is string && data.email.size() >= 3 && data.email.size() <= 160
+        && isOptionalString(data, 'phone', 40)
+        && data.category is string && data.category.size() >= 1 && data.category.size() <= 100
+        && isOptionalString(data, 'contactMethod', 60)
+        && data.message is string && data.message.size() >= 2 && data.message.size() <= 3000
+        && isOptionalBool(data, 'consentAgreed')
+        && data.status == 'new'
+        && isOptionalString(data, 'createdAt', 60);
+    }
+
+    function isValidEnquiryUpdate(data) {
+      return data.keys().hasAll(['name', 'email', 'category', 'message', 'status'])
+        && data.keys().hasOnly(['name', 'email', 'phone', 'category', 'contactMethod', 'message', 'consentAgreed', 'status', 'internalNotes', 'createdAt'])
+        && data.status in ['new', 'contacted', 'resolved', 'archived']
+        && isOptionalString(data, 'internalNotes', 2000);
+    }
+
+    function isValidLearnerProfile(data, userId) {
+      return data.keys().hasAll(['uid', 'email'])
+        && data.keys().hasOnly(['uid', 'displayName', 'email', 'background', 'city', 'createdAt'])
+        && data.uid == userId
+        && data.email is string && data.email.size() >= 3 && data.email.size() <= 160
+        && isOptionalString(data, 'displayName', 120)
+        && isOptionalString(data, 'background', 160)
+        && isOptionalString(data, 'city', 100)
+        && isOptionalString(data, 'createdAt', 60);
+    }
+
+    function isValidOrder(data) {
+      return data.keys().hasAll(['orderCode', 'userId', 'itemType', 'itemId', 'itemTitle', 'customerEmail', 'amount', 'currency', 'paymentStatus'])
+        && data.keys().hasOnly(['orderCode', 'userId', 'itemType', 'itemId', 'itemTitle', 'customerName', 'customerEmail', 'amount', 'currency', 'couponApplied', 'gateway', 'gatewayOrderId', 'transactionId', 'paymentStatus', 'refundStatus', 'refundReference', 'refundReason', 'downloadToken', 'createdAt'])
+        && data.orderCode is string && data.orderCode.size() >= 3 && data.orderCode.size() <= 80
+        && isValidId(data.userId)
+        && data.itemType in ['product', 'programme', 'workshop']
+        && data.itemId is string && data.itemId.size() >= 1 && data.itemId.size() <= 128
+        && data.itemTitle is string && data.itemTitle.size() >= 1 && data.itemTitle.size() <= 200
+        && isOptionalString(data, 'customerName', 120)
+        && data.customerEmail is string && data.customerEmail.size() >= 3 && data.customerEmail.size() <= 160
+        && data.amount is number && data.amount >= 0
+        && data.currency in ['INR', 'USD']
+        && isOptionalString(data, 'couponApplied', 40)
+        && isOptionalString(data, 'gateway', 40)
+        && isOptionalString(data, 'gatewayOrderId', 140)
+        && isOptionalString(data, 'transactionId', 140)
+        && data.paymentStatus in ['pending', 'verified', 'failed', 'refunded']
+        && isOptionalString(data, 'refundStatus', 30)
+        && isOptionalString(data, 'refundReference', 140)
+        && isOptionalString(data, 'refundReason', 400)
+        && isOptionalString(data, 'downloadToken', 200)
+        && isOptionalString(data, 'createdAt', 60);
+    }
+
+    function isValidEnrolment(data) {
+      return data.keys().hasAll(['userId', 'itemType', 'itemId', 'itemTitle', 'attendanceStatus'])
+        && data.keys().hasOnly(['userId', 'learnerName', 'learnerEmail', 'itemType', 'itemId', 'itemTitle', 'orderId', 'attendanceStatus', 'completionPercent', 'certificateId', 'createdAt'])
+        && isValidId(data.userId)
+        && isOptionalString(data, 'learnerName', 120)
+        && isOptionalString(data, 'learnerEmail', 160)
+        && data.itemType in ['programme', 'workshop']
+        && data.itemId is string && data.itemId.size() >= 1 && data.itemId.size() <= 128
+        && data.itemTitle is string && data.itemTitle.size() >= 1 && data.itemTitle.size() <= 200
+        && isOptionalString(data, 'orderId', 128)
+        && data.attendanceStatus in ['registered', 'attending', 'completed']
+        && isOptionalNumber(data, 'completionPercent')
+        && isOptionalString(data, 'certificateId', 128)
+        && isOptionalString(data, 'createdAt', 60);
+    }
+
+    function isValidCertificate(data) {
+      return data.keys().hasAll(['certificateId', 'learnerName', 'programmeTitle', 'certificateType', 'issueDate', 'verificationStatus'])
+        && data.keys().hasOnly(['certificateId', 'userId', 'learnerName', 'programmeTitle', 'certificateType', 'issueDate', 'verificationStatus', 'issuedBy'])
+        && isValidId(data.certificateId)
+        && isOptionalString(data, 'userId', 128)
+        && data.learnerName is string && data.learnerName.size() >= 1 && data.learnerName.size() <= 120
+        && data.programmeTitle is string && data.programmeTitle.size() >= 1 && data.programmeTitle.size() <= 220
+        && data.certificateType in ['Certificate of Completion', 'Certificate of Participation']
+        && data.issueDate is string && data.issueDate.size() <= 40
+        && data.verificationStatus in ['valid', 'revoked']
+        && isOptionalString(data, 'issuedBy', 120);
+    }
+
+    function isValidCmsDoc(data) {
+      return data.keys().hasAll(['status'])
+        && data.status in ['published', 'draft']
+        && isOptionalString(data, 'title', 240)
+        && isOptionalString(data, 'slug', 140)
+        && isOptionalString(data, 'subtitle', 400)
+        && isOptionalString(data, 'heroHeading', 240)
+        && isOptionalString(data, 'heroBody', 2000)
+        && isOptionalString(data, 'heroImage', 500)
+        && isOptionalString(data, 'ctaPrimaryLabel', 80)
+        && isOptionalString(data, 'ctaSecondaryLabel', 80)
+        && isOptionalBoundedList(data, 'sections', 30)
+        && isOptionalString(data, 'seoTitle', 140)
+        && isOptionalString(data, 'seoDescription', 320)
+        && isOptionalString(data, 'updatedAt', 60);
+    }
+
+    function isValidAuditLog(data) {
+      return data.keys().hasAll(['actorEmail', 'action'])
+        && data.keys().hasOnly(['actorEmail', 'action', 'targetCollection', 'targetId', 'timestamp'])
+        && data.actorEmail is string && data.actorEmail.size() <= 160
+        && data.action is string && data.action.size() <= 160
+        && isOptionalString(data, 'targetCollection', 80)
+        && isOptionalString(data, 'targetId', 128)
+        && isOptionalString(data, 'timestamp', 60);
+    }
+
+    // ==================== COLLECTION RULES ====================
+
+    // 1. Admins Registry
+    match /admins/{adminId} {
+      allow get: if isValidId(adminId) && (isOwner(adminId) || isAdmin());
+      allow list: if isAdmin();
+      allow create, update: if isValidId(adminId) && isAdmin() && isValidAdminUser(incoming());
+      allow delete: if isValidId(adminId) && isBootstrappedOwner();
+    }
+
+    // 2. Public Site Settings (Brand, SEO, Announcement, Public Payment Keys only)
+    match /siteSettings/{settingId} {
+      allow get: if isValidId(settingId);
+      allow list: if true;
+      allow create, update: if isValidId(settingId) && isAdmin() && incoming().keys().size() <= 30;
+      allow delete: if isValidId(settingId) && isAdmin();
+    }
+
+    // 3. Payment Gateway Private Configs (Admin Only)
+    match /paymentConfigs/{gatewayId} {
+      allow get: if isValidId(gatewayId) && isAdmin();
+      allow list: if isAdmin();
+      allow create, update: if isValidId(gatewayId) && isAdmin()
+        && incoming().keys().hasAll(['provider', 'enabled', 'mode'])
+        && incoming().keys().hasOnly(['provider', 'displayName', 'enabled', 'isDefault', 'mode', 'publicKey', 'supportedMethods', 'webhookStatus', 'updatedAt'])
+        && isOptionalBoundedList(incoming(), 'supportedMethods', 15);
+      allow delete: if isValidId(gatewayId) && isAdmin();
+    }
+
+    // 4. CMS Pages (Published public, Drafts Admin-only)
+    match /pages/{pageId} {
+      allow get: if isValidId(pageId) && (resource == null || existing().status == 'published' || isAdmin());
+      allow list: if resource.data.status == 'published' || isAdmin();
+      allow create, update: if isValidId(pageId) && isAdmin() && isValidCmsDoc(incoming());
+      allow delete: if isValidId(pageId) && isAdmin();
+    }
+
+    // 5. Public Catalogue Collections (Published public, Drafts Admin-only)
+    match /services/{serviceId} {
+      allow get: if isValidId(serviceId) && (resource == null || existing().status == 'published' || isAdmin());
+      allow list: if resource.data.status == 'published' || isAdmin();
+      allow create, update: if isValidId(serviceId) && isAdmin() && incoming().keys().hasAll(['slug', 'title', 'status']) && incoming().status in ['published', 'draft'];
+      allow delete: if isValidId(serviceId) && isAdmin();
+    }
+
+    match /programmes/{programmeId} {
+      allow get: if isValidId(programmeId) && (resource == null || existing().status == 'published' || isAdmin());
+      allow list: if resource.data.status == 'published' || isAdmin();
+      allow create, update: if isValidId(programmeId) && isAdmin() && incoming().keys().hasAll(['slug', 'title', 'category', 'enrolmentStatus', 'status']) && incoming().status in ['published', 'draft'];
+      allow delete: if isValidId(programmeId) && isAdmin();
+    }
+
+    match /workshops/{workshopId} {
+      allow get: if isValidId(workshopId) && (resource == null || existing().status == 'published' || isAdmin());
+      allow list: if resource.data.status == 'published' || isAdmin();
+      allow create, update: if isValidId(workshopId) && isAdmin() && incoming().keys().hasAll(['slug', 'title', 'eventStatus', 'status']) && incoming().status in ['published', 'draft'];
+      allow delete: if isValidId(workshopId) && isAdmin();
+    }
+
+    match /products/{productId} {
+      allow get: if isValidId(productId) && (resource == null || existing().status == 'published' || isAdmin());
+      allow list: if resource.data.status == 'published' || isAdmin();
+      allow create, update: if isValidId(productId) && isAdmin() && incoming().keys().hasAll(['slug', 'title', 'priceINR', 'status']) && incoming().status in ['published', 'draft'];
+      allow delete: if isValidId(productId) && isAdmin();
+    }
+
+    match /coupons/{couponId} {
+      allow get: if isValidId(couponId) && (resource == null || existing().active == true || isAdmin());
+      allow list: if resource.data.active == true || isAdmin();
+      allow create, update: if isValidId(couponId) && isAdmin()
+        && incoming().keys().hasAll(['code', 'discountType', 'value', 'active'])
+        && incoming().keys().hasOnly(['code', 'discountType', 'value', 'expiryDate', 'active']);
+      allow delete: if isValidId(couponId) && isAdmin();
+    }
+
+    match /articles/{articleId} {
+      allow get: if isValidId(articleId) && (resource == null || existing().status == 'published' || isAdmin());
+      allow list: if resource.data.status == 'published' || isAdmin();
+      allow create, update: if isValidId(articleId) && isAdmin() && incoming().keys().hasAll(['slug', 'title', 'category', 'status']) && incoming().status in ['published', 'draft'];
+      allow delete: if isValidId(articleId) && isAdmin();
+    }
+
+    match /research/{researchId} {
+      allow get: if isValidId(researchId) && (resource == null || existing().status == 'published' || isAdmin());
+      allow list: if resource.data.status == 'published' || isAdmin();
+      allow create, update: if isValidId(researchId) && isAdmin() && incoming().keys().hasAll(['title', 'type', 'status']) && incoming().status in ['published', 'draft'];
+      allow delete: if isValidId(researchId) && isAdmin();
+    }
+
+    match /testimonials/{testimonialId} {
+      allow get: if isValidId(testimonialId) && (resource == null || (existing().approved == true && existing().visible == true) || isAdmin());
+      allow list: if (resource.data.approved == true && resource.data.visible == true) || isAdmin();
+      allow create, update: if isValidId(testimonialId) && isAdmin()
+        && incoming().keys().hasAll(['name', 'role', 'quote', 'approved', 'visible'])
+        && incoming().keys().hasOnly(['name', 'role', 'context', 'quote', 'approved', 'visible']);
+      allow delete: if isValidId(testimonialId) && isAdmin();
+    }
+
+    match /media/{mediaId} {
+      allow get: if isValidId(mediaId);
+      allow list: if isAdmin();
+      allow create, update: if isValidId(mediaId) && isAdmin()
+        && incoming().keys().hasAll(['title', 'type', 'url'])
+        && incoming().keys().hasOnly(['title', 'type', 'url', 'altText', 'uploadedBy', 'createdAt']);
+      allow delete: if isValidId(mediaId) && isAdmin();
+    }
+
+    // 6. Enquiries (Public Write-Only, Admin Read/Manage)
+    match /enquiries/{enquiryId} {
+      allow create: if isValidId(enquiryId) && isValidEnquiryCreate(incoming());
+      allow get: if isValidId(enquiryId) && isAdmin();
+      allow list: if isAdmin();
+      allow update: if isValidId(enquiryId) && isAdmin() && isValidEnquiryUpdate(incoming());
+      allow delete: if isValidId(enquiryId) && isAdmin();
+    }
+
+    // 7. Learner Profiles (Strictly Isolated Per User)
+    match /learners/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isValidId(userId) && (isOwner(userId) || isAdmin()) && isValidLearnerProfile(incoming(), userId);
+      allow update: if isValidId(userId) && isValidLearnerProfile(incoming(), userId) && (
+        isAdmin() || (
+          isOwner(userId)
+          && incoming().uid == existing().uid
+          && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'background', 'city'])
+        )
+      );
+      allow delete: if isValidId(userId) && isAdmin();
+    }
+
+    // 8. Orders & Transactions (User creates pending order only; Admin verifies/refunds)
+    match /orders/{orderId} {
+      allow get: if isValidId(orderId) && (isAdmin() || (isVerifiedUser() && existing().userId == request.auth.uid));
+      allow list: if isAdmin() || (isVerifiedUser() && resource.data.userId == request.auth.uid);
+      allow create: if isValidId(orderId) && isValidOrder(incoming()) && (
+        isAdmin() || (
+          isVerifiedUser()
+          && incoming().userId == request.auth.uid
+          && incoming().paymentStatus == 'pending'
+        )
+      );
+      allow update: if isValidId(orderId) && isValidOrder(incoming()) && (
+        isAdmin() || (
+          isVerifiedUser()
+          && existing().userId == request.auth.uid
+          && existing().paymentStatus == 'pending'
+          && incoming().userId == existing().userId
+          && incoming().amount == existing().amount
+          && incoming().currency == existing().currency
+          && incoming().paymentStatus == 'pending'
+          && incoming().diff(existing()).affectedKeys().hasOnly(['transactionId', 'gateway', 'gatewayOrderId', 'downloadToken'])
+        )
+      );
+      allow delete: if isValidId(orderId) && isAdmin();
+    }
+
+    // 9. Academy & Workshop Enrolments
+    match /enrolments/{enrolmentId} {
+      allow get: if isValidId(enrolmentId) && (isAdmin() || (isVerifiedUser() && existing().userId == request.auth.uid));
+      allow list: if isAdmin() || (isVerifiedUser() && resource.data.userId == request.auth.uid);
+      allow create: if isValidId(enrolmentId) && isValidEnrolment(incoming()) && (
+        isAdmin() || (
+          isVerifiedUser()
+          && incoming().userId == request.auth.uid
+          && incoming().attendanceStatus == 'registered'
+          && !('certificateId' in incoming())
+          && (!('completionPercent' in incoming()) || incoming().completionPercent == 0)
+        )
+      );
+      allow update: if isValidId(enrolmentId) && isAdmin() && isValidEnrolment(incoming());
+      allow delete: if isValidId(enrolmentId) && isAdmin();
+    }
+
+    // 10. Certificates (Exact ID public lookup for /verify-certificate; list restricted to owner/admin)
+    match /certificates/{certificateId} {
+      allow get: if isValidId(certificateId);
+      allow list: if isAdmin() || (isVerifiedUser() && resource.data.userId == request.auth.uid);
+      allow create, update: if isValidId(certificateId) && isAdmin() && isValidCertificate(incoming());
+      allow delete: if isValidId(certificateId) && isAdmin();
+    }
+
+    // 11. Immutable Admin Audit Log
+    match /auditLogs/{logId} {
+      allow get: if isValidId(logId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isValidId(logId) && isAdmin() && isValidAuditLog(incoming());
+      allow update, delete: if false;
+    }
+
+    // 12. Health check test path
+    match /test/connection {
+      allow get: if true;
+    }
+  }
+}

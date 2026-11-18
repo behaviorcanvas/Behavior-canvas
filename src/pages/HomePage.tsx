@@ -1,19 +1,28 @@
 import React from 'react';
-import { ArrowRight, BookOpen, Users, Compass, GraduationCap, CheckCircle2, Calendar, FileText, Sparkles, HeartHandshake, ShieldCheck, Globe, Linkedin, Eye } from 'lucide-react';
+import {
+  ArrowRight,
+  GraduationCap,
+  HeartHandshake,
+  Calendar,
+  BookOpen,
+  Microscope,
+  FileText,
+  CheckCircle2,
+  Mail,
+  Edit3,
+} from 'lucide-react';
 import { brandConfig } from '../data/brand';
-import { servicesData } from '../data/services';
-import { productsData, ProductItem } from '../data/products';
-import { workshopsData } from '../data/workshops';
-import { articlesData } from '../data/articles';
+import { DEFAULT_CMS_PAGES } from '../data/cmsDefaults';
+import { ProductItem } from '../data/products';
+import { useAuth } from '../contexts/AuthContext';
+import { usePlatform } from '../contexts/PlatformContext';
 import { TestimonialsSection } from '../components/TestimonialsSection';
-import { TrustBadges } from '../components/TrustBadges';
-import { InteractiveQuestionWidget } from '../components/InteractiveQuestionWidget';
-import { TeleSupervisionCalculator } from '../components/TeleSupervisionCalculator';
 import { RoutePath } from '../types';
 
 interface HomePageProps {
   onNavigate: (route: RoutePath, param?: string) => void;
   onOpenEnquiry: (category?: string, subject?: string) => void;
+  onOpenSearch?: () => void;
   onSelectProduct: (product: ProductItem) => void;
   onPreviewProduct?: (product: ProductItem) => void;
   currency: 'USD' | 'INR';
@@ -22,683 +31,578 @@ interface HomePageProps {
 export const HomePage: React.FC<HomePageProps> = ({
   onNavigate,
   onOpenEnquiry,
-  onSelectProduct,
-  onPreviewProduct,
   currency,
 }) => {
-  const currentSymbol = currency === 'USD' ? '$' : '₹';
+  const { isAdmin, isVerifiedUser } = useAuth();
+  const { cmsPages, programmes, workshops, research, articles, requestAdminEdit } = usePlatform();
+  const showAdminEdit = isVerifiedUser && isAdmin;
+
+  const homeCms = cmsPages['home'] || DEFAULT_CMS_PAGES['home'];
+  const defaultHome = DEFAULT_CMS_PAGES['home'];
+
+  const findSection = (id: string) =>
+    homeCms?.sections?.find((s) => s.id === id) ||
+    defaultHome.sections.find((s) => s.id === id);
+
+  const introSec = findSection('home-intro');
+  const pillarsSec = findSection('home-pillars');
+  const academySec = findSection('home-academy-highlight');
+  const workshopsSec = findSection('home-workshops');
+  const founderSec = findSection('home-founder');
+  const philSec = findSection('home-philosophy');
+  const researchSec = findSection('home-research');
+  const ctaSec = findSection('home-cta');
+
+  const symbol = currency === 'INR' ? '₹' : '$';
+  const pillarIcons = [HeartHandshake, GraduationCap, Calendar, BookOpen];
+
+  const fourAreas = (pillarsSec?.items && pillarsSec.items.length > 0
+    ? pillarsSec.items
+    : defaultHome.sections.find((s) => s.id === 'home-pillars')?.items || []
+  ).map((item, idx) => ({
+    title: item.title,
+    description: item.description,
+    image: item.imageUrl || '/src/assets/images/hero_behaviour_canvas_calm_1794989127767.jpg',
+    cta: item.ctaLabel || 'Explore',
+    route: (item.link as RoutePath) || 'services',
+    icon: pillarIcons[idx % pillarIcons.length],
+  }));
+
+  const philosophyItems =
+    philSec?.items && philSec.items.length > 0
+      ? philSec.items
+      : brandConfig.philosophyPrinciples;
+
+  const founderHighlights =
+    founderSec?.items && founderSec.items.length > 0
+      ? founderSec.items.map((i) => i.title)
+      : brandConfig.founder.approachHighlights;
+
+  const editSectionButton = (sectionId: string, label = 'Edit Section') => {
+    if (!showAdminEdit) return null;
+    return (
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          requestAdminEdit('pages', 'home', sectionId);
+          onNavigate('admin');
+        }}
+        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#342A3A] text-white hover:bg-[#514458] text-[11px] font-semibold shadow-xs transition-colors cursor-pointer"
+        title={`Edit ${sectionId} in Admin Studio`}
+      >
+        <Edit3 className="w-3 h-3" />
+        <span>{label}</span>
+      </button>
+    );
+  };
 
   return (
-    <div className="space-y-24">
-      {/* Section B: Hero Section with Soft Watercolor Artwork */}
-      <section className="relative overflow-hidden pt-8 pb-16 lg:py-20">
+    <div className="bg-[#F8F5EF] text-[#514458]">
+      {/* 4.1 HERO SECTION */}
+      <section className="pt-12 pb-16 lg:py-24 border-b border-[#514458]/10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
-            {/* Left Column: Proposition */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="flex items-center gap-2 text-xs font-semibold text-[#583256] tracking-wider uppercase">
-                <Globe className="w-3.5 h-3.5 text-[#583256]" />
-                <span>Global & Pan-India · QASP-S Study Resources & Tele-Supervision</span>
-              </div>
+          {showAdminEdit && (
+            <div className="mb-4 flex justify-end">
+              {editSectionButton('hero', 'Edit Hero Banner')}
+            </div>
+          )}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-6 space-y-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6E6474]">
+                {homeCms?.subtitle || brandConfig.positioning}
+              </p>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.35rem] font-bold tracking-tight text-[#2A182C] leading-[1.15] text-balance">
-                {brandConfig.heroHeadline}
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[3.35rem] font-semibold tracking-tight text-[#514458] leading-[1.12]">
+                {homeCms?.heroHeading || 'Understanding Behaviour. Creating Meaningful Change.'}
               </h1>
 
-              <p className="text-base sm:text-lg text-[#5A475D] leading-relaxed max-w-2xl">
-                The Behavior Canvas connects behavior science, parent education, inclusive learning, and international professional development. We support families, educators, and candidates worldwide with structured QASP-S study materials and remote supervision across global time zones.
+              <p className="text-base sm:text-lg text-[#6E6474] leading-relaxed max-w-xl">
+                {homeCms?.heroBody || brandConfig.heroSubheadline}
               </p>
 
               <div className="flex flex-wrap items-center gap-4 pt-2">
                 <button
-                  onClick={() => onNavigate('resources')}
-                  className="px-6 py-3.5 text-xs sm:text-sm font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-all shadow-md hover:shadow-lg active:scale-98 flex items-center gap-2 whitespace-nowrap shrink-0"
+                  onClick={() => onNavigate('academy')}
+                  className="px-6 py-3.5 text-sm font-semibold text-white bg-[#514458] hover:bg-[#3f3445] rounded-xl transition-all shadow-xs flex items-center gap-2 cursor-pointer"
                 >
-                  <span>Explore Study Resources</span>
+                  <span>{homeCms?.ctaPrimaryLabel || 'Explore Our Academy'}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
-
                 <button
-                  onClick={() => onNavigate('service-detail', 'professional-mentoring-and-supervision')}
-                  className="px-6 py-3.5 text-xs sm:text-sm font-semibold text-[#2A182C] bg-white hover:bg-[#F6EEF5] border border-[#DACFDB] rounded-xl transition-all shadow-xs hover:border-[#583256] whitespace-nowrap shrink-0"
+                  onClick={() => onNavigate('services')}
+                  className="px-6 py-3.5 text-sm font-semibold text-[#514458] bg-[#F4E4ED]/65 hover:bg-[#F4E4ED] border border-[#514458]/15 rounded-xl transition-all cursor-pointer"
                 >
-                  Remote Supervision & Mentoring
+                  {homeCms?.ctaSecondaryLabel || 'Discover Our Services'}
                 </button>
-              </div>
-
-              {/* International Trust & Foundation Strip */}
-              <div className="pt-6 border-t border-[#EDE2EB] grid grid-cols-3 gap-4 text-left">
-                <div>
-                  <span className="block text-xl sm:text-2xl font-bold text-[#2A182C] tabular-nums">
-                    Worldwide
-                  </span>
-                  <span className="text-xs text-[#756178]">Stripe & PayPal Checkout</span>
-                </div>
-                <div>
-                  <span className="block text-xl sm:text-2xl font-bold text-[#2A182C] tabular-nums">
-                    Tele-Supervision
-                  </span>
-                  <span className="text-xs text-[#756178]">All Global Timezones</span>
-                </div>
-                <div>
-                  <span className="block text-xl sm:text-2xl font-bold text-[#2A182C] tabular-nums">
-                    QASP-S Prep
-                  </span>
-                  <span className="text-xs text-[#756178]">Notes, Cheats & Questions</span>
-                </div>
               </div>
             </div>
 
-            {/* Right Column: Hero Visual Asset (Soft Elegant Watercolor Illustration) */}
-            <div className="lg:col-span-5 relative">
-              <div className="relative rounded-3xl overflow-hidden shadow-xl border border-[#EDE2EB] bg-white group p-2">
+            <div className="lg:col-span-6">
+              <div className="relative rounded-3xl overflow-hidden border border-[#514458]/10 bg-[#F4E4ED]/30 shadow-sm aspect-[16/10]">
                 <img
-                  src="/src/assets/images/hero_watercolor_child_guide_1793099905373.jpg"
-                  alt="Soft watercolor illustration of an educator guiding a learner with colorful learning shapes and cards"
-                  className="w-full h-[380px] sm:h-[450px] object-cover object-center rounded-2xl group-hover:scale-101 transition-transform duration-500"
-                  referrerPolicy="no-referrer"
+                  src={
+                    homeCms?.heroImage ||
+                    '/src/assets/images/hero_behaviour_canvas_calm_1794989127767.jpg'
+                  }
+                  alt="Calm pastel watercolour editorial illustration for The Behavior Canvas"
+                  className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-x-4 bottom-4 p-4 rounded-2xl bg-white/95 backdrop-blur-md border border-[#EDE2EB] shadow-md text-[#2A182C]">
-                  <p className="text-xs font-bold tracking-tight text-[#2A182C] flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#583256]" />
-                    <span>Respectful, Compassionate Behavior Science</span>
-                  </p>
-                  <p className="text-[11px] text-[#5C4A60] mt-0.5 leading-snug">
-                    Helping families, educators, and international candidates master evidence-informed behavior support with empathy and dignity.
-                  </p>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Section C: Who We Support */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-          <span className="text-xs font-semibold tracking-wider uppercase text-[#7A5B79]">
-            Targeted Understanding
-          </span>
-          <h2 className="text-3xl font-bold text-[#2A182C] tracking-tight">
-            Who We Support
-          </h2>
-          <p className="text-sm text-[#5C4A60] leading-relaxed">
-            Every learner, family, and educational context is distinct. We tailor educational resources and guidance to support your specific role.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Card 1 */}
-          <div className="p-6 rounded-2xl bg-white border border-[#EDE2EB] shadow-xs hover:border-[#C4B2C6] hover:shadow-md transition-all flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F6EEF5] text-[#583256] flex items-center justify-center">
-                <HeartHandshake className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-bold text-[#2A182C]">
-                Parents & Caregivers
-              </h3>
-              <p className="text-xs text-[#5C4A60] leading-relaxed">
-                Practical education and guidance to better understand behavior, communication, learning, and everyday family challenges without blame.
-              </p>
-            </div>
-            <button
-              onClick={() => onNavigate('service-detail', 'parent-guidance-and-training')}
-              className="mt-6 text-xs font-semibold text-[#583256] hover:text-[#2A182C] flex items-center gap-1.5 transition-colors"
-            >
-              <span>Explore Parent Guidance</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Card 2 */}
-          <div className="p-6 rounded-2xl bg-white border border-[#EDE2EB] shadow-xs hover:border-[#C4B2C6] hover:shadow-md transition-all flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F6EEF5] text-[#583256] flex items-center justify-center">
-                <Compass className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-bold text-[#2A182C]">
-                Children & Learners
-              </h3>
-              <p className="text-xs text-[#5C4A60] leading-relaxed">
-                Individualized, respectful support focused on meaningful skills, participation, functional communication, and personal strengths, where appropriate.
-              </p>
-            </div>
-            <button
-              onClick={() => onNavigate('service-detail', 'behavior-consultation')}
-              className="mt-6 text-xs font-semibold text-[#583256] hover:text-[#2A182C] flex items-center gap-1.5 transition-colors"
-            >
-              <span>View Consultation Details</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Card 3 */}
-          <div className="p-6 rounded-2xl bg-white border border-[#EDE2EB] shadow-xs hover:border-[#C4B2C6] hover:shadow-md transition-all flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F6EEF5] text-[#583256] flex items-center justify-center">
-                <Users className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-bold text-[#2A182C]">
-                Educators & Special Educators
-              </h3>
-              <p className="text-xs text-[#5C4A60] leading-relaxed">
-                Educational resources, positive behavior support strategies, and visual classroom accommodations for truly inclusive schools.
-              </p>
-            </div>
-            <button
-              onClick={() => onNavigate('service-detail', 'special-education-inclusive-learning')}
-              className="mt-6 text-xs font-semibold text-[#583256] hover:text-[#2A182C] flex items-center gap-1.5 transition-colors"
-            >
-              <span>Inclusive Learning Support</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Card 4 */}
-          <div className="p-6 rounded-2xl bg-white border border-[#EDE2EB] shadow-xs hover:border-[#C4B2C6] hover:shadow-md transition-all flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F6EEF5] text-[#583256] flex items-center justify-center">
-                <GraduationCap className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-bold text-[#2A182C]">
-                Global Candidates & Trainees
-              </h3>
-              <p className="text-xs text-[#5C4A60] leading-relaxed">
-                QASP-S & ABAT study notes, question banks, exam cheat sheets, and international remote supervision accommodated to your local timezone.
-              </p>
-            </div>
-            <button
-              onClick={() => onNavigate('service-detail', 'professional-mentoring-and-supervision')}
-              className="mt-6 text-xs font-semibold text-[#583256] hover:text-[#2A182C] flex items-center gap-1.5 transition-colors"
-            >
-              <span>Explore Tele-Supervision</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Badges & Accreditations (QABA® QASP-S, Remote Supervision, Payments & Ethics) */}
-      <TrustBadges onNavigate={onNavigate} onOpenEnquiry={onOpenEnquiry} />
-
-      {/* Section D: Explore Our Services */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-          <div className="space-y-2 max-w-xl">
-            <span className="text-xs font-semibold tracking-wider uppercase text-[#7A5B79]">
-              Consultation & Professional Support
-            </span>
-            <h2 className="text-3xl font-bold text-[#2A182C] tracking-tight">
-              Explore Our Services
-            </h2>
-            <p className="text-xs sm:text-sm text-[#5C4A60] leading-relaxed">
-              Every service is grounded in evidence-informed methods, clear ethical boundaries, and transparent communication across all time zones.
+      {/* 4.2 INTRODUCTION */}
+      {(!introSec || introSec.visible) && (
+        <section className="py-16 lg:py-20 bg-[#F8F5EF]">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
+            {showAdminEdit && <div className="flex justify-center">{editSectionButton('home-intro')}</div>}
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6E6474]">
+              {introSec?.subheading || 'Our Mission & Purpose'}
             </p>
-          </div>
-          <button
-            onClick={() => onNavigate('services')}
-            className="text-xs font-semibold text-[#583256] hover:text-[#2A182C] flex items-center gap-1.5 whitespace-nowrap shrink-0"
-          >
-            <span>View All Services Breakdown</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {servicesData.map((service, index) => (
-            <div
-              key={service.id}
-              className="p-7 rounded-2xl bg-white border border-[#EDE2EB] shadow-xs hover:border-[#583256]/50 hover:shadow-md transition-all flex flex-col justify-between group"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-medium text-[#7A677D]">
-                    0{index + 1}.
-                  </span>
-                  <span className="text-[11px] font-medium text-[#6B5A6E] bg-[#FAF6F8] px-2.5 py-0.5 rounded-full border border-[#EDE2EB]">
-                    {service.id === 'professional-mentoring-and-supervision'
-                      ? 'Worldwide Tele-Supervision'
-                      : 'Online / Remote'}
-                  </span>
-                </div>
-
-                <h3 className="text-lg font-bold text-[#2A182C] group-hover:text-[#583256] transition-colors">
-                  {service.title}
-                </h3>
-
-                <p className="text-xs text-[#5C4A60] leading-relaxed">
-                  {service.shortDescription}
-                </p>
-              </div>
-
-              <div className="pt-6 mt-6 border-t border-[#F2EBF1] flex items-center justify-between">
-                <button
-                  onClick={() => onNavigate('service-detail', service.slug)}
-                  className="text-xs font-semibold text-[#2A182C] group-hover:text-[#583256] flex items-center gap-1 transition-colors"
-                >
-                  <span>Learn More</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => onOpenEnquiry(service.title, `Service: ${service.title}`)}
-                  className="text-xs font-medium text-[#583256] hover:underline"
-                >
-                  Enquire Now
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Interactive Tele-Supervision Timezone Converter & Pacing Tool */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <TeleSupervisionCalculator onOpenEnquiry={onOpenEnquiry} />
-      </section>
-
-      {/* Section E: Featured Learning Resources (Digital Educational Products) with Watercolor Cover & Multi-Currency */}
-      <section className="bg-gradient-to-b from-[#F7EFF5]/60 to-[#FAF6F8] py-16 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 border-y border-[#EDE2EB]">
-        <div className="max-w-7xl mx-auto space-y-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div className="space-y-2 max-w-xl">
-              <span className="text-xs font-semibold tracking-wider uppercase text-[#7A5B79]">
-                Worldwide Digital Storefront
-              </span>
-              <h2 className="text-3xl font-bold text-[#2A182C] tracking-tight">
-                QASP-S Study Resources & Question Banks
-              </h2>
-              <p className="text-xs sm:text-sm text-[#5C4A60] leading-relaxed">
-                Structured digital study guides, scenario question banks, and revision planners with instant global delivery and multi-currency payment via Stripe & PayPal.
+            <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#514458] tracking-tight leading-snug">
+              {introSec?.heading || 'A Space Where Behavioural Science Meets Meaningful Learning.'}
+            </h2>
+            <p className="text-base text-[#6E6474] leading-relaxed">
+              {introSec?.body || brandConfig.mission}
+            </p>
+            {(introSec?.ctaLabel || true) && (
+              <p className="text-sm text-[#6E6474] leading-relaxed pt-1">
+                {introSec?.ctaLabel ||
+                  'Supporting parents and families, individuals requiring thoughtful support, psychology and special education students, behaviour analysts, educators, curious learners, and academic research communities.'}
               </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => onNavigate('resources')}
-                className="text-xs font-semibold text-[#583256] hover:text-[#2A182C] flex items-center gap-1.5 whitespace-nowrap shrink-0"
-              >
-                <span>View Full Shop ({currency})</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+            )}
           </div>
+        </section>
+      )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {productsData.map((product) => {
-              const price = currency === 'USD' ? product.priceUSD : product.priceINR;
-              const origPrice = currency === 'USD' ? product.originalPriceUSD : product.originalPriceINR;
+      {/* 4.3 OUR AREAS OF WORK */}
+      {(!pillarsSec || pillarsSec.visible) && (
+        <section className="py-16 bg-white border-y border-[#514458]/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div className="max-w-2xl space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6E6474]">
+                  {pillarsSec?.subheading || 'What We Do'}
+                </p>
+                <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#514458] tracking-tight">
+                  {pillarsSec?.heading || 'Our Four Pillars of Work'}
+                </h2>
+              </div>
+              {editSectionButton('home-pillars', 'Edit Pillars')}
+            </div>
 
-              return (
-                <div
-                  key={product.id}
-                  className={`p-6 rounded-2xl bg-white border shadow-xs transition-all flex flex-col justify-between ${
-                    product.isBundle
-                      ? 'border-[#8E75A6] shadow-md ring-1 ring-[#8E75A6]/40 md:col-span-2 lg:col-span-1'
-                      : 'border-[#EDE2EB] hover:border-[#DACFDB] hover:shadow-md'
-                  }`}
-                >
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] font-semibold text-[#583256] uppercase tracking-wider">
-                        {product.format}
-                      </span>
-                      {product.badge && (
-                        <span className="text-[11px] font-medium text-[#583256] bg-[#F6EEF5] px-2 py-0.5 rounded-sm">
-                          {product.badge}
-                        </span>
-                      )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {fourAreas.map((area) => {
+                const Icon = area.icon;
+                return (
+                  <div
+                    key={area.title}
+                    onClick={() => onNavigate(area.route)}
+                    className="group rounded-2xl bg-[#F8F5EF]/60 hover:bg-white border border-[#514458]/10 hover:border-[#514458]/25 overflow-hidden transition-all flex flex-col justify-between cursor-pointer shadow-xs"
+                  >
+                    <div>
+                      <div className="h-44 overflow-hidden bg-[#E9E1F4]/40">
+                        <img
+                          src={area.image}
+                          alt={area.title}
+                          className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
+                        />
+                      </div>
+                      <div className="p-6 space-y-3">
+                        <Icon className="w-5 h-5 text-[#514458]" />
+                        <h3 className="font-serif text-xl font-semibold text-[#514458]">
+                          {area.title}
+                        </h3>
+                        <p className="text-sm text-[#6E6474] leading-relaxed">{area.description}</p>
+                      </div>
                     </div>
-
-                    <h3 className="text-lg font-bold text-[#2A182C]">
-                      {product.title}
-                    </h3>
-
-                    <p className="text-xs text-[#5C4A60] leading-relaxed line-clamp-3">
-                      {product.shortDescription}
-                    </p>
-
-                    <div className="pt-2 flex items-baseline gap-2">
-                      <span className="text-2xl font-bold text-[#2A182C] tabular-nums">
-                        {currentSymbol}{price.toLocaleString()}
-                      </span>
-                      {origPrice && (
-                        <span className="text-xs text-[#8C7A8F] line-through tabular-nums">
-                          {currentSymbol}{origPrice.toLocaleString()}
-                        </span>
-                      )}
-                      <span className="text-[11px] text-[#7A677D] font-medium ml-1">
-                        ({currency})
+                    <div className="px-6 pb-6 pt-2">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#514458] group-hover:gap-2.5 transition-all">
+                        <span>{area.cta}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
                   </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
-                  <div className="pt-6 mt-6 border-t border-[#F2EBF1] flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
-                      {onPreviewProduct && (
-                        <button
-                          onClick={() => onPreviewProduct(product)}
-                          className="flex-1 py-2 text-center text-xs font-semibold text-[#583256] bg-[#FAF2F8] hover:bg-[#F2EBF1] border border-[#DACFDB] rounded-lg transition-colors flex items-center justify-center gap-1.5"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                          <span>Preview Sample</span>
-                        </button>
-                      )}
-                      <button
-                        onClick={() => onNavigate('product-detail', product.slug)}
-                        className="flex-1 py-2 text-center text-xs font-semibold text-[#2A182C] bg-white border border-[#DACFDB] hover:bg-[#FAF6F8] rounded-lg transition-colors"
-                      >
-                        View Details
-                      </button>
+      {/* 4.4 ACADEMY HIGHLIGHT */}
+      {(!academySec || academySec.visible) && (
+        <section className="py-16 lg:py-20 bg-[#E9E1F4]/35">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div className="max-w-2xl space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6E6474]">
+                  {academySec?.subheading || 'Academic & Applied Programmes'}
+                </p>
+                <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#514458] tracking-tight">
+                  {academySec?.heading || 'The Behavior Canvas – Academy of Behavioural Science.'}
+                </h2>
+                <p className="text-sm sm:text-base text-[#6E6474] leading-relaxed">
+                  {academySec?.body}
+                </p>
+              </div>
+              <div className="flex items-center gap-2.5 shrink-0">
+                {editSectionButton('home-academy-highlight')}
+                <button
+                  onClick={() => onNavigate('programmes')}
+                  className="px-5 py-3 text-xs font-semibold text-white bg-[#514458] hover:bg-[#3f3445] rounded-xl inline-flex items-center gap-2 shrink-0 cursor-pointer"
+                >
+                  <span>{academySec?.ctaLabel || 'Explore All Programmes'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {programmes.slice(0, 3).map((prog) => {
+                const feeDisplay = prog.isFree
+                  ? 'Free Access'
+                  : `${symbol}${(currency === 'INR' ? prog.feeINR : prog.feeUSD).toLocaleString()}`;
+                return (
+                  <div
+                    key={prog.id}
+                    onClick={() => onNavigate('programme-detail', prog.slug)}
+                    className="rounded-2xl bg-white border border-[#514458]/10 overflow-hidden shadow-xs hover:border-[#514458]/25 transition-all flex flex-col justify-between cursor-pointer"
+                  >
+                    <div>
+                      <div className="h-44 overflow-hidden bg-[#F4E4ED]/40">
+                        <img
+                          src={prog.coverImage}
+                          alt={prog.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="p-6 space-y-3">
+                        <div className="flex items-center justify-between text-xs text-[#6E6474]">
+                          <span className="font-medium text-[#514458]">{prog.enrolmentStatus}</span>
+                          <span>{prog.duration.split('(')[0].trim()}</span>
+                        </div>
+                        <h3 className="font-serif text-xl font-semibold text-[#514458] leading-snug">
+                          {prog.title}
+                        </h3>
+                        <p className="text-sm text-[#6E6474] line-clamp-3 leading-relaxed">
+                          {prog.description}
+                        </p>
+                      </div>
                     </div>
+                    <div className="px-6 py-4 bg-[#F8F5EF]/60 border-t border-[#514458]/10 flex items-center justify-between text-xs">
+                      <span className="font-semibold text-[#514458]">{feeDisplay}</span>
+                      <span className="inline-flex items-center gap-1 font-medium text-[#514458]">
+                        <span>Programme Details</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 4.5 UPCOMING WORKSHOPS */}
+      {(!workshopsSec || workshopsSec.visible) && (
+        <section className="py-16 bg-white border-y border-[#514458]/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div className="space-y-2 max-w-2xl">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6E6474]">
+                  {workshopsSec?.subheading || 'Live Learning & Cohorts'}
+                </p>
+                <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#514458] tracking-tight">
+                  {workshopsSec?.heading || 'Workshops & Masterclasses'}
+                </h2>
+              </div>
+              <div className="flex items-center gap-3">
+                {editSectionButton('home-workshops')}
+                <button
+                  onClick={() => onNavigate('workshops')}
+                  className="text-xs font-semibold text-[#514458] hover:underline inline-flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>{workshopsSec?.ctaLabel || 'View All Workshops'}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {workshops.slice(0, 3).map((w) => (
+                <div
+                  key={w.id}
+                  className="p-6 rounded-2xl bg-[#F8F5EF]/60 border border-[#514458]/10 flex flex-col justify-between space-y-5"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-xs text-[#6E6474]">
+                      <span className="font-semibold text-[#514458]">
+                        {w.eventStatus || w.status}
+                      </span>
+                      <span>{w.duration.split('(')[0].trim()}</span>
+                    </div>
+                    <h3 className="font-serif text-xl font-semibold text-[#514458] leading-snug">
+                      {w.title}
+                    </h3>
+                    <p className="text-xs text-[#6E6474] font-medium">{w.dateTime}</p>
+                    <p className="text-sm text-[#6E6474] leading-relaxed line-clamp-3">
+                      {w.shortDescription}
+                    </p>
+                    <p className="text-xs text-[#514458]/80">
+                      <strong>Audience:</strong> {w.audience}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-[#514458]/10 flex items-center justify-between gap-3">
+                    <span className="text-xs font-semibold text-[#514458]">{w.fee}</span>
                     <button
-                      onClick={() => onSelectProduct(product)}
-                      className="w-full py-2.5 text-center text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-lg transition-colors shadow-xs"
+                      onClick={() => onNavigate('workshop-detail', w.slug)}
+                      className="px-4 py-2 text-xs font-semibold text-white bg-[#514458] hover:bg-[#3f3445] rounded-xl cursor-pointer"
                     >
-                      Get Resource ({currentSymbol}{price.toLocaleString()})
+                      Details & Register
                     </button>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-
-          <div className="p-4 bg-white rounded-xl border border-[#EDE2EB] text-xs text-[#5C4A60] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>International Payment Gateway: Stripe, PayPal, Visa, Mastercard, Amex, Apple Pay & Google Pay supported. Instant worldwide email delivery.</span>
+              ))}
             </div>
-            <button
-              onClick={() => onNavigate('copyright-policy')}
-              className="text-[#583256] font-semibold hover:underline shrink-0"
-            >
-              Digital Licensing Policy
-            </button>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Interactive QASP-S Exam Scenario Practice Widget */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <InteractiveQuestionWidget onNavigate={onNavigate} />
-      </section>
-
-      {/* Section F: Why The Behavior Canvas? */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-          <span className="text-xs font-semibold tracking-wider uppercase text-[#7A5B79]">
-            Our Guiding Philosophy
-          </span>
-          <h2 className="text-3xl font-bold text-[#2A182C] tracking-tight">
-            Why The Behavior Canvas?
-          </h2>
-          <p className="text-xs sm:text-sm text-[#5C4A60] leading-relaxed">
-            Our platform is built upon transparent commitments to scientific integrity, empathetic family partnership, and respectful inclusive practice.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {brandConfig.commitments.map((commitment, idx) => (
-            <div
-              key={idx}
-              className="p-6 rounded-2xl bg-white border border-[#EDE2EB] shadow-xs space-y-3"
-            >
-              <div className="w-8 h-8 rounded-lg bg-[#FAF2F8] text-[#583256] flex items-center justify-center font-serif font-bold text-sm">
-                0{idx + 1}
-              </div>
-              <h3 className="text-base font-bold text-[#2A182C]">
-                {commitment.title}
-              </h3>
-              <p className="text-xs text-[#5C4A60] leading-relaxed">
-                {commitment.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Testimonials & Success Stories Section with Watercolor Accents */}
-      <TestimonialsSection />
-
-      {/* Section G: Founder Introduction */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl border border-[#EDE2EB] shadow-xl overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center p-6 sm:p-10 lg:p-12">
-            <div className="lg:col-span-5 relative">
-              <div className="relative rounded-2xl overflow-hidden border border-[#EDE2EB] shadow-lg bg-[#FBF8FA] group">
-                <img
-                  src={brandConfig.founder.image}
-                  alt={`Portrait of ${brandConfig.founder.name}, Founder of The Behavior Canvas`}
-                  className="w-full h-[460px] sm:h-[490px] object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-xs p-3 rounded-xl border border-[#EDE2EB]/80 shadow-xs flex items-center justify-between">
-                  <div>
-                    <div className="text-xs font-bold text-[#2A182C]">{brandConfig.founder.name}</div>
-                    <div className="text-[11px] text-[#7A5B79]">Behavior & Special Education Specialist</div>
-                  </div>
-                  <span className="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[#FAF2F8] text-[#583256] border border-[#EDE2EB]">
-                    Founder
-                  </span>
+      {/* 4.6 FOUNDER INTRODUCTION */}
+      {(!founderSec || founderSec.visible) && (
+        <section className="py-16 lg:py-20 bg-[#F8F5EF]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center bg-white rounded-3xl p-8 sm:p-12 border border-[#514458]/10 shadow-xs">
+              <div className="lg:col-span-4">
+                <div className="rounded-2xl overflow-hidden border border-[#514458]/15 aspect-[4/5] bg-[#F4E4ED]/30">
+                  <img
+                    src={founderSec?.imageUrl || brandConfig.founder.image}
+                    alt="Reema Singh — Founder & Director, The Behavior Canvas"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
-            </div>
 
-            <div className="lg:col-span-7 space-y-5">
-              <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#583256] uppercase tracking-wider">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#583256]" />
-                <span>Founder & Global Practice Lead</span>
-              </div>
-
-              <h2 className="text-3xl font-bold text-[#2A182C] tracking-tight">
-                Meet the Founder
-              </h2>
-
-              <p className="text-sm font-semibold text-[#583256]">
-                {brandConfig.founder.name} · {brandConfig.founder.role}
-              </p>
-
-              <p className="text-sm text-[#5C4A60] leading-relaxed">
-                {brandConfig.founder.bioShort}
-              </p>
-
-              <div className="space-y-2 pt-2">
-                {brandConfig.founder.credentials.map((cred, i) => (
-                  <div key={i} className="flex items-center gap-2.5 text-xs text-[#2A182C]">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>{cred}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-4 flex flex-wrap items-center gap-3">
-                <button
-                  onClick={() => onNavigate('about')}
-                  className="px-5 py-2.5 text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-colors shadow-xs"
-                >
-                  Read Full Story & Mission
-                </button>
-                <a
-                  href={brandConfig.linkedin.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2.5 text-xs font-semibold text-[#0077B5] bg-white hover:bg-[#0077B5] hover:text-white rounded-xl border border-[#0077B5]/30 transition-colors shadow-xs flex items-center gap-1.5"
-                >
-                  <Linkedin className="w-3.5 h-3.5 fill-current" />
-                  <span>LinkedIn Profile (QASP-S)</span>
-                </a>
-                <button
-                  onClick={() => onOpenEnquiry('Professional Mentoring & Supervision', 'Founder Tele-Supervision Enquiry')}
-                  className="px-4 py-2.5 text-xs font-semibold text-[#2A182C] bg-[#FAF6F8] hover:bg-[#F2EBF1] rounded-xl border border-[#DACFDB] transition-colors"
-                >
-                  Connect for Supervision
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section H: Workshops and Learning */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-          <div className="space-y-2 max-w-xl">
-            <span className="text-xs font-semibold tracking-wider uppercase text-[#7A5B79]">
-              Interactive Learning
-            </span>
-            <h2 className="text-3xl font-bold text-[#2A182C] tracking-tight">
-              Workshops & Online Training
-            </h2>
-            <p className="text-xs sm:text-sm text-[#5C4A60] leading-relaxed">
-              Live educational sessions for parents, educators, special educators, and aspiring behavior analysts across all time zones.
-            </p>
-          </div>
-          <button
-            onClick={() => onNavigate('workshops')}
-            className="text-xs font-semibold text-[#583256] hover:text-[#2A182C] flex items-center gap-1.5 whitespace-nowrap shrink-0"
-          >
-            <span>View All Scheduled Workshops</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {workshopsData.map((workshop) => (
-            <div
-              key={workshop.id}
-              className="p-6 rounded-2xl bg-white border border-[#EDE2EB] shadow-xs hover:border-[#DACFDB] hover:shadow-md transition-all flex flex-col justify-between"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100">
-                    {workshop.status}
-                  </span>
-                  <span className="text-xs font-medium text-[#7A677D]">
-                    {workshop.duration}
-                  </span>
+              <div className="lg:col-span-8 space-y-5">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6E6474]">
+                    {founderSec?.subheading || 'Meet the Founder'}
+                  </p>
+                  {editSectionButton('home-founder', 'Edit Founder Section')}
+                </div>
+                <div>
+                  <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#514458]">
+                    {founderSec?.heading || brandConfig.founder.name}
+                  </h2>
+                  <p className="text-sm font-medium text-[#514458] mt-1">
+                    {brandConfig.founder.role}
+                  </p>
+                  <p className="text-xs sm:text-sm text-[#6E6474] mt-1 font-medium">
+                    {brandConfig.founder.credentialsLine}
+                  </p>
                 </div>
 
-                <h3 className="text-base font-bold text-[#2A182C]">
-                  {workshop.title}
-                </h3>
-
-                <p className="text-xs text-[#5C4A60] leading-relaxed line-clamp-3">
-                  {workshop.shortDescription}
+                <p className="text-sm sm:text-base text-[#6E6474] leading-relaxed">
+                  {founderSec?.body || brandConfig.founder.bioShort}
                 </p>
 
-                <div className="p-3 bg-[#FAF8FA] rounded-xl text-xs space-y-1 text-[#5C4A60]">
-                  <div className="flex items-center gap-1.5 font-medium text-[#2A182C]">
-                    <Calendar className="w-3.5 h-3.5 text-[#583256]" />
-                    <span>{workshop.dateTime}</span>
-                  </div>
-                  <p className="text-[11px]">Fee: <span className="font-semibold text-[#583256]">{workshop.fee}</span></p>
+                <ul className="space-y-2 pt-1">
+                  {founderHighlights.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5 text-sm text-[#514458]">
+                      <CheckCircle2 className="w-4 h-4 text-[#514458] shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="pt-2">
+                  <button
+                    onClick={() => onNavigate('meet-the-founder')}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold text-[#514458] bg-[#F4E4ED] hover:bg-[#E9E1F4] rounded-xl transition-colors cursor-pointer"
+                  >
+                    <span>{founderSec?.ctaLabel || 'Read Full Founder Biography'}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+      )}
 
-              <div className="pt-6 mt-6 border-t border-[#F2EBF1] flex items-center justify-between">
-                <button
-                  onClick={() => onNavigate('workshops')}
-                  className="text-xs font-semibold text-[#2A182C] hover:text-[#583256] transition-colors"
+      {/* 4.7 OUR PHILOSOPHY */}
+      {(!philSec || philSec.visible) && (
+        <section className="py-16 lg:py-20 bg-white border-y border-[#514458]/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div className="max-w-2xl space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6E6474]">
+                  {philSec?.subheading || 'Ethical Framework'}
+                </p>
+                <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#514458]">
+                  {philSec?.heading || 'Behaviour Is More Than What We See.'}
+                </h2>
+                <p className="text-sm sm:text-base text-[#6E6474] leading-relaxed">
+                  {philSec?.body}
+                </p>
+              </div>
+              {editSectionButton('home-philosophy', 'Edit Philosophy')}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {philosophyItems.map((principle, index) => (
+                <div
+                  key={`${principle.title}-${index}`}
+                  className="p-6 rounded-2xl bg-[#F8F5EF]/70 border border-[#514458]/10 space-y-2.5"
                 >
-                  View Objectives
+                  <span className="text-xs font-mono text-[#6E6474]">0{index + 1}</span>
+                  <h3 className="font-serif text-lg font-semibold text-[#514458]">
+                    {principle.title}
+                  </h3>
+                  <p className="text-sm text-[#6E6474] leading-relaxed">
+                    {principle.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 4.8 RESEARCH AND KNOWLEDGE */}
+      {(!researchSec || researchSec.visible) && (
+        <section className="py-16 lg:py-20 bg-[#F8F5EF]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div className="space-y-2 max-w-2xl">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6E6474]">
+                  {researchSec?.subheading || 'Scholarship & Applied Knowledge'}
+                </p>
+                <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#514458]">
+                  {researchSec?.heading || 'Research, Publications & Articles'}
+                </h2>
+              </div>
+              <div className="flex flex-wrap items-center gap-4 text-xs font-semibold">
+                {editSectionButton('home-research')}
+                <button
+                  onClick={() => onNavigate('research')}
+                  className="text-[#514458] hover:underline inline-flex items-center gap-1 cursor-pointer"
+                >
+                  <Microscope className="w-3.5 h-3.5" />
+                  <span>Research & Publications</span>
                 </button>
                 <button
-                  onClick={() => onOpenEnquiry('Workshops & Training', `Workshop: ${workshop.title}`)}
-                  className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-lg transition-colors"
+                  onClick={() => onNavigate('articles')}
+                  className="text-[#514458] hover:underline inline-flex items-center gap-1 cursor-pointer"
                 >
-                  Register / Enquire
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>All Articles</span>
                 </button>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* Section I: Latest Articles */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-          <div className="space-y-2 max-w-xl">
-            <span className="text-xs font-semibold tracking-wider uppercase text-[#7A5B79]">
-              Knowledge Hub
-            </span>
-            <h2 className="text-3xl font-bold text-[#2A182C] tracking-tight">
-              Latest Articles & Insights
-            </h2>
-            <p className="text-xs sm:text-sm text-[#5C4A60] leading-relaxed">
-              Research-informed perspectives on behavior science, positive reinforcement, functional communication, and inclusive pedagogy.
-            </p>
-          </div>
-          <button
-            onClick={() => onNavigate('articles')}
-            className="text-xs font-semibold text-[#583256] hover:text-[#2A182C] flex items-center gap-1.5 whitespace-nowrap shrink-0"
-          >
-            <span>Browse All Articles</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articlesData.slice(0, 3).map((article) => (
-            <div
-              key={article.id}
-              className="p-6 rounded-2xl bg-white border border-[#EDE2EB] shadow-xs hover:border-[#DACFDB] hover:shadow-md transition-all flex flex-col justify-between"
-            >
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-xs text-[#7A677D]">
-                  <span className="font-semibold text-[#583256]">{article.category}</span>
-                  <span aria-hidden="true">·</span>
-                  <span>{article.readTime}</span>
-                </div>
-
-                <h3 className="text-base font-bold text-[#2A182C] line-clamp-2">
-                  {article.title}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="p-7 rounded-2xl bg-white border border-[#514458]/10 space-y-4">
+                <h3 className="font-serif text-xl font-semibold text-[#514458]">
+                  Research Themes & Publications
                 </h3>
-
-                <p className="text-xs text-[#5C4A60] leading-relaxed line-clamp-3">
-                  {article.summary}
-                </p>
+                <div className="divide-y divide-[#514458]/10">
+                  {research.slice(0, 3).map((item) => (
+                    <div key={item.id} className="py-3.5 first:pt-0 last:pb-0 space-y-1">
+                      <span className="text-[11px] font-medium text-[#6E6474]">
+                        {item.type} · {item.year}
+                      </span>
+                      <h4 className="text-sm font-semibold text-[#514458]">{item.title}</h4>
+                      <p className="text-xs text-[#6E6474] line-clamp-2">{item.abstract}</p>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={() => onNavigate('research')}
+                  className="text-xs font-semibold text-[#514458] inline-flex items-center gap-1 pt-2 hover:underline cursor-pointer"
+                >
+                  <span>Explore Research Archive</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-[#F2EBF1] flex items-center justify-between text-xs">
-                <span className="text-[#8C7A8F]">{article.publishedDate}</span>
+              <div className="p-7 rounded-2xl bg-white border border-[#514458]/10 space-y-4">
+                <h3 className="font-serif text-xl font-semibold text-[#514458]">
+                  Recent Educational Articles
+                </h3>
+                <div className="divide-y divide-[#514458]/10">
+                  {articles.slice(0, 3).map((art) => (
+                    <button
+                      key={art.id}
+                      onClick={() => onNavigate('article-detail', art.slug)}
+                      className="w-full text-left py-3.5 first:pt-0 last:pb-0 space-y-1 group cursor-pointer"
+                    >
+                      <span className="text-[11px] font-medium text-[#6E6474]">
+                        {art.category} · {art.readTime}
+                      </span>
+                      <h4 className="text-sm font-semibold text-[#514458] group-hover:underline">
+                        {art.title}
+                      </h4>
+                      <p className="text-xs text-[#6E6474] line-clamp-2">{art.summary}</p>
+                    </button>
+                  ))}
+                </div>
                 <button
-                  onClick={() => onNavigate('article-detail', article.slug)}
-                  className="font-semibold text-[#583256] hover:text-[#2A182C] flex items-center gap-1 transition-colors"
+                  onClick={() => onNavigate('articles')}
+                  className="text-xs font-semibold text-[#514458] inline-flex items-center gap-1 pt-2 hover:underline cursor-pointer"
                 >
-                  <span>Read Article</span>
+                  <span>Read All Articles</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
-      {/* Section J: Final CTA */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-gradient-to-r from-[#3B223D] via-[#482A4A] to-[#3B223D] text-white p-8 sm:p-14 shadow-2xl relative overflow-hidden">
-          <div className="relative z-10 max-w-2xl space-y-4">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-              Small Steps. Meaningful Change.
+      {/* 4.9 TESTIMONIALS */}
+      <TestimonialsSection onOpenEnquiry={onOpenEnquiry} />
+
+      {/* 4.10 FINAL CALL TO ACTION */}
+      {(!ctaSec || ctaSec.visible) && (
+        <section className="py-16 lg:py-20 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+            {showAdminEdit && <div className="flex justify-center">{editSectionButton('home-cta', 'Edit CTA Banner')}</div>}
+            <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#514458]">
+              {ctaSec?.heading || "Let's Learn, Understand and Grow Together."}
             </h2>
-            <p className="text-sm sm:text-base text-[#E0D3E3] leading-relaxed">
-              Explore our services, order our international study resources, or connect with The Behavior Canvas to begin your personalized supervision journey.
+            <p className="text-sm sm:text-base text-[#6E6474] leading-relaxed max-w-2xl mx-auto">
+              {ctaSec?.body}
             </p>
-            <div className="pt-4 flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
               <button
-                onClick={() => onNavigate('resources')}
-                className="px-6 py-3 text-xs sm:text-sm font-semibold text-[#2A182C] bg-white hover:bg-[#F6EEF5] rounded-xl transition-all shadow-md active:scale-98 whitespace-nowrap"
+                onClick={() => onNavigate('programmes')}
+                className="px-6 py-3.5 text-sm font-semibold text-white bg-[#514458] hover:bg-[#3f3445] rounded-xl cursor-pointer"
               >
-                Explore Digital Shop
+                {ctaSec?.ctaLabel || 'Explore Programmes'}
               </button>
               <button
-                onClick={() => onNavigate('service-detail', 'professional-mentoring-and-supervision')}
-                className="px-6 py-3 text-xs sm:text-sm font-semibold text-white bg-transparent hover:bg-white/10 border border-white/40 rounded-xl transition-all whitespace-nowrap"
+                onClick={() => onOpenEnquiry('Behavioural Services')}
+                className="px-6 py-3.5 text-sm font-semibold text-[#514458] bg-[#F4E4ED] hover:bg-[#E9E1F4] rounded-xl cursor-pointer"
               >
-                Enquire for Supervision
+                Enquire About Services
+              </button>
+              <button
+                onClick={() => onNavigate('contact')}
+                className="px-6 py-3.5 text-sm font-semibold text-[#514458] border border-[#514458]/20 hover:bg-[#F8F5EF] rounded-xl inline-flex items-center gap-2 cursor-pointer"
+              >
+                <Mail className="w-4 h-4" />
+                <span>Contact Us</span>
               </button>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 };

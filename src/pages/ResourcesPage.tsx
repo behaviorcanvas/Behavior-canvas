@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle2, FileText, Download, ShieldCheck, Sparkles, ArrowLeft, HelpCircle, Lock, Globe, CreditCard, Eye } from 'lucide-react';
-import { productsData, ProductItem } from '../data/products';
-import { Breadcrumbs } from '../components/Breadcrumbs';
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  Eye,
+  FileText,
+  Lock,
+  Search,
+  ShoppingBag,
+} from 'lucide-react';
+import { ProductItem } from '../data/products';
+import { usePlatform } from '../contexts/PlatformContext';
 import { RoutePath } from '../types';
 
 interface ResourcesPageProps {
@@ -19,209 +28,112 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
   onSelectProduct,
   onPreviewProduct,
   currency,
-  onCurrencyToggle
+  onCurrencyToggle,
 }) => {
+  const { products } = usePlatform();
   const [filter, setFilter] = useState<string>('All');
-  const currentSymbol = currency === 'USD' ? '$' : '₹';
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const symbol = currency === 'USD' ? '$' : '₹';
 
   const activeProduct = selectedSlug
-    ? productsData.find((p) => p.slug === selectedSlug) || null
+    ? products.find((p) => p.slug === selectedSlug || p.id === selectedSlug) || null
     : null;
 
-  const filteredProducts = productsData.filter((p) => {
-    if (filter === 'All') return true;
-    if (filter === 'Bundle') return p.isBundle;
-    return p.category === filter;
-  });
-
   if (activeProduct) {
-    const currentPrice = currency === 'USD' ? activeProduct.priceUSD : activeProduct.priceINR;
-    const origPrice = currency === 'USD' ? activeProduct.originalPriceUSD : activeProduct.originalPriceINR;
-
+    const price = currency === 'INR' ? activeProduct.priceINR : activeProduct.priceUSD;
+    const orig = currency === 'INR' ? activeProduct.originalPriceINR : activeProduct.originalPriceUSD;
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-        <Breadcrumbs
-          items={[
-            { label: 'Resources & Shop', onClick: () => onNavigate('resources') },
-            { label: activeProduct.title }
-          ]}
-        />
-
-        <div className="flex items-center justify-between">
+      <div className="bg-[#F8F5EF] py-12 lg:py-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <button
             onClick={() => onNavigate('resources')}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#583256] hover:text-[#2A182C] transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-[#514458] hover:underline cursor-pointer"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to All Resources</span>
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Learning Resources Store</span>
           </button>
 
-          <button
-            onClick={onCurrencyToggle}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#583256] bg-white border border-[#DACFDB] rounded-lg hover:bg-[#FAF6F8] transition-colors shadow-xs"
-          >
-            <Globe className="w-3.5 h-3.5" />
-            <span>Currency: {currency === 'USD' ? '$ USD (Global)' : '₹ INR (India)'}</span>
-          </button>
-        </div>
-
-        <div className="bg-white rounded-3xl border border-[#EDE2EB] p-8 sm:p-12 shadow-xs grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          <div className="lg:col-span-5 space-y-4">
-            <div className="rounded-2xl overflow-hidden border border-[#EDE2EB] shadow-md bg-[#FAF8FA] relative group p-2">
-              <img
-                src={activeProduct.image}
-                alt={activeProduct.title}
-                className="w-full h-[360px] object-cover object-center rounded-xl"
-                referrerPolicy="no-referrer"
-              />
-              {activeProduct.badge && (
-                <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-[#583256] border border-[#EDE2EB] shadow-xs">
-                  {activeProduct.badge}
-                </div>
+          <div className="bg-white rounded-3xl border border-[#514458]/10 p-8 sm:p-10 shadow-xs grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-5 space-y-4">
+              <div className="rounded-2xl overflow-hidden border border-[#514458]/10 bg-[#F4E4ED]/30 aspect-[4/3]">
+                <img
+                  src={activeProduct.image}
+                  alt={activeProduct.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              {onPreviewProduct && (
+                <button
+                  onClick={() => onPreviewProduct(activeProduct)}
+                  className="w-full py-2.5 px-4 bg-[#F8F5EF] hover:bg-[#F4E4ED] text-[#514458] border border-[#514458]/15 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Eye className="w-4 h-4" />
+                  <span>Preview Sample Excerpt</span>
+                </button>
               )}
             </div>
 
-            <div className="p-4 bg-[#FAF6F8] rounded-2xl border border-[#EDE2EB] space-y-2 text-xs text-[#5C4A60]">
-              <div className="flex justify-between">
-                <span className="font-medium text-[#2A182C]">File Format:</span>
-                <span>{activeProduct.fileSpecs.format}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium text-[#2A182C]">Delivery:</span>
-                <span>{activeProduct.fileSpecs.delivery}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium text-[#2A182C]">Coverage:</span>
-                <span>{activeProduct.fileSpecs.estimatedPages}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium text-[#2A182C]">License:</span>
-                <span>Single-User Educational License</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-7 space-y-6">
-            <div className="space-y-2">
-              <span className="text-xs font-semibold text-[#583256] uppercase tracking-wider">
-                {activeProduct.category} · International Study Material
-              </span>
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#2A182C]">
-                {activeProduct.title}
-              </h1>
-              <p className="text-sm font-medium text-[#7A677D]">
-                {activeProduct.subtitle}
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-[#FAF8FA] border border-[#EDE2EB] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="lg:col-span-7 space-y-6">
               <div>
-                <span className="text-xs text-[#7A677D] block">International Price ({currency})</span>
-                <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="text-3xl font-bold text-[#2A182C] tabular-nums">
-                    {currentSymbol}{currentPrice.toLocaleString()}
-                  </span>
-                  {origPrice && (
-                    <span className="text-sm text-[#8C7A8F] line-through tabular-nums">
-                      {currentSymbol}{origPrice.toLocaleString()}
-                    </span>
-                  )}
-                  <span className="text-xs font-medium text-[#583256]">
-                    {currency === 'USD' ? 'USD (Global)' : 'INR (India)'}
-                  </span>
-                </div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#6E6474]">
+                  {activeProduct.category} · {activeProduct.format}
+                </p>
+                <h1 className="font-serif text-3xl font-semibold text-[#514458] mt-1">
+                  {activeProduct.title}
+                </h1>
+                <p className="text-sm text-[#6E6474] mt-1">{activeProduct.subtitle}</p>
               </div>
-              <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
-                {onPreviewProduct && (
-                  <button
-                    onClick={() => onPreviewProduct(activeProduct)}
-                    className="w-full sm:w-auto px-5 py-3 text-xs sm:text-sm font-semibold text-[#583256] bg-white hover:bg-[#F6EEF5] border border-[#DACFDB] rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 shrink-0"
-                  >
-                    <Eye className="w-4 h-4" />
-                    <span>Preview Sample Pages</span>
-                  </button>
+
+              <div className="flex items-baseline gap-3">
+                <span className="font-serif text-3xl font-semibold text-[#514458]">
+                  {symbol}
+                  {price.toLocaleString()}
+                </span>
+                {orig && (
+                  <span className="text-sm text-[#6E6474] line-through">
+                    {symbol}
+                    {orig.toLocaleString()}
+                  </span>
                 )}
                 <button
-                  onClick={() => onSelectProduct(activeProduct)}
-                  className="w-full sm:w-auto px-6 py-3 text-xs sm:text-sm font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-all shadow-md active:scale-98 flex items-center justify-center gap-2 shrink-0"
+                  onClick={onCurrencyToggle}
+                  className="ml-auto text-xs font-medium text-[#514458] underline cursor-pointer"
                 >
-                  <Download className="w-4 h-4" />
-                  <span>Get This Resource</span>
+                  Switch to {currency === 'INR' ? 'USD ($)' : 'INR (₹)'}
                 </button>
               </div>
-            </div>
 
-            <div className="space-y-3 text-xs sm:text-sm text-[#5C4A60] leading-relaxed">
-              {activeProduct.fullDescription.map((p, idx) => (
-                <p key={idx}>{p}</p>
-              ))}
-            </div>
-
-            <div className="space-y-3 pt-2">
-              <h3 className="text-sm font-bold text-[#2A182C]">
-                Contents & Modules Included
-              </h3>
-              <ul className="space-y-2">
-                {activeProduct.contents.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-xs text-[#2A182C]">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="space-y-3 pt-2">
-              <h3 className="text-sm font-bold text-[#2A182C]">
-                Key Highlights
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {activeProduct.features.map((feat, i) => (
-                  <div key={i} className="p-3 bg-[#FAF8FA] rounded-xl border border-[#EDE2EB] text-xs text-[#5C4A60]">
-                    {feat}
-                  </div>
+              <div className="space-y-3 text-sm text-[#6E6474] leading-relaxed">
+                {activeProduct.fullDescription.map((p, idx) => (
+                  <p key={idx}>{p}</p>
                 ))}
               </div>
-            </div>
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          <div className="lg:col-span-7 bg-white rounded-2xl border border-[#EDE2EB] p-7 shadow-xs space-y-6">
-            <h3 className="text-lg font-bold text-[#2A182C] flex items-center gap-2">
-              <HelpCircle className="w-5 h-5 text-[#583256]" />
-              <span>Frequently Asked Questions for this Resource</span>
-            </h3>
-            <div className="space-y-4">
-              {activeProduct.faq.map((item, i) => (
-                <div key={i} className="space-y-1 p-3.5 bg-[#FAF8FA] rounded-xl border border-[#F0E6EF]">
-                  <h4 className="text-xs font-bold text-[#2A182C]">{item.question}</h4>
-                  <p className="text-xs text-[#5C4A60] leading-relaxed">{item.answer}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+              <div className="space-y-2">
+                <h2 className="font-serif text-lg font-semibold text-[#514458]">What Is Included</h2>
+                <ul className="space-y-1.5">
+                  {activeProduct.contents.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-xs text-[#6E6474]">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#514458] shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-          <div className="lg:col-span-5 bg-[#FAF8FA] rounded-2xl border border-[#EDE2EB] p-7 space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#2A182C]">
-              <Lock className="w-4 h-4 text-[#583256]" />
-              <span>Usage & Licensing Terms</span>
-            </div>
-            <p className="text-xs text-[#5C4A60] leading-relaxed">
-              Digital resources are licensed exclusively for the purchaser’s personal educational use. Redistribution, resale, public file sharing, or unauthorized group distribution is strictly prohibited.
-            </p>
-            <div className="pt-2 flex flex-col space-y-2 text-xs">
+              <div className="p-4 rounded-xl bg-[#F8F5EF] border border-[#514458]/10 text-xs text-[#6E6474] flex items-start gap-2.5">
+                <Lock className="w-4 h-4 text-[#514458] shrink-0 mt-0.5" />
+                <span>
+                  Downloads unlock immediately upon server-verified payment. Independent educational study material; licensed strictly for single-user personal study.
+                </span>
+              </div>
+
               <button
-                onClick={() => onNavigate('copyright-policy')}
-                className="text-[#583256] font-semibold hover:underline text-left"
+                onClick={() => onSelectProduct(activeProduct)}
+                className="w-full py-3.5 px-6 bg-[#514458] hover:bg-[#3f3445] text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer"
               >
-                Read Complete Digital Product Usage Policy →
-              </button>
-              <button
-                onClick={() => onNavigate('refund-and-cancellation-policy')}
-                className="text-[#583256] font-semibold hover:underline text-left"
-              >
-                Review Digital Refund Policy →
+                <ShoppingBag className="w-4 h-4" />
+                <span>Purchase & Unlock Download ({symbol}{price.toLocaleString()})</span>
               </button>
             </div>
           </div>
@@ -230,161 +142,133 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
     );
   }
 
+  const filtered = products.filter((p) => {
+    if (!p.isAvailable) return false;
+    if (filter !== 'All' && p.category !== filter) return false;
+    if (searchKeyword.trim()) {
+      const q = searchKeyword.toLowerCase();
+      return (
+        p.title.toLowerCase().includes(q) ||
+        p.shortDescription.toLowerCase().includes(q)
+      );
+    }
+    return true;
+  });
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-      <Breadcrumbs items={[{ label: 'Resources & Digital Shop' }]} />
-
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#EDE2EB] pb-8">
-        <div className="space-y-3 max-w-2xl">
-          <span className="text-xs font-semibold tracking-wider uppercase text-[#7A5B79]">
-            International Study Publications
-          </span>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-[#2A182C]">
-            Behavior Science Study Resources
-          </h1>
-          <p className="text-sm sm:text-base text-[#5A475D] leading-relaxed">
-            Organized study notes, rapid revision cheat sheets, scenario-based practice questions, and study planners designed to support candidates preparing for QASP-S, ABAT, and applied behavior science coursework worldwide.
-          </p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 shrink-0">
+    <div className="bg-[#F8F5EF] py-12 lg:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="max-w-2xl space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6E6474]">
+              Digital Study Store
+            </p>
+            <h1 className="font-serif text-3xl sm:text-5xl font-semibold text-[#514458]">
+              Learning Resources
+            </h1>
+            <p className="text-base text-[#6E6474] leading-relaxed">
+              Structured ABA study notes, rapid revision cheat sheets, scenario question banks, study trackers, and digital guides unlocked automatically upon verified payment.
+            </p>
+          </div>
           <button
             onClick={onCurrencyToggle}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#583256] bg-white border border-[#DACFDB] rounded-xl hover:bg-[#FAF6F8] transition-colors shadow-xs"
+            className="px-4 py-2 text-xs font-semibold bg-white border border-[#514458]/15 rounded-xl text-[#514458] self-start md:self-auto cursor-pointer"
           >
-            <Globe className="w-3.5 h-3.5" />
-            <span>Currency: {currency === 'USD' ? '$ USD (Global)' : '₹ INR (India)'}</span>
+            Showing {currency === 'INR' ? '₹ INR' : '$ USD'} · Switch
           </button>
+        </div>
 
-          <div className="flex items-center gap-1.5 p-1 bg-[#FAF6F8] rounded-xl border border-[#EDE2EB] overflow-x-auto max-w-full">
-            {['All', 'Notes', 'Cheat Sheet', 'Practice', 'Planner', 'Bundle'].map((cat) => (
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+          <div className="flex flex-wrap gap-2">
+            {['All', 'Notes', 'Cheat Sheet', 'Practice', 'Planner', 'E-book', 'Bundle'].map((cat) => (
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-medium cursor-pointer ${
                   filter === cat
-                    ? 'bg-white text-[#2A182C] shadow-xs'
-                    : 'text-[#6B5A6E] hover:text-[#2A182C]'
+                    ? 'bg-[#514458] text-white'
+                    : 'bg-white text-[#514458] border border-[#514458]/15'
                 }`}
               >
-                {cat === 'All' ? 'All Resources' : cat}
+                {cat}
               </button>
             ))}
           </div>
-        </div>
-      </div>
-
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-[#FAF6F8] via-white to-[#FAF6F8] border border-[#EDE2EB] flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#5C4A60]">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-[#583256]/10 text-[#583256] flex items-center justify-center shrink-0">
-            <CreditCard className="w-4 h-4" />
-          </div>
-          <div>
-            <p className="font-bold text-[#2A182C]">Secure International Payment Gateways</p>
-            <p className="text-[11px] text-[#7A677D]">Stripe & PayPal Verified · Visa, Mastercard, American Express, Apple Pay, Google Pay & UPI accepted globally</p>
+          <div className="relative w-full sm:w-64">
+            <Search className="w-4 h-4 text-[#6E6474] absolute left-3 top-2.5" />
+            <input
+              type="text"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              placeholder="Filter resources..."
+              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-white border border-[#514458]/15"
+            />
           </div>
         </div>
-        <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 shrink-0">
-          <CheckCircle2 className="w-3.5 h-3.5" />
-          <span>Instant Download & Email Delivery</span>
-        </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filteredProducts.map((product) => {
-          const price = currency === 'USD' ? product.priceUSD : product.priceINR;
-          const origPrice = currency === 'USD' ? product.originalPriceUSD : product.originalPriceINR;
-
-          return (
-            <div
-              key={product.id}
-              className={`p-7 rounded-3xl bg-white border shadow-xs transition-all flex flex-col justify-between ${
-                product.isBundle
-                  ? 'border-[#8E75A6] shadow-md ring-1 ring-[#8E75A6]/40 md:col-span-2 lg:col-span-1'
-                  : 'border-[#EDE2EB] hover:border-[#DACFDB] hover:shadow-lg'
-              }`}
-            >
-              <div className="space-y-4">
-                <div className="rounded-2xl overflow-hidden border border-[#EDE2EB] bg-[#FAF8FA] h-48 relative p-1.5">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-full h-full object-cover rounded-xl"
-                    referrerPolicy="no-referrer"
-                  />
-                  {product.badge && (
-                    <span className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs text-[11px] font-bold text-[#583256] px-2.5 py-0.5 rounded-full border border-[#EDE2EB] shadow-xs">
-                      {product.badge}
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between text-xs text-[#7A677D]">
-                  <span>{product.format}</span>
-                  <span>{product.fileSpecs.estimatedPages}</span>
-                </div>
-
-                <h2 className="text-xl font-bold text-[#2A182C] line-clamp-1">
-                  {product.title}
-                </h2>
-
-                <p className="text-xs text-[#5C4A60] leading-relaxed line-clamp-3">
-                  {product.shortDescription}
-                </p>
-
-                <div className="pt-2 flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-[#2A182C] tabular-nums">
-                    {currentSymbol}{price.toLocaleString()}
-                  </span>
-                  {origPrice && (
-                    <span className="text-xs text-[#8C7A8F] line-through tabular-nums">
-                      {currentSymbol}{origPrice.toLocaleString()}
-                    </span>
-                  )}
-                  <span className="text-[11px] text-[#7A677D] font-medium ml-1">
-                    ({currency})
-                  </span>
-                </div>
-              </div>
-
-              <div className="pt-6 mt-6 border-t border-[#F2EBF1] flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  {onPreviewProduct && (
-                    <button
-                      onClick={() => onPreviewProduct(product)}
-                      className="flex-1 py-2 text-center text-xs font-semibold text-[#583256] bg-[#FAF2F8] hover:bg-[#F2EBF1] border border-[#DACFDB] rounded-xl transition-colors flex items-center justify-center gap-1.5"
-                    >
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>Preview</span>
-                    </button>
-                  )}
-                  <button
-                    onClick={() => onNavigate('product-detail', product.slug)}
-                    className="flex-1 py-2 text-center text-xs font-semibold text-[#2A182C] bg-white border border-[#DACFDB] hover:bg-[#FAF6F8] rounded-xl transition-colors"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((item) => {
+            const price = currency === 'INR' ? item.priceINR : item.priceUSD;
+            return (
+              <div
+                key={item.id}
+                className="bg-white rounded-2xl border border-[#514458]/10 overflow-hidden shadow-xs flex flex-col justify-between"
+              >
+                <div>
+                  <div
+                    onClick={() => onNavigate('product-detail', item.slug)}
+                    className="h-44 overflow-hidden bg-[#F4E4ED]/30 cursor-pointer"
                   >
-                    View Details
-                  </button>
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-6 space-y-2.5">
+                    <div className="flex items-center justify-between text-xs text-[#6E6474]">
+                      <span className="font-semibold text-[#514458]">{item.category}</span>
+                      <span className="flex items-center gap-1">
+                        <FileText className="w-3.5 h-3.5" />
+                        {item.fileSpecs.estimatedPages}
+                      </span>
+                    </div>
+                    <h2
+                      onClick={() => onNavigate('product-detail', item.slug)}
+                      className="font-serif text-xl font-semibold text-[#514458] cursor-pointer hover:underline"
+                    >
+                      {item.title}
+                    </h2>
+                    <p className="text-sm text-[#6E6474] line-clamp-3 leading-relaxed">
+                      {item.shortDescription}
+                    </p>
+                  </div>
                 </div>
-                <button
-                  onClick={() => onSelectProduct(product)}
-                  className="w-full py-2.5 text-center text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-colors shadow-xs"
-                >
-                  Get Resource ({currentSymbol}{price.toLocaleString()})
-                </button>
+                <div className="px-6 py-4 bg-[#F8F5EF]/60 border-t border-[#514458]/10 flex items-center justify-between gap-2">
+                  <span className="font-serif text-lg font-semibold text-[#514458]">
+                    {symbol}
+                    {price.toLocaleString()}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => onNavigate('product-detail', item.slug)}
+                      className="px-3 py-2 text-xs font-medium text-[#514458] hover:underline inline-flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>Details</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
+                    <button
+                      onClick={() => onSelectProduct(item)}
+                      className="px-4 py-2 text-xs font-semibold text-white bg-[#514458] hover:bg-[#3f3445] rounded-xl cursor-pointer"
+                    >
+                      Buy
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="p-6 rounded-2xl bg-[#FAF8FA] border border-[#EDE2EB] text-xs text-[#5C4A60] space-y-2">
-        <h4 className="font-bold text-[#2A182C] flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
-          <span>Independent Educational Publisher Notice</span>
-        </h4>
-        <p className="leading-relaxed">
-          These study resources are independently created by The Behavior Canvas and Reema Singh. They are not officially published, endorsed, or certified by the Qualified Applied Behavior Analysis Credentialing Board (QABA) or any other certifying entity. We do not guarantee examination passage, as performance is contingent upon individual coursework, supervision, and personal dedication.
-        </p>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

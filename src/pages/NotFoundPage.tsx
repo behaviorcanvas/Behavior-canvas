@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, ArrowLeft, Search } from 'lucide-react';
+import { Home, ArrowLeft, Search, Lock } from 'lucide-react';
 import { RoutePath } from '../types';
 
 interface NotFoundPageProps {
@@ -18,17 +18,18 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
       <p className="text-sm text-[#5C4A60] leading-relaxed max-w-md mx-auto">
         The page you are looking for may have been moved or does not exist. Please return to the homepage or explore our services and educational resources.
       </p>
-      <div className="pt-4 flex items-center justify-center gap-4">
+
+      <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
         <button
           onClick={() => onNavigate('home')}
-          className="px-6 py-2.5 text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-colors shadow-xs flex items-center gap-2"
+          className="px-5 py-2.5 text-xs font-semibold text-white bg-[#583256] hover:bg-[#482746] rounded-xl transition-colors shadow-xs flex items-center gap-2"
         >
           <Home className="w-3.5 h-3.5" />
           <span>Return Home</span>
         </button>
         <button
           onClick={() => onNavigate('services')}
-          className="px-6 py-2.5 text-xs font-semibold text-[#2A182C] bg-white border border-[#DACFDB] hover:bg-[#FAF6F8] rounded-xl transition-colors"
+          className="px-5 py-2.5 text-xs font-semibold text-[#2A182C] bg-white border border-[#DACFDB] hover:bg-[#FAF6F8] rounded-xl transition-colors"
         >
           Explore Services
         </button>

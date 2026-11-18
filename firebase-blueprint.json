@@ -1,0 +1,443 @@
+{
+  "entities": {
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Authorized platform administrator document keyed by Firebase Auth UID.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "name": { "type": "string", "maxLength": 120 },
+        "role": { "type": "string", "enum": ["super_admin", "editor"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "Public website configuration, brand positioning, SEO defaults, announcement banner, and non-secret payment display config.",
+      "type": "object",
+      "properties": {
+        "brandName": { "type": "string", "maxLength": 120 },
+        "positioning": { "type": "string", "maxLength": 180 },
+        "tagline": { "type": "string", "maxLength": 180 },
+        "email": { "type": "string", "maxLength": 160 },
+        "instagramHandle": { "type": "string", "maxLength": 80 },
+        "instagramUrl": { "type": "string", "maxLength": 300 },
+        "youtubeHandle": { "type": "string", "maxLength": 80 },
+        "youtubeUrl": { "type": "string", "maxLength": 300 },
+        "announcementEnabled": { "type": "boolean" },
+        "announcementText": { "type": "string", "maxLength": 280 },
+        "seoTitle": { "type": "string", "maxLength": 120 },
+        "seoDescription": { "type": "string", "maxLength": 320 },
+        "activeGateway": { "type": "string", "enum": ["razorpay", "stripe", "upi_manual"] },
+        "gatewayMode": { "type": "string", "enum": ["test", "live"] },
+        "razorpayEnabled": { "type": "boolean" },
+        "razorpayKeyId": { "type": "string", "maxLength": 120 },
+        "stripeEnabled": { "type": "boolean" },
+        "stripePublishableKey": { "type": "string", "maxLength": 160 },
+        "upiEnabled": { "type": "boolean" },
+        "upiId": { "type": "string", "maxLength": 120 },
+        "payeeName": { "type": "string", "maxLength": 120 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["brandName", "email"]
+    },
+    "PaymentGatewayConfig": {
+      "title": "PaymentGatewayConfig",
+      "description": "Private administrator-only gateway configuration metadata (never readable publicly).",
+      "type": "object",
+      "properties": {
+        "provider": { "type": "string", "enum": ["razorpay", "stripe", "cashfree", "phonepe", "upi_manual"] },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "enabled": { "type": "boolean" },
+        "isDefault": { "type": "boolean" },
+        "mode": { "type": "string", "enum": ["test", "live"] },
+        "publicKey": { "type": "string", "maxLength": 180 },
+        "supportedMethods": { "type": "array" },
+        "webhookStatus": { "type": "string", "enum": ["connected", "pending", "inactive"] },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["provider", "enabled", "mode"]
+    },
+    "CmsPage": {
+      "title": "CmsPage",
+      "description": "Editable website page with sections, draft/published state, and SEO metadata.",
+      "type": "object",
+      "properties": {
+        "slug": { "type": "string", "maxLength": 120, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "maxLength": 180 },
+        "subtitle": { "type": "string", "maxLength": 400 },
+        "heroHeading": { "type": "string", "maxLength": 240 },
+        "heroBody": { "type": "string", "maxLength": 2000 },
+        "heroImage": { "type": "string", "maxLength": 500 },
+        "ctaPrimaryLabel": { "type": "string", "maxLength": 80 },
+        "ctaSecondaryLabel": { "type": "string", "maxLength": 80 },
+        "sections": { "type": "array" },
+        "status": { "type": "string", "enum": ["published", "draft"] },
+        "seoTitle": { "type": "string", "maxLength": 140 },
+        "seoDescription": { "type": "string", "maxLength": 320 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["slug", "title", "status"]
+    },
+    "ServiceDoc": {
+      "title": "ServiceDoc",
+      "description": "Behavioural service offering.",
+      "type": "object",
+      "properties": {
+        "slug": { "type": "string", "maxLength": 120, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "maxLength": 160 },
+        "category": { "type": "string", "maxLength": 80 },
+        "shortDescription": { "type": "string", "maxLength": 600 },
+        "longDescription": { "type": "array" },
+        "audience": { "type": "string", "maxLength": 400 },
+        "deliveryFormat": { "type": "string", "maxLength": 240 },
+        "sessionDetails": { "type": "string", "maxLength": 400 },
+        "feeINR": { "type": "number" },
+        "feeNote": { "type": "string", "maxLength": 300 },
+        "status": { "type": "string", "enum": ["published", "draft"] }
+      },
+      "required": ["slug", "title", "status"]
+    },
+    "ProgrammeDoc": {
+      "title": "ProgrammeDoc",
+      "description": "Academy of Behavioural Science course or programme.",
+      "type": "object",
+      "properties": {
+        "slug": { "type": "string", "maxLength": 120, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "maxLength": 120 },
+        "coverImage": { "type": "string", "maxLength": 500 },
+        "description": { "type": "string", "maxLength": 3000 },
+        "learningObjectives": { "type": "array" },
+        "modules": { "type": "array" },
+        "duration": { "type": "string", "maxLength": 120 },
+        "eligibility": { "type": "string", "maxLength": 300 },
+        "audience": { "type": "string", "maxLength": 300 },
+        "faculty": { "type": "string", "maxLength": 200 },
+        "teachingFormat": { "type": "string", "maxLength": 200 },
+        "feeINR": { "type": "number" },
+        "feeUSD": { "type": "number" },
+        "isFree": { "type": "boolean" },
+        "registrationDeadline": { "type": "string", "maxLength": 100 },
+        "startDate": { "type": "string", "maxLength": 100 },
+        "endDate": { "type": "string", "maxLength": 100 },
+        "enrolmentStatus": { "type": "string", "enum": ["Open", "Upcoming", "Closed", "Archived"] },
+        "certificateType": { "type": "string", "enum": ["Certificate of Completion", "Certificate of Participation", "None"] },
+        "status": { "type": "string", "enum": ["published", "draft"] }
+      },
+      "required": ["slug", "title", "category", "enrolmentStatus", "status"]
+    },
+    "WorkshopDoc": {
+      "title": "WorkshopDoc",
+      "description": "Workshop or event managed via Admin.",
+      "type": "object",
+      "properties": {
+        "slug": { "type": "string", "maxLength": 120, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "maxLength": 200 },
+        "bannerImage": { "type": "string", "maxLength": 500 },
+        "shortDescription": { "type": "string", "maxLength": 600 },
+        "learningObjectives": { "type": "array" },
+        "dateTime": { "type": "string", "maxLength": 160 },
+        "duration": { "type": "string", "maxLength": 120 },
+        "audience": { "type": "string", "maxLength": 300 },
+        "feeINR": { "type": "number" },
+        "feeUSD": { "type": "number" },
+        "fee": { "type": "string", "maxLength": 160 },
+        "deliveryFormat": { "type": "string", "maxLength": 240 },
+        "seatCapacity": { "type": "number" },
+        "closingDate": { "type": "string", "maxLength": 100 },
+        "eventStatus": { "type": "string", "enum": ["Upcoming", "Registration Open", "Registration Closed", "Completed", "Archived"] },
+        "status": { "type": "string", "enum": ["published", "draft"] }
+      },
+      "required": ["slug", "title", "eventStatus", "status"]
+    },
+    "ProductDoc": {
+      "title": "ProductDoc",
+      "description": "Digital store resource product.",
+      "type": "object",
+      "properties": {
+        "slug": { "type": "string", "maxLength": 120, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "maxLength": 200 },
+        "subtitle": { "type": "string", "maxLength": 300 },
+        "category": { "type": "string", "maxLength": 80 },
+        "priceINR": { "type": "number" },
+        "priceUSD": { "type": "number" },
+        "originalPriceINR": { "type": "number" },
+        "originalPriceUSD": { "type": "number" },
+        "image": { "type": "string", "maxLength": 500 },
+        "shortDescription": { "type": "string", "maxLength": 600 },
+        "downloadPath": { "type": "string", "maxLength": 500 },
+        "isAvailable": { "type": "boolean" },
+        "isBundle": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["published", "draft"] }
+      },
+      "required": ["slug", "title", "priceINR", "status"]
+    },
+    "CouponDoc": {
+      "title": "CouponDoc",
+      "description": "Promotional discount code.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "maxLength": 40, "pattern": "^[A-Z0-9_\\-]+$" },
+        "discountType": { "type": "string", "enum": ["percent", "fixed_inr"] },
+        "value": { "type": "number" },
+        "expiryDate": { "type": "string", "maxLength": 40 },
+        "active": { "type": "boolean" }
+      },
+      "required": ["code", "discountType", "value", "active"]
+    },
+    "ArticleDoc": {
+      "title": "ArticleDoc",
+      "description": "Research & blog educational article.",
+      "type": "object",
+      "properties": {
+        "slug": { "type": "string", "maxLength": 140, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "maxLength": 220 },
+        "summary": { "type": "string", "maxLength": 800 },
+        "category": { "type": "string", "maxLength": 120 },
+        "tags": { "type": "array" },
+        "coverImage": { "type": "string", "maxLength": 500 },
+        "author": { "type": "string", "maxLength": 120 },
+        "publishedDate": { "type": "string", "maxLength": 80 },
+        "readTime": { "type": "string", "maxLength": 40 },
+        "sections": { "type": "array" },
+        "keyTakeaways": { "type": "array" },
+        "seoTitle": { "type": "string", "maxLength": 140 },
+        "seoDescription": { "type": "string", "maxLength": 320 },
+        "status": { "type": "string", "enum": ["published", "draft"] }
+      },
+      "required": ["slug", "title", "category", "status"]
+    },
+    "ResearchDoc": {
+      "title": "ResearchDoc",
+      "description": "Academic research publication, interest, or conference presentation.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 240 },
+        "type": { "type": "string", "enum": ["Interest Area", "Publication", "Conference Presentation"] },
+        "authors": { "type": "string", "maxLength": 240 },
+        "venueOrJournal": { "type": "string", "maxLength": 200 },
+        "year": { "type": "string", "maxLength": 20 },
+        "abstract": { "type": "string", "maxLength": 2000 },
+        "link": { "type": "string", "maxLength": 400 },
+        "status": { "type": "string", "enum": ["published", "draft"] }
+      },
+      "required": ["title", "type", "status"]
+    },
+    "TestimonialDoc": {
+      "title": "TestimonialDoc",
+      "description": "Approved community testimonial with consent.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 120 },
+        "role": { "type": "string", "maxLength": 140 },
+        "context": { "type": "string", "maxLength": 140 },
+        "quote": { "type": "string", "maxLength": 1000 },
+        "approved": { "type": "boolean" },
+        "visible": { "type": "boolean" }
+      },
+      "required": ["name", "role", "quote", "approved", "visible"]
+    },
+    "MediaItemDoc": {
+      "title": "MediaItemDoc",
+      "description": "Media library entry for images, banners, posters, and PDFs.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 160 },
+        "type": { "type": "string", "enum": ["image", "pdf", "banner", "poster"] },
+        "url": { "type": "string", "maxLength": 600 },
+        "altText": { "type": "string", "maxLength": 240 },
+        "uploadedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "type", "url"]
+    },
+    "EnquiryDoc": {
+      "title": "EnquiryDoc",
+      "description": "Confidential service or consultation enquiry containing PII (readable/editable only by admin).",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 120 },
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "phone": { "type": "string", "maxLength": 40 },
+        "category": { "type": "string", "maxLength": 100 },
+        "contactMethod": { "type": "string", "maxLength": 60 },
+        "message": { "type": "string", "maxLength": 3000 },
+        "consentAgreed": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["new", "contacted", "resolved", "archived"] },
+        "internalNotes": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "category", "message", "status"]
+    },
+    "OrderDoc": {
+      "title": "OrderDoc",
+      "description": "Customer order and payment verification record.",
+      "type": "object",
+      "properties": {
+        "orderCode": { "type": "string", "maxLength": 80 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "itemType": { "type": "string", "enum": ["product", "programme", "workshop"] },
+        "itemId": { "type": "string", "maxLength": 128 },
+        "itemTitle": { "type": "string", "maxLength": 200 },
+        "customerName": { "type": "string", "maxLength": 120 },
+        "customerEmail": { "type": "string", "format": "email", "maxLength": 160 },
+        "amount": { "type": "number" },
+        "currency": { "type": "string", "enum": ["INR", "USD"] },
+        "couponApplied": { "type": "string", "maxLength": 40 },
+        "gateway": { "type": "string", "enum": ["razorpay", "stripe", "upi_manual"] },
+        "gatewayOrderId": { "type": "string", "maxLength": 140 },
+        "transactionId": { "type": "string", "maxLength": 140 },
+        "paymentStatus": { "type": "string", "enum": ["pending", "verified", "failed", "refunded"] },
+        "refundStatus": { "type": "string", "enum": ["none", "requested", "processed"] },
+        "refundReference": { "type": "string", "maxLength": 140 },
+        "refundReason": { "type": "string", "maxLength": 400 },
+        "downloadToken": { "type": "string", "maxLength": 200 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orderCode", "userId", "itemType", "itemId", "itemTitle", "customerEmail", "amount", "currency", "paymentStatus"]
+    },
+    "EnrolmentDoc": {
+      "title": "EnrolmentDoc",
+      "description": "Student enrolment record for an academy programme or workshop.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "learnerName": { "type": "string", "maxLength": 120 },
+        "learnerEmail": { "type": "string", "format": "email", "maxLength": 160 },
+        "itemType": { "type": "string", "enum": ["programme", "workshop"] },
+        "itemId": { "type": "string", "maxLength": 128 },
+        "itemTitle": { "type": "string", "maxLength": 200 },
+        "orderId": { "type": "string", "maxLength": 128 },
+        "attendanceStatus": { "type": "string", "enum": ["registered", "attending", "completed"] },
+        "completionPercent": { "type": "number" },
+        "certificateId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "itemType", "itemId", "itemTitle", "attendanceStatus"]
+    },
+    "CertificateDoc": {
+      "title": "CertificateDoc",
+      "description": "Digital certificate record verifiable by exact certificate ID.",
+      "type": "object",
+      "properties": {
+        "certificateId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "maxLength": 128 },
+        "learnerName": { "type": "string", "maxLength": 120 },
+        "programmeTitle": { "type": "string", "maxLength": 220 },
+        "certificateType": { "type": "string", "enum": ["Certificate of Completion", "Certificate of Participation"] },
+        "issueDate": { "type": "string", "maxLength": 40 },
+        "verificationStatus": { "type": "string", "enum": ["valid", "revoked"] },
+        "issuedBy": { "type": "string", "maxLength": 120 }
+      },
+      "required": ["certificateId", "learnerName", "programmeTitle", "certificateType", "issueDate", "verificationStatus"]
+    },
+    "LearnerProfile": {
+      "title": "LearnerProfile",
+      "description": "Private learner profile isolated per authenticated user.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "displayName": { "type": "string", "maxLength": 120 },
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "background": { "type": "string", "maxLength": 160 },
+        "city": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "AuditLogDoc": {
+      "title": "AuditLogDoc",
+      "description": "Immutable admin activity audit entry.",
+      "type": "object",
+      "properties": {
+        "actorEmail": { "type": "string", "maxLength": 160 },
+        "action": { "type": "string", "maxLength": 160 },
+        "targetCollection": { "type": "string", "maxLength": 80 },
+        "targetId": { "type": "string", "maxLength": 128 },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["actorEmail", "action"]
+    }
+  },
+  "firestore": {
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Authorized administrator registry."
+    },
+    "/siteSettings/{settingId}": {
+      "schema": { "$ref": "#/entities/SiteSettings" },
+      "description": "Public brand, SEO, announcement, and non-secret gateway display configuration."
+    },
+    "/paymentConfigs/{gatewayId}": {
+      "schema": { "$ref": "#/entities/PaymentGatewayConfig" },
+      "description": "Private administrator-only payment provider configurations."
+    },
+    "/pages/{pageId}": {
+      "schema": { "$ref": "#/entities/CmsPage" },
+      "description": "CMS editable website pages (published readable publicly, drafts admin-only)."
+    },
+    "/services/{serviceId}": {
+      "schema": { "$ref": "#/entities/ServiceDoc" },
+      "description": "Behavioural services."
+    },
+    "/programmes/{programmeId}": {
+      "schema": { "$ref": "#/entities/ProgrammeDoc" },
+      "description": "Academy of Behavioural Science programmes."
+    },
+    "/workshops/{workshopId}": {
+      "schema": { "$ref": "#/entities/WorkshopDoc" },
+      "description": "Workshops and events."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/ProductDoc" },
+      "description": "Digital store resources."
+    },
+    "/coupons/{couponId}": {
+      "schema": { "$ref": "#/entities/CouponDoc" },
+      "description": "Promotional discount codes."
+    },
+    "/articles/{articleId}": {
+      "schema": { "$ref": "#/entities/ArticleDoc" },
+      "description": "Blog & research articles."
+    },
+    "/research/{researchId}": {
+      "schema": { "$ref": "#/entities/ResearchDoc" },
+      "description": "Research interests, publications, and conference presentations."
+    },
+    "/testimonials/{testimonialId}": {
+      "schema": { "$ref": "#/entities/TestimonialDoc" },
+      "description": "Approved testimonials."
+    },
+    "/media/{mediaId}": {
+      "schema": { "$ref": "#/entities/MediaItemDoc" },
+      "description": "Media library references."
+    },
+    "/enquiries/{enquiryId}": {
+      "schema": { "$ref": "#/entities/EnquiryDoc" },
+      "description": "Private contact and service enquiries."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/OrderDoc" },
+      "description": "User orders isolated by userId or accessible by admins."
+    },
+    "/enrolments/{enrolmentId}": {
+      "schema": { "$ref": "#/entities/EnrolmentDoc" },
+      "description": "Learner enrolments isolated by userId or accessible by admins."
+    },
+    "/certificates/{certificateId}": {
+      "schema": { "$ref": "#/entities/CertificateDoc" },
+      "description": "Digital certificates (verifiable by exact certificateId)."
+    },
+    "/learners/{userId}": {
+      "schema": { "$ref": "#/entities/LearnerProfile" },
+      "description": "Isolated learner profile documents."
+    },
+    "/auditLogs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLogDoc" },
+      "description": "Immutable admin audit log."
+    }
+  }
+}
